@@ -11,6 +11,7 @@ from services.ai_service import analyze_image_with_ai, analyze_frame_with_ai
 import uuid
 import os
 import imageio
+from starlette.concurrency import run_in_threadpool
 
 router = APIRouter(
     prefix="/api/reports",
@@ -115,22 +116,10 @@ def get_report_by_id(report_id: int, db: Session = Depends(get_db)):
         
     return report
 
-@router.post("/video")
-async def process_video(file: UploadFile = File(...)):
-    """Real video processing endpoint using imageio and YOLOv8."""
-    import tempfile
-    
-    temp_dir = tempfile.gettempdir()
-    temp_file_name = f"{uuid.uuid4()}_{file.filename}"
-    temp_file_path = os.path.join(temp_dir, temp_file_name)
+def _process_video_sync(temp_file_path: str) -> dict:
+    """CPU-bound helper to extract and analyze video frames synchronously in a background thread."""
     reader = None
-    
     try:
-        # 1. Save uploaded video to a temporary file
-        with open(temp_file_path, "wb") as buffer:
-            buffer.write(await file.read())
-            
-        # 2. Open video with imageio
         reader = imageio.get_reader(temp_file_path)
         meta = reader.get_meta_data()
         fps = meta.get("fps", 30.0)
@@ -138,7 +127,6 @@ async def process_video(file: UploadFile = File(...)):
         if fps <= 0:
             fps = 30.0 # fallback
             
-        # 3. Extract and analyze frames (e.g., 5 frames per second to show smooth bounding boxes)
         timeline = []
         frame_interval = max(1, int(fps / 5)) # analyze 5 frames per second
         frames_scanned = 0
@@ -146,7 +134,6 @@ async def process_video(file: UploadFile = File(...)):
         highest_conf = 0.0
         worst_severity = "Low"
         
-        # Loop through frames using step interval for maximum speed (supports inf length videos)
         current_frame = 0
         while True:
             if isinstance(total_frames, (int, float)) and total_frames != float('inf'):
@@ -161,7 +148,6 @@ async def process_video(file: UploadFile = File(...)):
             frames_scanned += 1
             timestamp = current_frame / fps
             
-            # Analyze this frame using YOLO best.pt
             ai_result = analyze_frame_with_ai(frame)
             detected_issues = ai_result.get("analysis", {}).get("detected_issues", [])
             
@@ -188,18 +174,40 @@ async def process_video(file: UploadFile = File(...)):
                 
             current_frame += frame_interval
             
-        reader.close()
-        reader = None
+        return {
+            "frames_scanned": frames_scanned,
+            "damage_frames": damage_frames,
+            "worst_severity": worst_severity if damage_frames > 0 else "None",
+            "peak_confidence": round(highest_conf * 100) if damage_frames > 0 else 0,
+            "timeline": timeline
+        }
+    finally:
+        if reader is not None:
+            try:
+                reader.close()
+            except Exception:
+                pass
+
+@router.post("/video")
+async def process_video(file: UploadFile = File(...)):
+    """Real video processing endpoint using imageio and YOLOv8 offloaded to thread pool."""
+    import tempfile
+    
+    temp_dir = tempfile.gettempdir()
+    temp_file_name = f"{uuid.uuid4()}_{file.filename}"
+    temp_file_path = os.path.join(temp_dir, temp_file_name)
+    
+    try:
+        # 1. Save uploaded video to a temporary file
+        with open(temp_file_path, "wb") as buffer:
+            buffer.write(await file.read())
+            
+        # 2. Run CPU-bound video processing in threadpool to prevent blocking the event loop
+        result_data = await run_in_threadpool(_process_video_sync, temp_file_path)
         
         return {
             "success": True,
-            "data": {
-                "frames_scanned": frames_scanned,
-                "damage_frames": damage_frames,
-                "worst_severity": worst_severity if damage_frames > 0 else "None",
-                "peak_confidence": round(highest_conf * 100) if damage_frames > 0 else 0,
-                "timeline": timeline
-            }
+            "data": result_data
         }
         
     except Exception as e:
@@ -207,12 +215,6 @@ async def process_video(file: UploadFile = File(...)):
         return JSONResponse(status_code=500, content={"detail": f"Video processing failed: {str(e)}"})
         
     finally:
-        # Close reader if not already closed (prevents WinError 32 lock on temp file deletion)
-        if reader is not None:
-            try:
-                reader.close()
-            except Exception:
-                pass
         # Cleanup temporary file
         if os.path.exists(temp_file_path):
             try:
