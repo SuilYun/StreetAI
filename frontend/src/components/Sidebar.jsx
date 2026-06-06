@@ -1,8 +1,17 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { Shield, LayoutDashboard, BarChart3, Database, Sun, Moon } from 'lucide-react';
 
 const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
+    const location = useLocation();
+
+    const handleLogoClick = (e) => {
+        if (location.pathname === '/') {
+            e.preventDefault();
+            window.location.reload();
+        }
+    };
+
     const navItems = [
         { path: '/', label: 'Dashboard', icon: LayoutDashboard },
         { path: '/analytics', label: 'Analytics', icon: BarChart3 },
@@ -12,23 +21,31 @@ const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
     return (
         <aside className="h-16 lg:h-full w-full lg:w-64 flex-shrink-0 flex lg:flex-col justify-between items-center lg:items-stretch bg-white/70 dark:bg-slate-900/80 backdrop-blur-md border-b lg:border-b-0 lg:border-r border-slate-200/60 dark:border-slate-800 p-4 z-40 transition-all duration-300">
             {/* Logo Section */}
-            <div className="hidden lg:flex items-center gap-3 mb-8 px-2">
-                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-md shadow-blue-500/20">
+            <Link
+                to="/"
+                onClick={handleLogoClick}
+                className="hidden lg:flex items-center gap-3 mb-8 px-2 hover:opacity-90 transition-all duration-200 group"
+            >
+                <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-105 group-hover:shadow-blue-500/35 transition-all duration-300">
                     <Shield size={18} className="text-white" />
                 </div>
                 <div>
-                    <h1 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight">RoadAI</h1>
+                    <h1 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200">RoadAI</h1>
                     <span className="text-[10px] text-slate-400 font-mono">v11.0.0</span>
                 </div>
-            </div>
+            </Link>
 
             {/* Mobile Brand / Logo (only on small viewports) */}
-            <div className="flex lg:hidden items-center gap-2">
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center">
+            <Link
+                to="/"
+                onClick={handleLogoClick}
+                className="flex lg:hidden items-center gap-2 group hover:opacity-90 transition-all duration-200"
+            >
+                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center group-hover:scale-105 transition-all duration-300">
                     <Shield size={16} className="text-white" />
                 </div>
-                <span className="text-sm font-bold text-slate-800 dark:text-white">RoadAI</span>
-            </div>
+                <span className="text-sm font-bold text-slate-800 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200">RoadAI</span>
+            </Link>
 
             {/* Navigation Links */}
             <nav className="flex lg:flex-col gap-1.5 flex-1 lg:flex-initial justify-center lg:justify-start px-2 lg:px-0">
