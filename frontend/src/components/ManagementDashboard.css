@@ -116,3 +116,40 @@
     padding: 3rem;
     color: #64748b;
 }
+
+/* Dark Mode Overrides */
+.dark .dashboard-header h2 {
+    color: #cbd5e1;
+}
+
+.dark .report-count {
+    background: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .dashboard-table th {
+    color: #94a3b8;
+    border-bottom-color: #334155;
+    background: #1e293b;
+}
+
+.dark .dashboard-table td {
+    border-bottom-color: #1e293b;
+    color: #cbd5e1;
+}
+
+.dark .dashboard-table tr:hover td {
+    background: #1e293b;
+}
+
+.dark .btn-view {
+    background: #1e293b;
+    border-color: #334155;
+    color: #60a5fa;
+}
+
+.dark .btn-view:hover {
+    background: #2563eb;
+    border-color: #2563eb;
+    color: white;
+}

@@ -5,10 +5,10 @@ import { uploadImage, uploadVideo, getImageUrl } from '../services/api';
 import VideoTimeline from './VideoTimeline';
 
 const SEVERITY_COLORS = {
-    High: { border: '#ef4444', bg: 'bg-red-50/70 border-red-200', text: 'text-red-500', badge: 'bg-red-500 text-white shadow-sm font-semibold' },
-    Medium: { border: '#f59e0b', bg: 'bg-amber-50/70 border-amber-200', text: 'text-amber-600', badge: 'bg-amber-500 text-white shadow-sm font-semibold' },
-    Low: { border: '#10b981', bg: 'bg-emerald-50/70 border-emerald-200', text: 'text-emerald-600', badge: 'bg-emerald-500 text-white shadow-sm font-semibold' },
-    None: { border: '#64748b', bg: 'bg-slate-50/70 border-slate-200', text: 'text-slate-600', badge: 'bg-slate-500 text-white shadow-sm font-semibold' }
+    High: { border: '#ef4444', bg: 'bg-red-50/70 border-red-200 dark:bg-red-950/20 dark:border-red-900/50', text: 'text-red-500 dark:text-red-400', badge: 'bg-red-500 text-white shadow-sm font-semibold' },
+    Medium: { border: '#f59e0b', bg: 'bg-amber-50/70 border-amber-200 dark:bg-amber-950/20 dark:border-amber-900/50', text: 'text-amber-600 dark:text-amber-400', badge: 'bg-amber-500 text-white shadow-sm font-semibold' },
+    Low: { border: '#10b981', bg: 'bg-emerald-50/70 border-emerald-200 dark:bg-emerald-950/20 dark:border-emerald-900/50', text: 'text-emerald-600 dark:text-emerald-400', badge: 'bg-emerald-500 text-white shadow-sm font-semibold' },
+    None: { border: '#64748b', bg: 'bg-slate-50/70 border-slate-200 dark:bg-slate-800/40 dark:border-slate-800', text: 'text-slate-600 dark:text-slate-400', badge: 'bg-slate-500 text-white shadow-sm font-semibold' }
 };
 
 const MODES = [

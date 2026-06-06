@@ -8,6 +8,20 @@ import Reports from './pages/Reports';
 import LiveMap from './pages/LiveMap';
 
 function App() {
+    const [darkMode, setDarkMode] = useState(() => {
+        return localStorage.getItem('theme') === 'dark';
+    });
+
+    useEffect(() => {
+        if (darkMode) {
+            document.documentElement.classList.add('dark');
+            localStorage.setItem('theme', 'dark');
+        } else {
+            document.documentElement.classList.remove('dark');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [darkMode]);
+
     const [mediaActive, setMediaActive] = useState(false);
     const [stats, setStats] = useState({
         totalDetections: 0,
@@ -110,9 +124,9 @@ function App() {
 
     return (
         <Router>
-            <div className="h-screen overflow-hidden flex flex-col lg:flex-row bg-slate-50">
+            <div className="h-screen overflow-hidden flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950">
                 {/* Persistent Responsive Sidebar */}
-                <Sidebar isConnected={isConnected} />
+                <Sidebar isConnected={isConnected} darkMode={darkMode} toggleDarkMode={() => setDarkMode(!darkMode)} />
 
                 {/* Main Content Pane */}
                 <main className="flex-1 min-h-0 p-4 lg:p-6 flex flex-col overflow-hidden">

@@ -9,25 +9,25 @@ const StatsBar = ({ stats, isConnected }) => {
             label: 'Total Detections',
             value: stats.totalDetections,
             icon: <Activity size={20} />,
-            color: 'text-accent-blue',
-            bgColor: 'bg-blue-50',
-            iconBg: 'bg-blue-100',
+            color: 'text-blue-500 dark:text-blue-400',
+            bgColor: 'bg-blue-500/5',
+            iconBg: 'bg-blue-500/10',
         },
         {
             label: 'Avg Confidence',
             value: `${stats.avgConfidence || 0}%`,
             icon: <Target size={20} />,
-            color: 'text-detect-safe',
-            bgColor: 'bg-emerald-50',
-            iconBg: 'bg-emerald-100',
+            color: 'text-emerald-500 dark:text-emerald-400',
+            bgColor: 'bg-emerald-500/5',
+            iconBg: 'bg-emerald-500/10',
         },
         {
             label: 'Critical Alerts',
             value: stats.potholes,
             icon: <AlertTriangle size={20} />,
-            color: 'text-detect-pothole',
-            bgColor: 'bg-red-50',
-            iconBg: 'bg-red-100',
+            color: 'text-red-500 dark:text-red-400',
+            bgColor: 'bg-red-500/5',
+            iconBg: 'bg-red-500/10',
         },
     ];
 
@@ -59,7 +59,7 @@ const StatsBar = ({ stats, isConnected }) => {
                         </div>
                     </div>
                     <span className={`text-4xl font-extrabold tracking-tight mt-1 z-10 relative ${card.color}`}>{card.value}</span>
-                    <div className="absolute right-[-16px] bottom-[-16px] opacity-[0.04] text-slate-900 pointer-events-none">
+                    <div className="absolute right-[-16px] bottom-[-16px] opacity-[0.04] text-slate-900 dark:text-white pointer-events-none">
                         {React.cloneElement(card.icon, { size: 100 })}
                     </div>
                 </div>

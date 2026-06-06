@@ -47,15 +47,15 @@ const DamageRadarChart = ({ stats }) => {
 
     return (
         <div ref={chartRef} className="glass-panel p-4 flex flex-col gap-4 h-full min-h-0 overflow-y-auto">
-            <h3 className="text-sm font-semibold text-mission-100">Damage Profile</h3>
+            <h3 className="text-sm font-semibold text-mission-100 dark:text-slate-100">Damage Profile</h3>
             
             {totalIssues === 0 ? (
-                <div className="flex flex-col items-center justify-center h-[220px] text-center border border-dashed border-slate-200 rounded-xl bg-slate-50/50 p-4">
-                    <div className="w-12 h-12 rounded-full bg-slate-100/80 flex items-center justify-center mb-3">
-                        <BarChart3 className="text-slate-400 w-6 h-6" />
+                <div className="flex flex-col items-center justify-center h-[220px] text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-900/30 p-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-100/80 dark:bg-slate-850 flex items-center justify-center mb-3">
+                        <BarChart3 className="text-slate-400 dark:text-slate-500 w-6 h-6" />
                     </div>
-                    <p className="text-slate-700 text-xs font-semibold">Awaiting Damage Data</p>
-                    <p className="text-slate-400 text-[10px] max-w-[200px] mt-1">
+                    <p className="text-slate-700 dark:text-slate-200 text-xs font-semibold">Awaiting Damage Data</p>
+                    <p className="text-slate-400 dark:text-slate-500 text-[10px] max-w-[200px] mt-1">
                         Upload and analyze road media on the dashboard to generate the damage profile.
                     </p>
                 </div>
@@ -102,18 +102,18 @@ const DamageRadarChart = ({ stats }) => {
             )}
 
             {/* Data Breakdown */}
-            <div className="border-t border-slate-200 pt-3">
+            <div className="border-t border-slate-200 dark:border-slate-800 pt-3">
                 <div className="flex items-center justify-between mb-3">
-                    <span className="text-xs font-semibold text-slate-500 uppercase tracking-wider">Breakdown</span>
-                    <span className="text-xs font-mono text-slate-400">{totalIssues} total</span>
+                    <span className="text-xs font-semibold text-slate-500 dark:text-slate-400 uppercase tracking-wider">Breakdown</span>
+                    <span className="text-xs font-mono text-slate-400 dark:text-slate-500">{totalIssues} total</span>
                 </div>
                 <div className="flex flex-col gap-2.5">
                     {rawData.map((item) => (
                         <div key={item.category} className="flex items-start gap-3">
                             <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1" style={{ backgroundColor: item.color }} />
-                            <span className="text-xs text-slate-600 flex-1 leading-tight">{item.category}</span>
-                            <span className="text-xs font-bold text-slate-800 w-6 text-right mt-0.5">{item.count}</span>
-                            <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
+                            <span className="text-xs text-slate-600 dark:text-slate-300 flex-1 leading-tight">{item.category}</span>
+                            <span className="text-xs font-bold text-slate-800 dark:text-slate-100 w-6 text-right mt-0.5">{item.count}</span>
+                            <div className="w-16 h-1.5 bg-slate-100 dark:bg-slate-800 rounded-full overflow-hidden">
                                 <div
                                     className="h-full rounded-full transition-all duration-700"
                                     style={{

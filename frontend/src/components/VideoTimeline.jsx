@@ -24,7 +24,7 @@ const VideoTimeline = ({ results, onReset }) => {
                 Video Analysis Complete
             </p>
             <div className="flex justify-between items-end mb-6">
-                <h2 className="text-3xl font-bold text-slate-800">Video Analysis Results</h2>
+                <h2 className="text-3xl font-bold text-slate-800 dark:text-slate-100">Video Analysis Results</h2>
             </div>
 
             {/* Top Stats Cards */}
@@ -51,8 +51,8 @@ const VideoTimeline = ({ results, onReset }) => {
 
             {/* Timeline Selector */}
             <div className="mb-8">
-                <p className="text-[10px] text-slate-500 tracking-widest uppercase mb-3">Detection Timeline</p>
-                <div className="glass-panel p-3 border border-slate-200 flex overflow-x-auto gap-2 scrollbar-thin scrollbar-thumb-slate-300">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 tracking-widest uppercase mb-3">Detection Timeline</p>
+                <div className="glass-panel p-3 border border-slate-200 dark:border-slate-800 flex overflow-x-auto gap-2 scrollbar-thin scrollbar-thumb-slate-300 dark:scrollbar-thumb-slate-700">
                     {timeline.map((frame, idx) => {
                         const hasDamage = frame.detected_issues.length > 0;
                         const isActive = idx === activeFrameIdx;
@@ -62,10 +62,10 @@ const VideoTimeline = ({ results, onReset }) => {
                                 key={idx}
                                 onClick={() => setActiveFrameIdx(idx)}
                                 className={`flex flex-col items-center justify-center min-w-[56px] h-[52px] rounded-lg transition-all duration-200 border
-                                    ${isActive ? 'bg-accent-blue border-accent-blue shadow-md text-white' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50'}
+                                    ${isActive ? 'bg-accent-blue border-accent-blue shadow-md text-white' : 'bg-white border-slate-200 hover:border-slate-300 hover:bg-slate-50 dark:bg-slate-800 dark:border-slate-700 dark:hover:bg-slate-750 dark:hover:border-slate-600'}
                                 `}
                             >
-                                <span className={`text-[10px] font-bold ${isActive ? 'text-white' : 'text-slate-600'}`}>
+                                <span className={`text-[10px] font-bold ${isActive ? 'text-white' : 'text-slate-600 dark:text-slate-300'}`}>
                                     {frame.timestamp}s
                                 </span>
                                 {hasDamage ? (
@@ -81,22 +81,22 @@ const VideoTimeline = ({ results, onReset }) => {
 
             {/* Active Frame Details */}
             <div className="mb-8">
-                <p className="text-[10px] text-slate-500 tracking-widest uppercase mb-3">
+                <p className="text-[10px] text-slate-500 dark:text-slate-400 tracking-widest uppercase mb-3">
                     Detection at {activeFrame.timestamp}s
                 </p>
                 
                 {activeFrame.detected_issues.length === 0 ? (
-                    <div className="glass-panel border-slate-200 p-8 flex flex-col items-center justify-center text-center">
+                    <div className="glass-panel border-slate-200 dark:border-slate-800 p-8 flex flex-col items-center justify-center text-center">
                         <CheckCircle className="w-8 h-8 text-green-500 mb-3" />
-                        <p className="text-slate-700 font-medium">No damage detected at this timestamp.</p>
-                        <p className="text-slate-500 text-sm mt-1">The road surface appears secure natively.</p>
+                        <p className="text-slate-700 dark:text-slate-300 font-medium">No damage detected at this timestamp.</p>
+                        <p className="text-slate-500 dark:text-slate-400 text-sm mt-1">The road surface appears secure natively.</p>
                     </div>
                 ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                         {activeFrame.detected_issues.map((issue, idx) => (
-                            <div key={idx} className="glass-panel p-5 border border-slate-200 flex flex-col justify-between">
+                            <div key={idx} className="glass-panel p-5 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h4 className="text-slate-800 font-bold">{issue.type}</h4>
+                                    <h4 className="text-slate-800 dark:text-slate-250 font-bold">{issue.type}</h4>
                                     <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border ${getSeverityColor(issue.severity)}`}>
                                         {issue.severity}
                                     </span>
@@ -107,7 +107,7 @@ const VideoTimeline = ({ results, onReset }) => {
                                         <span className="text-xs text-mission-400">Confidence</span>
                                         <span className="text-sm font-bold text-accent-blue">{Math.round(issue.confidence * 100)}%</span>
                                     </div>
-                                    <div className="h-1.5 w-full bg-mission-900 rounded-full overflow-hidden">
+                                    <div className="h-1.5 w-full bg-mission-900 dark:bg-slate-800 rounded-full overflow-hidden">
                                         <div 
                                             className="h-full bg-accent-blue transition-all duration-1000" 
                                             style={{ width: `${Math.round(issue.confidence * 100)}%` }}
@@ -115,7 +115,7 @@ const VideoTimeline = ({ results, onReset }) => {
                                     </div>
                                 </div>
                                 
-                                <p className="text-[10px] text-slate-500 font-mono bg-slate-100 p-2 rounded">
+                                <p className="text-[10px] text-slate-500 dark:text-slate-400 font-mono bg-slate-100 dark:bg-slate-800/60 p-2 rounded">
                                     bbox: [{issue.bbox.map(n => Math.round(n)).join(', ')}]
                                 </p>
                             </div>
