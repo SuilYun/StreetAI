@@ -593,7 +593,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
                 </div>
 
                 {/* Media area */}
-                <div className={`relative flex flex-col ${analysisState === 'done' ? 'h-[500px] flex-shrink-0' : 'flex-grow flex-1 min-h-0'}`}>
+                <div className={`relative flex flex-col ${analysisState === 'done' ? 'h-[640px] flex-shrink-0' : 'flex-grow flex-1 min-h-0'}`}>
                     {renderContent()}
                 </div>
             </div>
