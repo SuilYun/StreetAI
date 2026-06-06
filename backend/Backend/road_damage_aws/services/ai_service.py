@@ -1,0 +1,206 @@
+import os
+import io
+from PIL import Image
+from fastapi import UploadFile
+from dotenv import load_dotenv
+from ultralytics import YOLO
+
+load_dotenv()
+
+# We can load the custom trained YOLO model
+MODEL_PATH = os.path.abspath(os.path.join(os.path.dirname(__file__), "../../../../ai-model/best.pt"))
+try:
+    model = YOLO(MODEL_PATH)
+except Exception as e:
+    print(f"Error loading YOLO model: {e}")
+    model = None
+
+# Class names mapping from best.pt classes to frontend display names
+CLASS_MAPPING = {
+    "longitudinal_crack": "Longitudinal Cracks (D00)",
+    "transverse_crack": "Transverse Cracks (D10)",
+    "alligator_crack": "Alligator Cracks (D20)",
+    "pothole": "Pothole (D40)"
+}
+
+async def analyze_image_with_ai(file: UploadFile):
+    """
+    Sends the image to the YOLO AI model and returns the predictions.
+    """
+    file_content = await file.read()
+    await file.seek(0)
+    
+    default_result = {
+        "damage_type": "None",
+        "confidence": 1.0,
+        "severity": "None",
+        "analysis": {
+            "detected_issues": []
+        }
+    }
+    
+    if not model:
+        return default_result
+
+    try:
+        # Load image via PIL
+        img = Image.open(io.BytesIO(file_content))
+        img_width, img_height = img.size
+        
+        results = model(img)
+        
+        detected_issues = []
+        highest_conf = 0.0
+        primary_damage = "None"
+        primary_severity = "None"
+        
+        for r in results:
+            boxes = r.boxes
+            for box in boxes:
+                # get box coordinates in (x, y, w, h)
+                x1, y1, x2, y2 = box.xyxy[0].tolist()
+                w = x2 - x1
+                h = y2 - y1
+                # get confidence
+                conf = float(box.conf[0])
+                # get class
+                cls = int(box.cls[0])
+                raw_class_name = model.names.get(cls, "unknown")
+                issue_type = CLASS_MAPPING.get(raw_class_name, raw_class_name.replace('_', ' ').title())
+                
+                bbox_area = w * h
+                severity = calculate_severity(conf, bbox_area)
+                
+                # Convert bbox coordinates to percentages for the frontend
+                x_pct = (x1 / img_width) * 100
+                y_pct = (y1 / img_height) * 100
+                w_pct = (w / img_width) * 100
+                h_pct = (h / img_height) * 100
+                
+                detected_issues.append({
+                    "type": issue_type,
+                    "severity": severity,
+                    "confidence": conf,
+                    "bbox": [x_pct, y_pct, w_pct, h_pct]
+                })
+                
+                if conf > highest_conf:
+                    highest_conf = conf
+                    primary_damage = issue_type
+                    primary_severity = severity
+                    
+        if not detected_issues:
+            return {
+                "damage_type": "None",
+                "confidence": 1.0,
+                "severity": "None",
+                "analysis": {
+                    "image_width": img_width,
+                    "image_height": img_height,
+                    "detected_issues": []
+                }
+            }
+            
+        return {
+            "damage_type": primary_damage,
+            "confidence": highest_conf,
+            "severity": primary_severity,
+            "analysis": {
+                "image_width": img_width,
+                "image_height": img_height,
+                "detected_issues": detected_issues
+            }
+        }
+    except Exception as e:
+        print(f"YOLO inference error: {e}")
+        return default_result
+
+def analyze_frame_with_ai(img) -> dict:
+    """Synchronous helper to analyze a raw cv2 frame or PIL Image for video processing."""
+    # Determine dimensions
+    if hasattr(img, 'shape'):
+        img_height, img_width = img.shape[:2]
+    elif hasattr(img, 'size'):
+        img_width, img_height = img.size
+    else:
+        img_width, img_height = 640, 480
+
+    default_result = {
+        "damage_type": "None",
+        "confidence": 1.0,
+        "severity": "None",
+        "analysis": {
+            "image_width": img_width,
+            "image_height": img_height,
+            "detected_issues": []
+        }
+    }
+    
+    if not model:
+        return default_result
+
+    try:
+        results = model(img)
+        detected_issues = []
+        highest_conf = 0.0
+        primary_damage = "None"
+        primary_severity = "None"
+        
+        for r in results:
+            boxes = r.boxes
+            for box in boxes:
+                x1, y1, x2, y2 = box.xyxy[0].tolist()
+                w = x2 - x1
+                h = y2 - y1
+                conf = float(box.conf[0])
+                cls = int(box.cls[0])
+                raw_class_name = model.names.get(cls, "unknown")
+                issue_type = CLASS_MAPPING.get(raw_class_name, raw_class_name.replace('_', ' ').title())
+                
+                bbox_area = w * h
+                severity = calculate_severity(conf, bbox_area)
+                
+                # Convert bbox coordinates to percentages for the frontend
+                x_pct = (x1 / img_width) * 100
+                y_pct = (y1 / img_height) * 100
+                w_pct = (w / img_width) * 100
+                h_pct = (h / img_height) * 100
+                
+                detected_issues.append({
+                    "type": issue_type,
+                    "severity": severity,
+                    "confidence": conf,
+                    "bbox": [x_pct, y_pct, w_pct, h_pct]
+                })
+                
+                if conf > highest_conf:
+                    highest_conf = conf
+                    primary_damage = issue_type
+                    primary_severity = severity
+                    
+        if not detected_issues:
+            return default_result
+            
+        return {
+            "damage_type": primary_damage,
+            "confidence": highest_conf,
+            "severity": primary_severity,
+            "analysis": {
+                "image_width": img_width,
+                "image_height": img_height,
+                "detected_issues": detected_issues
+            }
+        }
+    except Exception as e:
+        print(f"YOLO frame inference error: {e}")
+        return default_result
+
+def calculate_severity(confidence: float, bbox_area: float) -> str:
+    """Calculates severity based on confidence and bounding box size."""
+    if confidence > 0.85 or bbox_area > 5000:
+        return "High"
+    elif confidence > 0.60 or bbox_area > 2000:
+        return "Medium"
+    else:
+        return "Low"
+

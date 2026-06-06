@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Server Status Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #020617;
+            --bg-gradient: linear-gradient(135deg, #09090b 0%, #171717 100%);
+            --glass-bg: rgba(255, 255, 255, 0.03);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+            
+            /* Status Colors */
+            --status-online: #10b981;
+            --status-online-glow: rgba(16, 185, 129, 0.4);
+            --status-offline: #ef4444;
+            --status-offline-glow: rgba(239, 68, 68, 0.4);
+            --status-checking: #f59e0b;
+            --status-checking-glow: rgba(245, 158, 11, 0.4);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-main);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Abstract ambient background elements */
+        .ambient-light {
+            position: absolute;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            filter: blur(150px);
+            z-index: 0;
+            opacity: 0.5;
+            transition: background 1.5s ease-in-out;
+        }
+
+        .ambient-light.online { background: rgba(16, 185, 129, 0.15); }
+        .ambient-light.offline { background: rgba(239, 68, 68, 0.15); }
+        .ambient-light.checking { background: rgba(245, 158, 11, 0.15); }
+
+        .dashboard-container {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            max-width: 500px;
+            padding: 20px;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            border-radius: 24px;
+            padding: 3rem 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255,255,255,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255,255,255,0.1);
+            border-color: rgba(255, 255, 255, 0.12);
+        }
+
+        .header {
+            margin-bottom: 2.5rem;
+        }
+
+        .title {
+            font-size: 1.75rem;
+            font-weight: 600;
+            letter-spacing: -0.5px;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(to right, #ffffff, #a1a1aa);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .subtitle {
+            font-size: 0.95rem;
+            color: var(--text-muted);
+            font-weight: 400;
+        }
+
+        /* Status Orb */
+        .status-orb-container {
+            position: relative;
+            width: 120px;
+            height: 120px;
+            margin: 0 auto 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .ripple {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            animation: ripple-anim 2s infinite cubic-bezier(0.65, 0, 0.34, 1);
+            z-index: 1;
+        }
+
+        .orb {
+            position: relative;
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            z-index: 2;
+            transition: background 0.5s ease, box-shadow 0.5s ease;
+        }
+
+        /* States */
+        /* Online */
+        .status-container.online .orb {
+            background: var(--status-online);
+            box-shadow: 0 0 20px var(--status-online-glow), inset 0 2px 4px rgba(255,255,255,0.4);
+        }
+        .status-container.online .ripple { border: 2px solid var(--status-online); }
+        .status-container.online .status-text { color: var(--status-online); }
+
+        /* Offline */
+        .status-container.offline .orb {
+            background: var(--status-offline);
+            box-shadow: 0 0 20px var(--status-offline-glow), inset 0 2px 4px rgba(255,255,255,0.4);
+        }
+        .status-container.offline .ripple { border: 2px solid var(--status-offline); animation-duration: 3s; }
+        .status-container.offline .status-text { color: var(--status-offline); }
+
+        /* Checking */
+        .status-container.checking .orb {
+            background: var(--status-checking);
+            box-shadow: 0 0 20px var(--status-checking-glow), inset 0 2px 4px rgba(255,255,255,0.4);
+            animation: pulse-anim 1s infinite alternate;
+        }
+        .status-container.checking .ripple { display: none; }
+        .status-container.checking .status-text { color: var(--status-checking); }
+
+        @keyframes ripple-anim {
+            0% { transform: scale(0.4); opacity: 0.8; }
+            100% { transform: scale(1.2); opacity: 0; }
+        }
+        
+        @keyframes pulse-anim {
+            0% { transform: scale(0.9); opacity: 0.8; }
+            100% { transform: scale(1.1); opacity: 1; }
+        }
+
+        /* Typography & Details */
+        .status-headline {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.25rem;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+        }
+
+        .details-grid {
+            margin-top: 2.5rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            text-align: left;
+            border-top: 1px solid var(--glass-border);
+            padding-top: 2rem;
+        }
+
+        .metric {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .metric-label {
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--text-muted);
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+        }
+
+        .metric-value {
+            font-size: 1rem;
+            font-weight: 500;
+            color: var(--text-main);
+            word-break: break-all;
+        }
+
+        .ping-time {
+            color: var(--status-online);
+            font-family: monospace;
+            font-size: 1.1rem;
+        }
+
+        .refresh-btn {
+            margin-top: 2rem;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid var(--glass-border);
+            color: var(--text-main);
+            padding: 0.75rem 1.5rem;
+            border-radius: 99px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-btn:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+        }
+
+        .refresh-btn.spinning svg {
+            animation: spin 1s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="ambient-light checking" id="ambientLight"></div>
+
+    <div class="dashboard-container">
+        <div class="glass-card status-container checking" id="statusWrapper">
+            
+            <div class="header">
+                <h1 class="title">API Gateway</h1>
+                <p class="subtitle">System Health Monitor</p>
+            </div>
+
+            <div class="status-orb-container">
+                <div class="ripple"></div>
+                <div class="orb"></div>
+            </div>
+
+            <h2 class="status-headline status-text" id="statusHeadline">Connecting...</h2>
+            <p class="subtitle" id="statusMessage">Establishing connection via localhost:8000</p>
+
+            <div class="details-grid">
+                <div class="metric">
+                    <div class="metric-label">AWS Status</div>
+                    <div class="metric-value" id="dbValue">--</div>
+                </div>
+                <div class="metric">
+                    <div class="metric-label">Latency Response</div>
+                    <div class="metric-value ping-time" id="latencyValue">-- ms</div>
+                </div>
+            </div>
+
+            <button class="refresh-btn" id="refreshBtn" onclick="checkServerStatus()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21.5 2v6h-6M2.5 22v-6h6M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.3"/>
+                </svg>
+                Sync Now
+            </button>
+
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "http://127.0.0.1:8000/";
+        
+        const wrapper = document.getElementById('statusWrapper');
+        const ambient = document.getElementById('ambientLight');
+        const headline = document.getElementById('statusHeadline');
+        const message = document.getElementById('statusMessage');
+        const dbValue = document.getElementById('dbValue');
+        const latencyValue = document.getElementById('latencyValue');
+        const refreshBtn = document.getElementById('refreshBtn');
+
+        function setStatus(state, msg, dbInfo, latency) {
+            // Remove previous states
+            wrapper.classList.remove('online', 'offline', 'checking');
+            ambient.classList.remove('online', 'offline', 'checking');
+
+            // Apply new state
+            wrapper.classList.add(state);
+            ambient.classList.add(state);
+
+            if (state === 'online') {
+                headline.textContent = 'ONLINE';
+                message.textContent = 'All systems are operating normally.';
+                dbValue.textContent = dbInfo || "Connected";
+                latencyValue.textContent = latency + " ms";
+                latencyValue.style.color = "var(--status-online)";
+            } else if (state === 'offline') {
+                headline.textContent = 'OFFLINE';
+                message.textContent = msg || 'Server is completely unreachable.';
+                dbValue.textContent = "Disconnected";
+                latencyValue.textContent = "Timeout";
+                latencyValue.style.color = "var(--status-offline)";
+            } else {
+                headline.textContent = 'CHECKING...';
+                message.textContent = 'Reaching out to backend...';
+                dbValue.textContent = "--";
+                latencyValue.textContent = "-- ms";
+                latencyValue.style.color = "var(--text-main)";
+            }
+        }
+
+        async function checkServerStatus() {
+            setStatus('checking');
+            refreshBtn.classList.add('spinning');
+            refreshBtn.disabled = true;
+
+            const startTime = performance.now();
+
+            try {
+                // We add a cache buster to prevent browser caching of GET requests
+                const cacheBuster = `?t=${new Date().getTime()}`;
+                
+                // Set a manual timeout using Promise.race (fetch doesn't have built-in timeout)
+                const fetchPromise = fetch(API_URL + cacheBuster, { method: 'GET' });
+                const timeoutPromise = new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 5000));
+                
+                const response = await Promise.race([fetchPromise, timeoutPromise]);
+                const endTime = performance.now();
+                const latency = Math.round(endTime - startTime);
+
+                if (response.ok) {
+                    const data = await response.json();
+                    
+                    // Parse based on your specific fastapi output {"status": "...", "database": "..."}
+                    const dbStatus = data.database || "Unknown DB state";
+                    
+                    if (data.status && data.status.toLowerCase() === 'active') {
+                        setStatus('online', '', dbStatus, latency);
+                    } else {
+                        // Response received but status isn't exactly 'active'
+                        setStatus('online', '', 'Warning: Non-Active State', latency);
+                        message.textContent = `Server responded, but status is: ${data.status}`;
+                    }
+                } else {
+                    setStatus('offline', `HTTP Error: ${response.status}`);
+                }
+            } catch (error) {
+                setStatus('offline', 'Connection refused. Ensure Uvicorn is running.');
+            } finally {
+                setTimeout(() => {
+                    refreshBtn.classList.remove('spinning');
+                    refreshBtn.disabled = false;
+                }, 500);
+            }
+        }
+
+        // Initialize check on load
+        document.addEventListener('DOMContentLoaded', () => {
+            // Add a tiny delay purely for aesthetic booting effect
+            setTimeout(checkServerStatus, 800);
+            
+            // Auto check every 30 seconds
+            setInterval(checkServerStatus, 30000);
+        });
+
+    </script>
+</body>
+</html>
