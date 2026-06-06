@@ -26,11 +26,10 @@ const DamageRadarChart = ({ stats }) => {
         }
     }, []);
     const rawData = [
-        { category: 'Potholes (D40)', description: 'Potholes (D40) – Surface depressions resulting from pavement deterioration.', count: stats.potholes, color: '#ef4444', bg: 'bg-red-50' },
-        { category: 'Longitudinal Cracks (D00)', description: 'Longitudinal Cracks (D00) – Cracks running parallel to the road direction.', count: stats.longCracks, color: '#f59e0b', bg: 'bg-amber-50' },
-        { category: 'Transverse Cracks (D10)', description: 'Transverse Cracks (D10) – Cracks running across the road width.', count: stats.transCracks, color: '#8b5cf6', bg: 'bg-violet-50' },
-        { category: 'Healthy Road Conditions', description: 'Healthy Road Conditions – Detection of road surfaces without visible damage.', count: stats.erosion, color: '#06b6d4', bg: 'bg-cyan-50' },
-        { category: 'Alligator Cracks (D20)', description: 'Alligator Cracks (D20) – Interconnected crack patterns caused by pavement fatigue.', count: stats.alligatorCracks, color: '#10b981', bg: 'bg-emerald-50' },
+        { category: 'Potholes (D40)', count: stats.potholes, color: '#ef4444', bg: 'bg-red-50' },
+        { category: 'Longitudinal Cracks (D00)', count: stats.longCracks, color: '#f59e0b', bg: 'bg-amber-50' },
+        { category: 'Transverse Cracks (D10)', count: stats.transCracks, color: '#8b5cf6', bg: 'bg-violet-50' },
+        { category: 'Alligator Cracks (D20)', count: stats.alligatorCracks, color: '#10b981', bg: 'bg-emerald-50' },
     ];
 
     const chartData = rawData.map(d => ({ category: d.category, value: d.count * 3 }));
@@ -98,7 +97,7 @@ const DamageRadarChart = ({ stats }) => {
                     {rawData.map((item) => (
                         <div key={item.category} className="flex items-start gap-3">
                             <div className="w-2.5 h-2.5 rounded-full flex-shrink-0 mt-1" style={{ backgroundColor: item.color }} />
-                            <span className="text-xs text-slate-600 flex-1 leading-tight">{item.description}</span>
+                            <span className="text-xs text-slate-600 flex-1 leading-tight">{item.category}</span>
                             <span className="text-xs font-bold text-slate-800 w-6 text-right mt-0.5">{item.count}</span>
                             <div className="w-16 h-1.5 bg-slate-100 rounded-full overflow-hidden">
                                 <div
