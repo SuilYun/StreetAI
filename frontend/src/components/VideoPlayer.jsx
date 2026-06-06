@@ -569,7 +569,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
 
     return (
         <>
-            <div className="glass-panel overflow-hidden relative flex flex-col flex-1 min-h-[380px]" ref={containerRef}>
+            <div className="glass-panel overflow-hidden relative flex flex-col lg:h-[calc(100vh-230px)] min-h-[380px]" ref={containerRef}>
                 {/* Header tabs */}
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 z-20 bg-white/90 backdrop-blur-sm">
                     <div className="flex gap-1">
