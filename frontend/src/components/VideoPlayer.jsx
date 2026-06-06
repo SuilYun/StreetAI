@@ -593,7 +593,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
                 </div>
 
                 {/* Media area */}
-                <div className="relative flex-1 flex flex-col" style={{ minHeight: '360px' }}>
+                <div className="relative flex-1 min-h-0 flex flex-col">
                     {renderContent()}
                 </div>
             </div>

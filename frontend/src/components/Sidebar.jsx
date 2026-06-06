@@ -1,13 +1,12 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { Shield, LayoutDashboard, BarChart3, Database, Map, Network } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Database } from 'lucide-react';
 
 const Sidebar = ({ isConnected }) => {
     const navItems = [
         { path: '/', label: 'Dashboard', icon: LayoutDashboard },
         { path: '/analytics', label: 'Analytics', icon: BarChart3 },
         { path: '/reports', label: 'Reports', icon: Database },
-        { path: '/map', label: 'Live Map', icon: Map },
     ];
 
     return (
