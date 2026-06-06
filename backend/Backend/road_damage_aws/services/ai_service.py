@@ -201,15 +201,15 @@ def analyze_frame_with_ai(img) -> dict:
 
 def calculate_severity(confidence: float, relative_area: float) -> str:
     """
-    Calculates severity based on confidence and relative bounding box area (0 to 100%).
+    Calculates severity based on confidence thresholds:
+    - Low: < 35% (< 0.35)
+    - Medium: 35% to 65% (0.35 - 0.65)
+    - High (Critical): >= 65% (>= 0.65)
     """
-    # High: High confidence and significant size, or very large size
-    if (confidence >= 0.75 and relative_area >= 1.5) or relative_area >= 4.0:
+    if confidence >= 0.65:
         return "High"
-    # Medium: Moderate confidence/size, or high confidence with smaller size
-    elif (confidence >= 0.45 and relative_area >= 0.6) or relative_area >= 1.5 or confidence >= 0.80:
+    elif confidence >= 0.35:
         return "Medium"
-    # Low: Otherwise (small defects or low confidence predictions)
     else:
         return "Low"
 

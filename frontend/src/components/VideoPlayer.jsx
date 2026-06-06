@@ -4,19 +4,11 @@ import anime from 'animejs';
 import { uploadImage, uploadVideo, getImageUrl } from '../services/api';
 import VideoTimeline from './VideoTimeline';
 
-const TYPE_COLORS = {
-    'Pothole': { border: '#ef4444', bg: 'bg-red-500/15', text: 'text-red-400', badge: 'bg-red-500' },
-    'Transverse Cracks': { border: '#8b5cf6', bg: 'bg-violet-500/15', text: 'text-violet-400', badge: 'bg-violet-500' },
-    'Longitudinal Cracks': { border: '#f59e0b', bg: 'bg-amber-500/15', text: 'text-amber-400', badge: 'bg-amber-500' },
-    'Alligator Cracks': { border: '#10b981', bg: 'bg-emerald-500/15', text: 'text-emerald-400', badge: 'bg-emerald-500' },
-    'Healthy Road Conditions': { border: '#06b6d4', bg: 'bg-cyan-500/15', text: 'text-cyan-400', badge: 'bg-cyan-500' }
-};
-
-const SEVERITY_STYLES = {
-    High: 'bg-detect-pothole/20 text-detect-pothole border border-detect-pothole/30',
-    Medium: 'bg-detect-crack/20 text-detect-crack border border-detect-crack/30',
-    Low: 'bg-detect-safe/20 text-detect-safe border border-detect-safe/30',
-    None: 'bg-white/10 text-mission-300 border border-white/10',
+const SEVERITY_COLORS = {
+    High: { border: '#ef4444', bg: 'bg-red-50/70 border-red-200', text: 'text-red-500', badge: 'bg-red-500 text-white shadow-sm font-semibold' },
+    Medium: { border: '#f59e0b', bg: 'bg-amber-50/70 border-amber-200', text: 'text-amber-600', badge: 'bg-amber-500 text-white shadow-sm font-semibold' },
+    Low: { border: '#10b981', bg: 'bg-emerald-50/70 border-emerald-200', text: 'text-emerald-600', badge: 'bg-emerald-500 text-white shadow-sm font-semibold' },
+    None: { border: '#64748b', bg: 'bg-slate-50/70 border-slate-200', text: 'text-slate-600', badge: 'bg-slate-500 text-white shadow-sm font-semibold' }
 };
 
 const MODES = [
@@ -85,7 +77,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
         const y = (yPct / 100) * canvas.height;
         const w = (wPct / 100) * canvas.width;
         const h = (hPct / 100) * canvas.height;
-        const color = TYPE_COLORS[latestEvent.type]?.border || '#3b82f6';
+        const color = SEVERITY_COLORS[latestEvent.severity]?.border || '#3b82f6';
 
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = color;
@@ -165,7 +157,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
             const y = offsetY + (by / 100) * displayHeight;
             const w = (bw / 100) * displayWidth;
             const h = (bh / 100) * displayHeight;
-            const color = TYPE_COLORS[issue.type]?.border || '#3b82f6';
+            const color = SEVERITY_COLORS[issue.severity]?.border || '#3b82f6';
 
             // Box
             ctx.strokeStyle = color;
@@ -274,7 +266,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
             const y = offsetY + (yPct / 100) * displayHeight;
             const w = (wPct / 100) * displayWidth;
             const h = (hPct / 100) * displayHeight;
-            const color = TYPE_COLORS[issue.type]?.border || '#3b82f6';
+            const color = SEVERITY_COLORS[issue.severity]?.border || '#3b82f6';
 
             ctx.strokeStyle = color;
             ctx.lineWidth = 2.5;
@@ -529,14 +521,14 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
                             ) : (
                                 <div className="flex flex-wrap gap-2 mb-4">
                                     {analysisResults.detected_issues.map((issue, idx) => {
-                                        const colors = TYPE_COLORS[issue.type] || TYPE_COLORS.Crack;
+                                        const colors = SEVERITY_COLORS[issue.severity] || SEVERITY_COLORS.Low;
                                         return (
                                             <div key={idx}
-                                                className={`flex items-center gap-3 p-3 rounded-lg ${colors.bg} border border-slate-200/60 min-w-[200px]`}>
+                                                className={`flex items-center gap-3 p-3 rounded-lg ${colors.bg} border min-w-[200px]`}>
                                                 <div className="flex-1">
                                                     <div className="flex items-center gap-2 mb-1">
                                                         <span className="font-semibold text-sm text-mission-100">{issue.type}</span>
-                                                        <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-full ${SEVERITY_STYLES[issue.severity]}`}>
+                                                        <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full ${colors.badge}`}>
                                                             {issue.severity === 'High' ? 'critical' : issue.severity.toLowerCase()}
                                                         </span>
                                                     </div>
@@ -544,7 +536,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
                                                         <span className="text-xs text-mission-300">Confidence</span>
                                                         <span className={`text-xs font-bold ${colors.text}`}>{(issue.confidence * 100).toFixed(0)}%</span>
                                                     </div>
-                                                    <div className="w-full h-1 bg-slate-200 rounded-full mt-1 overflow-hidden">
+                                                    <div className="w-full h-1 bg-slate-200/40 rounded-full mt-1 overflow-hidden">
                                                         <div className="h-full rounded-full transition-all duration-1000"
                                                             style={{ width: `${issue.confidence * 100}%`, backgroundColor: colors.border }} />
                                                     </div>
