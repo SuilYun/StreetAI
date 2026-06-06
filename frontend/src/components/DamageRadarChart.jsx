@@ -26,10 +26,10 @@ const DamageRadarChart = ({ stats }) => {
         }
     }, []);
     const rawData = [
-        { category: 'Potholes (D40)', count: stats.potholes, color: '#ef4444', bg: 'bg-red-50' },
-        { category: 'Longitudinal Cracks (D00)', count: stats.longCracks, color: '#f59e0b', bg: 'bg-amber-50' },
-        { category: 'Transverse Cracks (D10)', count: stats.transCracks, color: '#8b5cf6', bg: 'bg-violet-50' },
-        { category: 'Alligator Cracks (D20)', count: stats.alligatorCracks, color: '#10b981', bg: 'bg-emerald-50' },
+        { category: 'Potholes', count: stats.potholes, color: '#ef4444', bg: 'bg-red-50' },
+        { category: 'Longitudinal Cracks', count: stats.longCracks, color: '#f59e0b', bg: 'bg-amber-50' },
+        { category: 'Transverse Cracks', count: stats.transCracks, color: '#8b5cf6', bg: 'bg-violet-50' },
+        { category: 'Alligator Cracks', count: stats.alligatorCracks, color: '#10b981', bg: 'bg-emerald-50' },
     ];
 
     const chartData = rawData.map(d => ({ category: d.category, value: d.count * 3 }));

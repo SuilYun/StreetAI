@@ -5,10 +5,10 @@ import { uploadImage, uploadVideo, getImageUrl } from '../services/api';
 import VideoTimeline from './VideoTimeline';
 
 const TYPE_COLORS = {
-    'Pothole (D40)': { border: '#ef4444', bg: 'bg-red-500/15', text: 'text-red-400', badge: 'bg-red-500' },
-    'Transverse Cracks (D10)': { border: '#8b5cf6', bg: 'bg-violet-500/15', text: 'text-violet-400', badge: 'bg-violet-500' },
-    'Longitudinal Cracks (D00)': { border: '#f59e0b', bg: 'bg-amber-500/15', text: 'text-amber-400', badge: 'bg-amber-500' },
-    'Alligator Cracks (D20)': { border: '#10b981', bg: 'bg-emerald-500/15', text: 'text-emerald-400', badge: 'bg-emerald-500' },
+    'Pothole': { border: '#ef4444', bg: 'bg-red-500/15', text: 'text-red-400', badge: 'bg-red-500' },
+    'Transverse Cracks': { border: '#8b5cf6', bg: 'bg-violet-500/15', text: 'text-violet-400', badge: 'bg-violet-500' },
+    'Longitudinal Cracks': { border: '#f59e0b', bg: 'bg-amber-500/15', text: 'text-amber-400', badge: 'bg-amber-500' },
+    'Alligator Cracks': { border: '#10b981', bg: 'bg-emerald-500/15', text: 'text-emerald-400', badge: 'bg-emerald-500' },
     'Healthy Road Conditions': { border: '#06b6d4', bg: 'bg-cyan-500/15', text: 'text-cyan-400', badge: 'bg-cyan-500' }
 };
 

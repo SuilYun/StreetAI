@@ -17,10 +17,10 @@ except Exception as e:
 
 # Class names mapping from best.pt classes to frontend display names
 CLASS_MAPPING = {
-    "longitudinal_crack": "Longitudinal Cracks (D00)",
-    "transverse_crack": "Transverse Cracks (D10)",
-    "alligator_crack": "Alligator Cracks (D20)",
-    "pothole": "Pothole (D40)"
+    "longitudinal_crack": "Longitudinal Cracks",
+    "transverse_crack": "Transverse Cracks",
+    "alligator_crack": "Alligator Cracks",
+    "pothole": "Pothole"
 }
 
 async def analyze_image_with_ai(file: UploadFile):

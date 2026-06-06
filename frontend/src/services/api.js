@@ -96,11 +96,10 @@ export const fetchAnalytics = async () => {
         setTimeout(() => {
             resolve({
                 radarData: [
-                    { category: 'Potholes (D40)', value: 85, fullMark: 100 },
-                    { category: 'Longitudinal Cracks (D00)', value: 65, fullMark: 100 },
-                    { category: 'Transverse Cracks (D10)', value: 45, fullMark: 100 },
-                    { category: 'Healthy Road Conditions', value: 30, fullMark: 100 },
-                    { category: 'Alligator Cracks (D20)', value: 55, fullMark: 100 },
+                    { category: 'Potholes', value: 85, fullMark: 100 },
+                    { category: 'Longitudinal Cracks', value: 65, fullMark: 100 },
+                    { category: 'Transverse Cracks', value: 45, fullMark: 100 },
+                    { category: 'Alligator Cracks', value: 55, fullMark: 100 },
                 ],
                 kpis: {
                     totalDetections: 1247,
