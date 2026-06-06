@@ -161,16 +161,14 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
 
             // Box
             ctx.strokeStyle = color;
-            ctx.lineWidth = 2;
-            ctx.setLineDash([6, 3]);
+            ctx.lineWidth = 2.5;
             ctx.strokeRect(x, y, w, h);
-            ctx.setLineDash([]);
-            ctx.fillStyle = color + '15';
+            ctx.fillStyle = color + '18';
             ctx.fillRect(x, y, w, h);
 
             // Corner brackets
-            const cl = 8;
-            ctx.lineWidth = 3;
+            const cl = 10;
+            ctx.lineWidth = 3.5;
             ctx.strokeStyle = color;
             ctx.beginPath();
             ctx.moveTo(x, y + cl); ctx.lineTo(x, y); ctx.lineTo(x + cl, y);
