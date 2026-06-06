@@ -69,7 +69,9 @@ async def analyze_image_with_ai(file: UploadFile):
                 issue_type = CLASS_MAPPING.get(raw_class_name, raw_class_name.replace('_', ' ').title())
                 
                 bbox_area = w * h
-                severity = calculate_severity(conf, bbox_area)
+                img_area = img_width * img_height
+                relative_area = (bbox_area / img_area) * 100 if img_area > 0 else 0
+                severity = calculate_severity(conf, relative_area)
                 
                 # Convert bbox coordinates to percentages for the frontend
                 x_pct = (x1 / img_width) * 100
@@ -158,7 +160,9 @@ def analyze_frame_with_ai(img) -> dict:
                 issue_type = CLASS_MAPPING.get(raw_class_name, raw_class_name.replace('_', ' ').title())
                 
                 bbox_area = w * h
-                severity = calculate_severity(conf, bbox_area)
+                img_area = img_width * img_height
+                relative_area = (bbox_area / img_area) * 100 if img_area > 0 else 0
+                severity = calculate_severity(conf, relative_area)
                 
                 # Convert bbox coordinates to percentages for the frontend
                 x_pct = (x1 / img_width) * 100
@@ -195,12 +199,17 @@ def analyze_frame_with_ai(img) -> dict:
         print(f"YOLO frame inference error: {e}")
         return default_result
 
-def calculate_severity(confidence: float, bbox_area: float) -> str:
-    """Calculates severity based on confidence and bounding box size."""
-    if confidence > 0.85 or bbox_area > 5000:
+def calculate_severity(confidence: float, relative_area: float) -> str:
+    """
+    Calculates severity based on confidence and relative bounding box area (0 to 100%).
+    """
+    # High: High confidence and significant size, or very large size
+    if (confidence >= 0.75 and relative_area >= 1.5) or relative_area >= 4.0:
         return "High"
-    elif confidence > 0.60 or bbox_area > 2000:
+    # Medium: Moderate confidence/size, or high confidence with smaller size
+    elif (confidence >= 0.45 and relative_area >= 0.6) or relative_area >= 1.5 or confidence >= 0.80:
         return "Medium"
+    # Low: Otherwise (small defects or low confidence predictions)
     else:
         return "Low"
 
