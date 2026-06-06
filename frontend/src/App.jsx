@@ -1,15 +1,13 @@
-import React, { useState, useEffect, useCallback, useRef } from 'react';
-import { Database, Shield, Menu, X, Image as ImageIcon, Video } from 'lucide-react';
-import anime from 'animejs';
-import useLiveDetection from './hooks/useLiveDetection';
+import React, { useState, useEffect, useCallback } from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { checkServerStatus } from './services/api';
-import StatsBar from './components/StatsBar';
-import VideoPlayer from './components/VideoPlayer';
-import DamageRadarChart from './components/DamageRadarChart';
-import ManagementDashboard from './components/ManagementDashboard';
+import Sidebar from './components/Sidebar';
+import Dashboard from './pages/Dashboard';
+import Analytics from './pages/Analytics';
+import Reports from './pages/Reports';
+import LiveMap from './pages/LiveMap';
 
 function App() {
-    const [currentView, setCurrentView] = useState('image'); // 'image', 'video', or 'dashboard'
     const [mediaActive, setMediaActive] = useState(false);
     const [stats, setStats] = useState({
         totalDetections: 0,
@@ -23,34 +21,7 @@ function App() {
     });
 
     const [isConnected, setIsConnected] = useState(false);
-    const [menuOpen, setMenuOpen] = useState(false);
     const latestEvent = null;
-    const headerRef = useRef(null);
-    const menuRef = useRef(null);
-
-    // Header shimmer animation
-    useEffect(() => {
-        if (headerRef.current) {
-            anime({
-                targets: headerRef.current,
-                backgroundPosition: ['0% 50%', '200% 50%'],
-                loop: true,
-                easing: 'linear',
-                duration: 4000,
-            });
-        }
-    }, []);
-
-    // Close menu when clicking outside
-    useEffect(() => {
-        function handleClickOutside(event) {
-            if (menuRef.current && !menuRef.current.contains(event.target)) {
-                setMenuOpen(false);
-            }
-        }
-        document.addEventListener("mousedown", handleClickOutside);
-        return () => document.removeEventListener("mousedown", handleClickOutside);
-    }, []);
 
     // Real-time server connection check
     useEffect(() => {
@@ -65,19 +36,6 @@ function App() {
 
     const handleMediaStateChange = useCallback((isActive) => {
         setMediaActive(isActive);
-    }, []);
-
-    const handleResetStats = useCallback(() => {
-        setStats({
-            totalDetections: 0,
-            potholes: 0,
-            cracks: 0,
-            erosion: 0,
-            longCracks: 0,
-            transCracks: 0,
-            alligatorCracks: 0,
-            avgConfidence: 0,
-        });
     }, []);
 
     const handleAnalysisComplete = useCallback((data) => {
@@ -126,123 +84,57 @@ function App() {
         }));
     }, []);
 
+    const handleResetStats = useCallback(() => {
+        setStats({
+            totalDetections: 0,
+            potholes: 0,
+            cracks: 0,
+            erosion: 0,
+            longCracks: 0,
+            transCracks: 0,
+            alligatorCracks: 0,
+            avgConfidence: 0,
+        });
+    }, []);
+
     return (
-        <div className="h-screen overflow-hidden flex flex-col bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-4 lg:p-5">
-            {/* Header */}
-            <header className="mb-4 flex-shrink-0 flex items-center justify-between gap-4">
-                <div className="flex items-center gap-3">
-                    {/* Hamburger Menu in the top left */}
-                    <div className="relative" ref={menuRef}>
-                        <button
-                            onClick={() => setMenuOpen(!menuOpen)}
-                            className="p-2.5 text-slate-600 hover:text-blue-600 hover:bg-slate-100/80 active:bg-slate-200/80 rounded-xl border border-slate-200/60 transition-all flex items-center justify-center shadow-sm bg-white"
-                            aria-label="Toggle Navigation Menu"
-                        >
-                            {menuOpen ? <X size={20} /> : <Menu size={20} />}
-                        </button>
+        <Router>
+            <div className="h-screen overflow-hidden flex flex-col lg:flex-row bg-gradient-to-br from-slate-50 via-white to-blue-50/20">
+                {/* Persistent Responsive Sidebar */}
+                <Sidebar isConnected={isConnected} />
 
-                        {menuOpen && (
-                            <div className="absolute left-0 mt-2 w-56 bg-white rounded-xl border border-slate-200/80 shadow-xl py-1.5 z-50 animate-in fade-in slide-in-from-top-2 duration-200">
-                                <button
-                                    onClick={() => {
-                                        setCurrentView('image');
-                                        setMenuOpen(false);
-                                    }}
-                                    className={`w-full px-4 py-2.5 text-left flex items-center gap-3 text-sm font-medium transition-all ${
-                                        currentView === 'image'
-                                            ? 'bg-blue-50/60 text-blue-600 font-semibold'
-                                            : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
-                                    }`}
-                                >
-                                    <ImageIcon size={16} />
-                                    Image Option
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setCurrentView('video');
-                                        setMenuOpen(false);
-                                    }}
-                                    className={`w-full px-4 py-2.5 text-left flex items-center gap-3 text-sm font-medium transition-all ${
-                                        currentView === 'video'
-                                            ? 'bg-blue-50/60 text-blue-600 font-semibold'
-                                            : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
-                                    }`}
-                                >
-                                    <Video size={16} />
-                                    Video Option
-                                </button>
-                                <button
-                                    onClick={() => {
-                                        setCurrentView('dashboard');
-                                        setMenuOpen(false);
-                                    }}
-                                    className={`w-full px-4 py-2.5 text-left flex items-center gap-3 text-sm font-medium transition-all ${
-                                        currentView === 'dashboard'
-                                            ? 'bg-blue-50/60 text-blue-600 font-semibold'
-                                            : 'text-slate-600 hover:text-slate-800 hover:bg-slate-50'
-                                    }`}
-                                >
-                                    <Database size={16} />
-                                    Previous Reports
-                                </button>
-                            </div>
-                        )}
-                    </div>
-
-                    {/* Logo */}
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center shadow-lg shadow-blue-500/25">
-                        <Shield size={22} className="text-white" />
-                    </div>
-                    <div>
-                        <h1
-                            ref={headerRef}
-                            className="text-2xl font-bold text-slate-800"
-                            style={{
-                                backgroundImage: 'linear-gradient(90deg, #3b82f6, #06b6d4, #3b82f6)',
-                                backgroundSize: '200% auto',
-                                WebkitBackgroundClip: 'text',
-                                WebkitTextFillColor: 'transparent',
-                            }}
-                        >
-                            RoadAI
-                        </h1>
-                        <p className="text-sm text-slate-500">
-                            Real-time road damage detection & analytics
-                        </p>
-                    </div>
-                </div>
-            </header>
-
-            {currentView === 'dashboard' ? (
-                <div className="flex-1 min-h-0 overflow-y-auto">
-                    <ManagementDashboard />
-                </div>
-            ) : (
-                <div className="flex-1 min-h-0 flex flex-col">
-                    {/* Stats Row */}
-                    <div className="mb-4 flex-shrink-0">
-                        <StatsBar stats={stats} isConnected={isConnected} />
-                    </div>
-
-                    {/* Main Grid: Video + Radar Chart Sidebar */}
-                    <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-4 overflow-hidden">
-                        <div className="lg:col-span-2 flex flex-col h-full min-h-0 overflow-y-auto pr-1">
-                            <VideoPlayer
-                                latestEvent={latestEvent}
-                                onMediaStateChange={handleMediaStateChange}
-                                onAnalysisComplete={handleAnalysisComplete}
-                                activeMode={currentView}
-                                onModeChange={(mode) => setCurrentView(mode)}
-                                onReset={handleResetStats}
-                            />
-                        </div>
-                        <div className="lg:col-span-1 h-full min-h-0 flex flex-col">
-                            <DamageRadarChart stats={stats} />
-                        </div>
-                    </div>
-                </div>
-            )}
-        </div>
+                {/* Main Content Pane */}
+                <main className="flex-1 min-h-0 p-4 lg:p-6 flex flex-col overflow-hidden">
+                    <Routes>
+                        <Route
+                            path="/"
+                            element={
+                                <Dashboard
+                                    stats={stats}
+                                    isConnected={isConnected}
+                                    latestEvent={latestEvent}
+                                    handleMediaStateChange={handleMediaStateChange}
+                                    handleAnalysisComplete={handleAnalysisComplete}
+                                    handleResetStats={handleResetStats}
+                                />
+                            }
+                        />
+                        <Route
+                            path="/analytics"
+                            element={<Analytics stats={stats} />}
+                        />
+                        <Route
+                            path="/reports"
+                            element={<Reports />}
+                        />
+                        <Route
+                            path="/map"
+                            element={<LiveMap />}
+                        />
+                    </Routes>
+                </main>
+            </div>
+        </Router>
     );
 }
 

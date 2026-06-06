@@ -22,18 +22,20 @@ const DEFAULT_ZONES = [
     { id: 'd4', lat: 40.6892, lng: -74.0445, location: 'Oak Boulevard', severity: 'High', issues: 'Pothole (99%)' },
 ];
 
-const HeatmapView = () => {
+const HeatmapView = ({ height = '280px', hideHeader = false }) => {
     const [hotZones, setHotZones] = useState(DEFAULT_ZONES);
     const [mapError, setMapError] = useState(false);
 
     // If the map crashes, show a fallback
     if (mapError) {
         return (
-            <div className="glass-panel overflow-hidden">
-                <div className="px-4 py-3 border-b border-white/[0.06]">
-                    <h3 className="text-sm font-semibold text-mission-100">Damage Hot Zones</h3>
-                </div>
-                <div className="flex items-center justify-center text-mission-400 text-sm" style={{ height: '280px' }}>
+            <div className="glass-panel overflow-hidden h-full">
+                {!hideHeader && (
+                    <div className="px-4 py-3 border-b border-white/[0.06]">
+                        <h3 className="text-sm font-semibold text-mission-100">Damage Hot Zones</h3>
+                    </div>
+                )}
+                <div className="flex items-center justify-center text-mission-400 text-sm" style={{ height }}>
                     Map failed to load. Check Leaflet installation.
                 </div>
             </div>
@@ -41,14 +43,16 @@ const HeatmapView = () => {
     }
 
     return (
-        <div className="glass-panel overflow-hidden">
-            <div className="px-4 py-3 border-b border-white/[0.06]">
-                <h3 className="text-sm font-semibold text-mission-100">Damage Hot Zones</h3>
-            </div>
+        <div className="glass-panel overflow-hidden h-full flex flex-col">
+            {!hideHeader && (
+                <div className="px-4 py-3 border-b border-slate-200/50 flex-shrink-0 bg-white">
+                    <h3 className="text-sm font-semibold text-mission-100">Damage Hot Zones</h3>
+                </div>
+            )}
             <MapContainer
                 center={[40.7128, -74.006]}
                 zoom={11}
-                style={{ height: '280px', width: '100%' }}
+                style={{ height, width: '100%', flex: 1 }}
                 scrollWheelZoom={false}
                 zoomControl={false}
             >
