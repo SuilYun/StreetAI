@@ -10,7 +10,7 @@ from services.s3_service import upload_image_to_s3
 from services.ai_service import analyze_image_with_ai, analyze_frame_with_ai
 import uuid
 import os
-import cv2
+import imageio
 
 router = APIRouter(
     prefix="/api/reports",
@@ -117,7 +117,7 @@ def get_report_by_id(report_id: int, db: Session = Depends(get_db)):
 
 @router.post("/video")
 async def process_video(file: UploadFile = File(...)):
-    """Real video processing endpoint using OpenCV and YOLOv8."""
+    """Real video processing endpoint using imageio and YOLOv8."""
     import tempfile
     
     temp_dir = tempfile.gettempdir()
@@ -129,62 +129,58 @@ async def process_video(file: UploadFile = File(...)):
         with open(temp_file_path, "wb") as buffer:
             buffer.write(await file.read())
             
-        # 2. Open video with OpenCV
-        cap = cv2.VideoCapture(temp_file_path)
-        if not cap.isOpened():
-            raise HTTPException(status_code=400, detail="Could not open video file.")
-            
-        fps = cap.get(cv2.CAP_PROP_FPS)
-        total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT))
+        # 2. Open video with imageio
+        reader = imageio.get_reader(temp_file_path)
+        meta = reader.get_meta_data()
+        fps = meta.get("fps", 30.0)
+        total_frames = reader.get_length()
         if fps <= 0:
             fps = 30.0 # fallback
             
         # 3. Extract and analyze frames (e.g., 1 frame per second to save processing time)
         timeline = []
         frame_interval = int(fps) # analyze 1 frame every second
-        current_frame = 0
         frames_scanned = 0
         damage_frames = 0
         highest_conf = 0.0
         worst_severity = "Low"
         
-        while True:
-            ret, frame = cap.read()
-            if not ret:
+        # Loop through frames using step interval for maximum speed
+        for current_frame in range(0, total_frames, frame_interval):
+            try:
+                frame = reader.get_data(current_frame)
+            except IndexError:
                 break
                 
-            if current_frame % frame_interval == 0:
-                frames_scanned += 1
-                timestamp = current_frame / fps
-                
-                # Analyze this frame using YOLO
-                ai_result = analyze_frame_with_ai(frame)
-                detected_issues = ai_result.get("analysis", {}).get("detected_issues", [])
-                
-                if detected_issues:
-                    damage_frames += 1
-                    timeline.append({
-                        "frame_index": current_frame,
-                        "timestamp": round(timestamp, 2),
-                        "detected_issues": detected_issues
-                    })
-                    
-                    # Track worst severity and peak confidence across all frames
-                    for issue in detected_issues:
-                        if issue["confidence"] > highest_conf:
-                            highest_conf = issue["confidence"]
-                        if issue["severity"] == "High":
-                            worst_severity = "High"
-                        elif issue["severity"] == "Medium" and worst_severity != "High":
-                            worst_severity = "Medium"
-                            
-            current_frame += 1
+            frames_scanned += 1
+            timestamp = current_frame / fps
             
+            # Analyze this frame using YOLO best.pt
+            ai_result = analyze_frame_with_ai(frame)
+            detected_issues = ai_result.get("analysis", {}).get("detected_issues", [])
+            
+            if detected_issues:
+                damage_frames += 1
+                timeline.append({
+                    "frame_index": current_frame,
+                    "timestamp": round(timestamp, 2),
+                    "detected_issues": detected_issues
+                })
+                
+                # Track worst severity and peak confidence across all frames
+                for issue in detected_issues:
+                    if issue["confidence"] > highest_conf:
+                        highest_conf = issue["confidence"]
+                    if issue["severity"] == "High":
+                        worst_severity = "High"
+                    elif issue["severity"] == "Medium" and worst_severity != "High":
+                        worst_severity = "Medium"
+                        
             # Cap at max 30 seconds of processing for demo to avoid timeouts
             if timestamp > 30:
                 break
                 
-        cap.release()
+        reader.close()
         
         return {
             "success": True,

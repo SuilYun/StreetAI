@@ -31,7 +31,7 @@ async def main():
     import pprint
     pprint.pprint(res)
     
-    # Test 2: Frame analysis with numpy array frame (OpenCV format)
+    # Test 2: Frame analysis with numpy array frame (imageio format)
     print("\n--- Test 2: Frame Analysis (Numpy Array) ---")
     fake_frame = np.zeros((480, 640, 3), dtype=np.uint8)
     frame_res = analyze_frame_with_ai(fake_frame)
