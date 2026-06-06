@@ -127,9 +127,9 @@ function App() {
     }, []);
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-4 lg:p-6">
+        <div className="h-screen overflow-hidden flex flex-col bg-gradient-to-br from-slate-50 via-white to-blue-50/30 p-4 lg:p-5">
             {/* Header */}
-            <header className="mb-6 flex items-center justify-between gap-4">
+            <header className="mb-4 flex-shrink-0 flex items-center justify-between gap-4">
                 <div className="flex items-center gap-3">
                     {/* Hamburger Menu in the top left */}
                     <div className="relative" ref={menuRef}>
@@ -214,17 +214,19 @@ function App() {
             </header>
 
             {currentView === 'dashboard' ? (
-                <ManagementDashboard />
+                <div className="flex-1 min-h-0 overflow-y-auto">
+                    <ManagementDashboard />
+                </div>
             ) : (
-                <>
+                <div className="flex-1 min-h-0 flex flex-col">
                     {/* Stats Row */}
-                    <div className="mb-5">
+                    <div className="mb-4 flex-shrink-0">
                         <StatsBar stats={stats} isConnected={isConnected} />
                     </div>
 
                     {/* Main Grid: Video + Radar Chart Sidebar */}
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-4">
-                        <div className="lg:col-span-2">
+                    <div className="flex-1 min-h-0 grid grid-cols-1 lg:grid-cols-3 gap-4 overflow-hidden">
+                        <div className="lg:col-span-2 flex flex-col h-full min-h-0 overflow-y-auto pr-1">
                             <VideoPlayer
                                 latestEvent={latestEvent}
                                 onMediaStateChange={handleMediaStateChange}
@@ -234,11 +236,11 @@ function App() {
                                 onReset={handleResetStats}
                             />
                         </div>
-                        <div className="lg:col-span-1">
+                        <div className="lg:col-span-1 h-full min-h-0 flex flex-col">
                             <DamageRadarChart stats={stats} />
                         </div>
                     </div>
-                </>
+                </div>
             )}
         </div>
     );

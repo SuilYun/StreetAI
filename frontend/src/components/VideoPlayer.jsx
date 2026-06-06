@@ -505,7 +505,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
 
                     {/* Results panel */}
                     {analysisState === 'done' && analysisResults && (
-                        <div className="px-4 py-4 border-t border-slate-200">
+                        <div className="px-4 py-3.5 border-t border-slate-200 overflow-y-auto max-h-[160px] flex-shrink-0">
                             <div className="flex items-center justify-between mb-3">
                                 <div>
                                     <span className="text-xs font-mono text-accent-cyan uppercase tracking-wider">Analysis Complete</span>
@@ -569,7 +569,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
 
     return (
         <>
-            <div className="glass-panel overflow-auto relative flex flex-col" ref={containerRef}>
+            <div className="glass-panel overflow-hidden relative flex flex-col flex-1 min-h-[380px]" ref={containerRef}>
                 {/* Header tabs */}
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 z-20 bg-white/90 backdrop-blur-sm">
                     <div className="flex gap-1">

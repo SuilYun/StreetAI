@@ -45,7 +45,7 @@ const DamageRadarChart = ({ stats }) => {
     const totalIssues = rawData.reduce((sum, d) => sum + d.count, 0);
 
     return (
-        <div ref={chartRef} className="glass-panel p-4 flex flex-col gap-4">
+        <div ref={chartRef} className="glass-panel p-4 flex flex-col gap-4 h-full min-h-0 overflow-y-auto">
             <h3 className="text-sm font-semibold text-mission-100">Damage Profile</h3>
             <ResponsiveContainer width="100%" height={220}>
                 <RadarChart cx="50%" cy="50%" outerRadius="70%" data={normalizedData}>
