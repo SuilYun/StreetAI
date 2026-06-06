@@ -23,6 +23,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
     const mediaRef = useRef(null);
     const boxTimeoutRef = useRef(null);
     const laserRef = useRef(null);
+    const fileInputRef = useRef(null);
 
     const [localMode, setLocalMode] = useState('image');
     const mode = activeMode || localMode;
@@ -587,8 +588,26 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
                             );
                         })}
                     </div>
-                    <div className="flex items-center gap-2">
+                    <div className="flex items-center gap-3">
                         {fileName && <span className="text-xs text-mission-300 font-mono truncate max-w-[150px]">{fileName}</span>}
+                        {uploadedSrc && (
+                            <>
+                                <button
+                                    onClick={() => fileInputRef.current?.click()}
+                                    className="flex items-center gap-1.5 px-3 py-1.5 bg-blue-500 hover:bg-blue-600 text-white rounded-lg text-xs font-medium transition-all shadow-sm flex-shrink-0"
+                                >
+                                    <Upload size={12} />
+                                    Upload New
+                                </button>
+                                <input
+                                    type="file"
+                                    ref={fileInputRef}
+                                    accept={mode === 'video' ? 'video/*' : 'image/*'}
+                                    className="hidden"
+                                    onChange={handleFileUpload}
+                                />
+                            </>
+                        )}
                     </div>
                 </div>
 
