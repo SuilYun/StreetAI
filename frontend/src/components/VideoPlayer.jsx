@@ -16,7 +16,7 @@ const MODES = [
     { id: 'video', label: 'Video', icon: Video },
 ];
 
-const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, activeMode, onModeChange }) => {
+const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, activeMode, onModeChange, onReset }) => {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const imageContainerRef = useRef(null);
@@ -294,6 +294,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
         setAnalysisProgress(0);
         setImageLoaded(false);
         setMode(newMode);
+        onReset?.();
     };
 
     // ── File upload ──
@@ -306,6 +307,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
         setAnalysisState('idle');
         setImageLoaded(false);
         setAnalysisResults(null);
+        onReset?.();
     };
 
     // ── Analyze media via backend ──
@@ -362,6 +364,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
         setAnalysisResults(null);
         setAnalysisProgress(0);
         setImageLoaded(false);
+        onReset?.();
     };
 
     // ── Render content ──

@@ -67,6 +67,19 @@ function App() {
         setMediaActive(isActive);
     }, []);
 
+    const handleResetStats = useCallback(() => {
+        setStats({
+            totalDetections: 0,
+            potholes: 0,
+            cracks: 0,
+            erosion: 0,
+            longCracks: 0,
+            transCracks: 0,
+            alligatorCracks: 0,
+            avgConfidence: 0,
+        });
+    }, []);
+
     const handleAnalysisComplete = useCallback((data) => {
         let issues = [];
         if (data.detected_issues) {
@@ -191,7 +204,7 @@ function App() {
                                 WebkitTextFillColor: 'transparent',
                             }}
                         >
-                            RoadAI Mission Control
+                            RoadAI
                         </h1>
                         <p className="text-sm text-slate-500">
                             Real-time road damage detection & analytics
@@ -218,6 +231,7 @@ function App() {
                                 onAnalysisComplete={handleAnalysisComplete}
                                 activeMode={currentView}
                                 onModeChange={(mode) => setCurrentView(mode)}
+                                onReset={handleResetStats}
                             />
                         </div>
                         <div className="lg:col-span-1">
