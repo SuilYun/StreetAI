@@ -220,8 +220,21 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
         if (!canvasRef.current || !mediaRef.current) return;
 
         const currentTime = mediaRef.current.currentTime;
-        // Find closest frame within a reasonable tolerance (e.g. 0.3 seconds)
-        const frame = analysisResults.timeline.find(f => Math.abs(f.timestamp - currentTime) < 0.4);
+        
+        // Find the absolute closest frame in the timeline
+        let closestFrame = null;
+        let minDiff = Infinity;
+        
+        analysisResults.timeline.forEach(f => {
+            const diff = Math.abs(f.timestamp - currentTime);
+            if (diff < minDiff) {
+                minDiff = diff;
+                closestFrame = f;
+            }
+        });
+
+        // Use the closest frame if it is within 0.25 seconds (since frames are spaced 0.20s apart)
+        const frame = (minDiff < 0.25) ? closestFrame : null;
 
         const canvas = canvasRef.current;
         const videoEl = mediaRef.current;

@@ -138,9 +138,9 @@ async def process_video(file: UploadFile = File(...)):
         if fps <= 0:
             fps = 30.0 # fallback
             
-        # 3. Extract and analyze frames (e.g., 1 frame per second to save processing time)
+        # 3. Extract and analyze frames (e.g., 5 frames per second to show smooth bounding boxes)
         timeline = []
-        frame_interval = int(fps) # analyze 1 frame every second
+        frame_interval = max(1, int(fps / 5)) # analyze 5 frames per second
         frames_scanned = 0
         damage_frames = 0
         highest_conf = 0.0

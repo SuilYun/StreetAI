@@ -41,3 +41,7 @@ frontend/dist/
 
 # Logs
 *.log
+
+# Databases & local uploads
+*.db
+**/uploads/
