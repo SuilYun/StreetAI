@@ -388,12 +388,17 @@ const VideoPlayer = ({
         if (mode === 'video') {
             if (!uploadedSrc) {
                 return (
-                    <label className="flex flex-col items-center justify-center h-full gap-4 cursor-pointer">
-                        <div className="w-16 h-16 rounded-full bg-detect-crack/10 flex items-center justify-center">
-                            <Upload size={28} className="text-detect-crack" />
+                    <label className="flex flex-col items-center justify-center h-full gap-5 cursor-pointer m-4 border-2 border-dashed border-slate-200 hover:border-blue-400/70 hover:bg-blue-50/20 rounded-2xl transition-all duration-300 p-8 group">
+                        <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center shadow-inner transition-transform group-hover:scale-105">
+                            <Upload size={32} className="text-accent-blue" />
                         </div>
-                        <p className="text-mission-300 text-sm">Click to upload a video file</p>
-                        <span className="text-xs text-mission-400">MP4, AVI, MOV supported</span>
+                        <div className="text-center">
+                            <p className="text-slate-700 text-sm font-semibold">Upload Road Video</p>
+                            <p className="text-xs text-slate-400 mt-1">Drag and drop or click to select video</p>
+                        </div>
+                        <span className="text-[10px] font-mono bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200/50">
+                            MP4, AVI, MOV supported
+                        </span>
                         <input type="file" accept="video/*" className="hidden" onChange={handleFileUpload} />
                     </label>
                 );
@@ -456,12 +461,17 @@ const VideoPlayer = ({
             // Empty state — upload prompt
             if (!uploadedSrc) {
                 return (
-                    <label className="flex flex-col items-center justify-center h-full gap-4 cursor-pointer">
-                        <div className="w-16 h-16 rounded-full bg-accent-blue/10 flex items-center justify-center">
-                            <Upload size={28} className="text-accent-blue" />
+                    <label className="flex flex-col items-center justify-center h-full gap-5 cursor-pointer m-4 border-2 border-dashed border-slate-200 hover:border-blue-400/70 hover:bg-blue-50/20 rounded-2xl transition-all duration-300 p-8 group">
+                        <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center shadow-inner transition-transform group-hover:scale-105">
+                            <Upload size={32} className="text-accent-blue" />
                         </div>
-                        <p className="text-mission-200 text-sm font-medium">Upload Road Media</p>
-                        <span className="text-xs text-mission-400">JPG, PNG, WEBP supported</span>
+                        <div className="text-center">
+                            <p className="text-slate-700 text-sm font-semibold">Upload Road Image</p>
+                            <p className="text-xs text-slate-400 mt-1">Drag and drop or click to select image</p>
+                        </div>
+                        <span className="text-[10px] font-mono bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200/50">
+                            JPG, PNG, WEBP supported
+                        </span>
                         <input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
                     </label>
                 );

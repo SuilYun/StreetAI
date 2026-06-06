@@ -1,5 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import anime from 'animejs';
+import { BarChart3 } from 'lucide-react';
 import {
     RadarChart,
     PolarGrid,
@@ -47,45 +48,58 @@ const DamageRadarChart = ({ stats }) => {
     return (
         <div ref={chartRef} className="glass-panel p-4 flex flex-col gap-4 h-full min-h-0 overflow-y-auto">
             <h3 className="text-sm font-semibold text-mission-100">Damage Profile</h3>
-            <ResponsiveContainer width="100%" height={220}>
-                <RadarChart cx="50%" cy="50%" outerRadius="70%" data={normalizedData}>
-                    <defs>
-                        <linearGradient id="radarGradient" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8}/>
-                            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.2}/>
-                        </linearGradient>
-                    </defs>
-                    <PolarGrid stroke="rgba(100, 116, 139, 0.15)" />
-                    <PolarAngleAxis
-                        dataKey="category"
-                        tick={{ fill: '#64748b', fontSize: 11 }}
-                    />
-                    <PolarRadiusAxis
-                        angle={90}
-                        domain={[0, 100]}
-                        tick={false}
-                        axisLine={false}
-                    />
-                    <Radar
-                        name="Damage"
-                        dataKey="value"
-                        stroke="#06b6d4"
-                        fill="url(#radarGradient)"
-                        fillOpacity={1}
-                        strokeWidth={2}
-                    />
-                    <Tooltip
-                        contentStyle={{
-                            backgroundColor: '#ffffff',
-                            border: '1px solid #e2e8f0',
-                            borderRadius: '8px',
-                            color: '#334155',
-                            fontSize: '12px',
-                            boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-                        }}
-                    />
-                </RadarChart>
-            </ResponsiveContainer>
+            
+            {totalIssues === 0 ? (
+                <div className="flex flex-col items-center justify-center h-[220px] text-center border border-dashed border-slate-200 rounded-xl bg-slate-50/50 p-4">
+                    <div className="w-12 h-12 rounded-full bg-slate-100/80 flex items-center justify-center mb-3">
+                        <BarChart3 className="text-slate-400 w-6 h-6" />
+                    </div>
+                    <p className="text-slate-700 text-xs font-semibold">Awaiting Damage Data</p>
+                    <p className="text-slate-400 text-[10px] max-w-[200px] mt-1">
+                        Upload and analyze road media on the dashboard to generate the damage profile.
+                    </p>
+                </div>
+            ) : (
+                <ResponsiveContainer width="100%" height={220}>
+                    <RadarChart cx="50%" cy="50%" outerRadius="70%" data={normalizedData}>
+                        <defs>
+                            <linearGradient id="radarGradient" x1="0" y1="0" x2="0" y2="1">
+                                <stop offset="5%" stopColor="#06b6d4" stopOpacity={0.8}/>
+                                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0.2}/>
+                            </linearGradient>
+                        </defs>
+                        <PolarGrid stroke="rgba(100, 116, 139, 0.15)" />
+                        <PolarAngleAxis
+                            dataKey="category"
+                            tick={{ fill: '#64748b', fontSize: 11 }}
+                        />
+                        <PolarRadiusAxis
+                            angle={90}
+                            domain={[0, 100]}
+                            tick={false}
+                            axisLine={false}
+                        />
+                        <Radar
+                            name="Damage"
+                            dataKey="value"
+                            stroke="#06b6d4"
+                            fill="url(#radarGradient)"
+                            fillOpacity={1}
+                            strokeWidth={2}
+                        />
+                        <Tooltip
+                            contentStyle={{
+                                backgroundColor: '#ffffff',
+                                border: '1px solid #e2e8f0',
+                                borderRadius: '8px',
+                                color: '#334155',
+                                fontSize: '12px',
+                                boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+                            }}
+                        />
+                    </RadarChart>
+                </ResponsiveContainer>
+            )}
 
             {/* Data Breakdown */}
             <div className="border-t border-slate-200 pt-3">

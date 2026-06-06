@@ -51,19 +51,22 @@ const StatsBar = ({ stats, isConnected }) => {
     return (
         <div ref={containerRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {cards.map((card) => (
-                <div key={card.label} className="stat-card">
-                    <div className="flex items-center justify-between">
+                <div key={card.label} className="stat-card relative overflow-hidden">
+                    <div className="flex items-center justify-between z-10 relative">
                         <span className="text-xs text-mission-400 uppercase tracking-wider font-medium">{card.label}</span>
                         <div className={`${card.iconBg} ${card.color} p-2 rounded-lg`}>
                             {card.icon}
                         </div>
                     </div>
-                    <span className={`text-3xl font-bold ${card.color}`}>{card.value}</span>
+                    <span className={`text-4xl font-extrabold tracking-tight mt-1 z-10 relative ${card.color}`}>{card.value}</span>
+                    <div className="absolute right-[-16px] bottom-[-16px] opacity-[0.04] text-slate-900 pointer-events-none">
+                        {React.cloneElement(card.icon, { size: 100 })}
+                    </div>
                 </div>
             ))}
 
             {/* Earth Globe Connectivity Card */}
-            <div className="stat-card flex flex-col items-center justify-center gap-1">
+            <div className="stat-card flex flex-col items-center justify-center gap-1 relative overflow-hidden">
                 <span className="text-xs text-mission-400 uppercase tracking-wider font-medium mb-1">Server Status</span>
                 <EarthGlobe isConnected={isConnected} />
             </div>

@@ -110,7 +110,7 @@ function App() {
 
     return (
         <Router>
-            <div className="h-screen overflow-hidden flex flex-col lg:flex-row bg-gradient-to-br from-slate-50 via-white to-blue-50/20">
+            <div className="h-screen overflow-hidden flex flex-col lg:flex-row bg-slate-50">
                 {/* Persistent Responsive Sidebar */}
                 <Sidebar isConnected={isConnected} />
 
