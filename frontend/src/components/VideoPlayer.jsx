@@ -16,7 +16,30 @@ const MODES = [
     { id: 'video', label: 'Video', icon: Video },
 ];
 
-const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, activeMode, onModeChange, onReset }) => {
+const VideoPlayer = ({
+    latestEvent,
+    onMediaStateChange,
+    onAnalysisComplete,
+    activeMode,
+    onModeChange,
+    onReset,
+    uploadedSrc,
+    setUploadedSrc,
+    uploadedFile,
+    setUploadedFile,
+    fileName,
+    setFileName,
+    analysisState,
+    setAnalysisState,
+    analysisResults,
+    setAnalysisResults,
+    analysisProgress,
+    setAnalysisProgress,
+    analysisTime,
+    setAnalysisTime,
+    imageLoaded,
+    setImageLoaded
+}) => {
     const canvasRef = useRef(null);
     const containerRef = useRef(null);
     const imageContainerRef = useRef(null);
@@ -28,17 +51,6 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
     const [localMode, setLocalMode] = useState('image');
     const mode = activeMode || localMode;
     const setMode = onModeChange || setLocalMode;
-
-    const [uploadedSrc, setUploadedSrc] = useState(null);
-    const [uploadedFile, setUploadedFile] = useState(null);
-    const [fileName, setFileName] = useState('');
-
-    // Image analysis states
-    const [analysisState, setAnalysisState] = useState('idle'); // idle | analyzing | done
-    const [analysisProgress, setAnalysisProgress] = useState(0);
-    const [analysisResults, setAnalysisResults] = useState(null);
-    const [analysisTime, setAnalysisTime] = useState(0);
-    const [imageLoaded, setImageLoaded] = useState(false);
 
     // ── Notify parent when media is active ──
     useEffect(() => {
@@ -293,6 +305,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
         setAnalysisState('idle');
         setAnalysisResults(null);
         setAnalysisProgress(0);
+        setAnalysisTime(0);
         setImageLoaded(false);
         setMode(newMode);
         onReset?.();
@@ -364,6 +377,7 @@ const VideoPlayer = ({ latestEvent, onMediaStateChange, onAnalysisComplete, acti
         setAnalysisState('idle');
         setAnalysisResults(null);
         setAnalysisProgress(0);
+        setAnalysisTime(0);
         setImageLoaded(false);
         onReset?.();
     };

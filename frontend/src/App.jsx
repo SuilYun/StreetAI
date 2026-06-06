@@ -23,6 +23,17 @@ function App() {
     const [isConnected, setIsConnected] = useState(false);
     const latestEvent = null;
 
+    // Lifted analysis state from VideoPlayer to persist across view transitions
+    const [activeMode, setActiveMode] = useState('image');
+    const [uploadedSrc, setUploadedSrc] = useState(null);
+    const [uploadedFile, setUploadedFile] = useState(null);
+    const [fileName, setFileName] = useState('');
+    const [analysisState, setAnalysisState] = useState('idle');
+    const [analysisProgress, setAnalysisProgress] = useState(0);
+    const [analysisResults, setAnalysisResults] = useState(null);
+    const [analysisTime, setAnalysisTime] = useState(0);
+    const [imageLoaded, setImageLoaded] = useState(false);
+
     // Real-time server connection check
     useEffect(() => {
         const checkStatus = async () => {
@@ -116,6 +127,24 @@ function App() {
                                     handleMediaStateChange={handleMediaStateChange}
                                     handleAnalysisComplete={handleAnalysisComplete}
                                     handleResetStats={handleResetStats}
+                                    activeMode={activeMode}
+                                    setActiveMode={setActiveMode}
+                                    uploadedSrc={uploadedSrc}
+                                    setUploadedSrc={setUploadedSrc}
+                                    uploadedFile={uploadedFile}
+                                    setUploadedFile={setUploadedFile}
+                                    fileName={fileName}
+                                    setFileName={setFileName}
+                                    analysisState={analysisState}
+                                    setAnalysisState={setAnalysisState}
+                                    analysisResults={analysisResults}
+                                    setAnalysisResults={setAnalysisResults}
+                                    analysisProgress={analysisProgress}
+                                    setAnalysisProgress={setAnalysisProgress}
+                                    analysisTime={analysisTime}
+                                    setAnalysisTime={setAnalysisTime}
+                                    imageLoaded={imageLoaded}
+                                    setImageLoaded={setImageLoaded}
                                 />
                             }
                         />

@@ -9,6 +9,24 @@ const Dashboard = ({
     handleMediaStateChange,
     handleAnalysisComplete,
     handleResetStats,
+    activeMode,
+    setActiveMode,
+    uploadedSrc,
+    setUploadedSrc,
+    uploadedFile,
+    setUploadedFile,
+    fileName,
+    setFileName,
+    analysisState,
+    setAnalysisState,
+    analysisResults,
+    setAnalysisResults,
+    analysisProgress,
+    setAnalysisProgress,
+    analysisTime,
+    setAnalysisTime,
+    imageLoaded,
+    setImageLoaded,
 }) => {
     return (
         <div className="flex-1 min-h-0 flex flex-col">
@@ -25,6 +43,24 @@ const Dashboard = ({
                         onMediaStateChange={handleMediaStateChange}
                         onAnalysisComplete={handleAnalysisComplete}
                         onReset={handleResetStats}
+                        activeMode={activeMode}
+                        onModeChange={setActiveMode}
+                        uploadedSrc={uploadedSrc}
+                        setUploadedSrc={setUploadedSrc}
+                        uploadedFile={uploadedFile}
+                        setUploadedFile={setUploadedFile}
+                        fileName={fileName}
+                        setFileName={setFileName}
+                        analysisState={analysisState}
+                        setAnalysisState={setAnalysisState}
+                        analysisResults={analysisResults}
+                        setAnalysisResults={setAnalysisResults}
+                        analysisProgress={analysisProgress}
+                        setAnalysisProgress={setAnalysisProgress}
+                        analysisTime={analysisTime}
+                        setAnalysisTime={setAnalysisTime}
+                        imageLoaded={imageLoaded}
+                        setImageLoaded={setImageLoaded}
                     />
                 </div>
             </div>
