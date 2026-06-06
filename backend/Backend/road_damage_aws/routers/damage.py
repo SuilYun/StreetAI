@@ -123,6 +123,7 @@ async def process_video(file: UploadFile = File(...)):
     temp_dir = tempfile.gettempdir()
     temp_file_name = f"{uuid.uuid4()}_{file.filename}"
     temp_file_path = os.path.join(temp_dir, temp_file_name)
+    reader = None
     
     try:
         # 1. Save uploaded video to a temporary file
@@ -145,11 +146,16 @@ async def process_video(file: UploadFile = File(...)):
         highest_conf = 0.0
         worst_severity = "Low"
         
-        # Loop through frames using step interval for maximum speed
-        for current_frame in range(0, total_frames, frame_interval):
+        # Loop through frames using step interval for maximum speed (supports inf length videos)
+        current_frame = 0
+        while True:
+            if isinstance(total_frames, (int, float)) and total_frames != float('inf'):
+                if current_frame >= total_frames:
+                    break
+            
             try:
                 frame = reader.get_data(current_frame)
-            except IndexError:
+            except (IndexError, RuntimeError):
                 break
                 
             frames_scanned += 1
@@ -180,7 +186,10 @@ async def process_video(file: UploadFile = File(...)):
             if timestamp > 30:
                 break
                 
+            current_frame += frame_interval
+            
         reader.close()
+        reader = None
         
         return {
             "success": True,
@@ -198,6 +207,15 @@ async def process_video(file: UploadFile = File(...)):
         return JSONResponse(status_code=500, content={"detail": f"Video processing failed: {str(e)}"})
         
     finally:
+        # Close reader if not already closed (prevents WinError 32 lock on temp file deletion)
+        if reader is not None:
+            try:
+                reader.close()
+            except Exception:
+                pass
         # Cleanup temporary file
         if os.path.exists(temp_file_path):
-            os.remove(temp_file_path)
+            try:
+                os.remove(temp_file_path)
+            except Exception as e:
+                print(f"Error removing temp file: {e}")
