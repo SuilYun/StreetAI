@@ -440,14 +440,14 @@ const VideoPlayer = ({
 
                     {/* Bottom bar — Analyze */}
                     {analysisState === 'idle' && (
-                        <div className="flex items-center gap-3 px-4 py-3 border-t border-slate-200 bg-white">
+                        <div className="flex items-center gap-3 px-4 py-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900">
                             <button onClick={handleAnalyze}
                                 className="flex items-center gap-2 px-5 py-2.5 bg-accent-blue hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-all btn-interactive shadow-md shadow-blue-500/20">
                                 <Search size={16} />
                                 Analyze Video
                             </button>
                             <button onClick={handleNewUpload}
-                                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-medium transition-all border border-slate-200 btn-interactive">
+                                className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg text-sm font-medium transition-all border border-slate-200 dark:border-slate-700 btn-interactive">
                                 Cancel
                             </button>
                         </div>
@@ -498,11 +498,11 @@ const VideoPlayer = ({
                         {analysisState === 'analyzing' && (
                             <>
                                 <div ref={laserRef} className="absolute left-0 top-0 w-full h-[3px] bg-accent-cyan shadow-[0_0_15px_rgba(6,182,212,1)] z-30" />
-                                <div className="absolute bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-white/95 to-transparent">
+                                <div className="absolute bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-white/95 dark:from-slate-950/95 to-transparent">
                                 <div className="flex items-center gap-2 mb-2">
                                     <Loader2 size={16} className="animate-spin text-accent-cyan" />
                                     <span className="text-sm font-mono text-accent-cyan">AI model analyzing...</span>
-                                    <span className="ml-auto text-sm font-mono text-mission-300">{Math.min(Math.round(analysisProgress), 100)}%</span>
+                                    <span className="ml-auto text-sm font-mono text-mission-300 dark:text-slate-400">{Math.min(Math.round(analysisProgress), 100)}%</span>
                                 </div>
                                 <div className="w-full h-1.5 bg-mission-700 rounded-full overflow-hidden">
                                     <div className="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full transition-all duration-300"
@@ -515,14 +515,14 @@ const VideoPlayer = ({
 
                     {/* Bottom bar — Analyze / Results */}
                     {analysisState === 'idle' && (
-                        <div className="flex items-center gap-3 px-4 py-3 border-t border-slate-200">
+                        <div className="flex items-center gap-3 px-4 py-3 border-t border-slate-200 dark:border-slate-800">
                             <button onClick={handleAnalyze}
                                 className="flex items-center gap-2 px-5 py-2.5 bg-accent-blue hover:bg-blue-600 text-white rounded-lg text-sm font-medium transition-all btn-interactive shadow-md shadow-blue-500/20">
                                 <Search size={16} />
                                 Analyze Image
                             </button>
                             <button onClick={handleNewUpload}
-                                className="px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-medium transition-all border border-slate-200 btn-interactive">
+                                className="px-4 py-2.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg text-sm font-medium transition-all border border-slate-200 dark:border-slate-700 btn-interactive">
                                 Cancel
                             </button>
                         </div>
@@ -530,13 +530,13 @@ const VideoPlayer = ({
 
                     {/* Results panel */}
                     {analysisState === 'done' && analysisResults && (
-                        <div className="px-4 py-3.5 border-t border-slate-200 overflow-y-auto max-h-[160px] flex-shrink-0">
+                        <div className="px-4 py-3.5 border-t border-slate-200 dark:border-slate-800 overflow-y-auto max-h-[160px] flex-shrink-0">
                             <div className="flex items-center justify-between mb-3">
                                 <div>
                                     <span className="text-xs font-mono text-accent-cyan uppercase tracking-wider">Analysis Complete</span>
-                                    <h3 className="text-lg font-semibold text-mission-100">Detection Results</h3>
+                                    <h3 className="text-lg font-semibold text-mission-100 dark:text-slate-100">Detection Results</h3>
                                 </div>
-                                <span className="text-xs font-mono text-mission-400">Processed in {analysisTime}s</span>
+                                <span className="text-xs font-mono text-mission-400 dark:text-slate-400">Processed in {analysisTime}s</span>
                             </div>
 
                             {/* Issue cards */}
@@ -553,13 +553,13 @@ const VideoPlayer = ({
                                                 className={`flex items-center gap-3 p-3 rounded-lg ${colors.bg} border min-w-[200px]`}>
                                                 <div className="flex-1">
                                                     <div className="flex items-center gap-2 mb-1">
-                                                        <span className="font-semibold text-sm text-mission-100">{issue.type}</span>
+                                                        <span className="font-semibold text-sm text-mission-100 dark:text-slate-100">{issue.type}</span>
                                                         <span className={`text-[10px] font-bold uppercase px-2.5 py-0.5 rounded-full ${colors.badge}`}>
                                                             {issue.severity === 'High' ? 'critical' : issue.severity.toLowerCase()}
                                                         </span>
                                                     </div>
                                                     <div className="flex items-center gap-2">
-                                                        <span className="text-xs text-mission-300">Confidence</span>
+                                                        <span className="text-xs text-mission-300 dark:text-slate-400">Confidence</span>
                                                         <span className={`text-xs font-bold ${colors.text}`}>{(issue.confidence * 100).toFixed(0)}%</span>
                                                     </div>
                                                     <div className="w-full h-1 bg-slate-200/40 rounded-full mt-1 overflow-hidden">
@@ -580,7 +580,7 @@ const VideoPlayer = ({
                                     Save Report
                                 </button>
                                 <button onClick={handleNewUpload}
-                                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 hover:bg-slate-200 text-slate-600 rounded-lg text-sm font-medium transition-all border border-slate-200 btn-interactive">
+                                    className="flex items-center gap-2 px-4 py-2 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 rounded-lg text-sm font-medium transition-all border border-slate-200 dark:border-slate-700 btn-interactive">
                                     <RotateCcw size={14} />
                                     New Upload
                                 </button>
@@ -596,7 +596,7 @@ const VideoPlayer = ({
         <>
             <div className={`glass-panel overflow-hidden relative flex flex-col ${analysisState === 'done' ? 'min-h-[380px]' : 'lg:h-[calc(100vh-230px)] min-h-[380px]'}`} ref={containerRef}>
                 {/* Header tabs */}
-                <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 z-20 bg-white/90 backdrop-blur-sm">
+                <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 dark:border-slate-800 z-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
                     <div className="flex gap-1">
                         {MODES.map((m) => {
                             const Icon = m.icon;
@@ -604,8 +604,8 @@ const VideoPlayer = ({
                             return (
                                 <button key={m.id} onClick={() => switchMode(m.id)}
                                     className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all ${
-                                        isActive ? 'bg-blue-50 text-accent-blue border border-blue-200'
-                                                 : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100'}`}>
+                                        isActive ? 'bg-blue-50 text-accent-blue border border-blue-200 dark:bg-blue-950/40 dark:text-blue-400 dark:border-blue-900/50'
+                                                 : 'text-slate-500 hover:text-slate-700 hover:bg-slate-100 dark:text-slate-400 dark:hover:text-slate-200 dark:hover:bg-slate-850'}`}>
                                     <Icon size={14} />
                                     {m.label}
                                 </button>
@@ -613,7 +613,7 @@ const VideoPlayer = ({
                         })}
                     </div>
                     <div className="flex items-center gap-3">
-                        {fileName && <span className="text-xs text-mission-300 font-mono truncate max-w-[150px]">{fileName}</span>}
+                        {fileName && <span className="text-xs text-mission-300 dark:text-slate-400 font-mono truncate max-w-[150px]">{fileName}</span>}
                         {uploadedSrc && (
                             <>
                                 <button
