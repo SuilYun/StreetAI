@@ -102,9 +102,7 @@
 
 /* Glassmorphism improvements in dark mode */
 .dark .glass-panel {
-  background: rgba(15, 23, 42, 0.45) !important;
-  backdrop-filter: blur(12px) !important;
-  -webkit-backdrop-filter: blur(12px) !important;
+  background: rgba(15, 23, 42, 0.9) !important;
 }
 
 /* Neon glow glassmorphism card classes */
