@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { MapContainer, TileLayer, CircleMarker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, CircleMarker, Popup, useMap } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 
 const SEVERITY_COLORS = {
@@ -14,15 +14,31 @@ const SEVERITY_RADIUS = {
     Low: 6,
 };
 
+const ChangeMapView = ({ center, zoom }) => {
+    const map = useMap();
+    useEffect(() => {
+        if (center) {
+            map.setView(center, zoom);
+        }
+    }, [center, zoom, map]);
+    return null;
+};
+
 // Default hot zones for demo purposes (until backend provides real GPS data)
-const DEFAULT_ZONES = [
-    { id: 'd1', lat: 40.7128, lng: -74.006, location: 'Main St & 5th Ave', severity: 'High', issues: 'Pothole (94%)' },
-    { id: 'd2', lat: 40.7589, lng: -73.9851, location: 'Highway 61', severity: 'Medium', issues: 'Crack (88%)' },
-    { id: 'd3', lat: 40.7282, lng: -73.7949, location: 'Elm Street', severity: 'Low', issues: 'Crack (75%)' },
-    { id: 'd4', lat: 40.6892, lng: -74.0445, location: 'Oak Boulevard', severity: 'High', issues: 'Pothole (99%)' },
+export const DEFAULT_ZONES = [
+    { id: 'd1', lat: 12.9716, lng: 77.5946, location: 'MG Road, Bengaluru', severity: 'High', issues: 'Pothole (94%)', time: '10m ago' },
+    { id: 'd2', lat: 12.9352, lng: 77.6245, location: 'Koramangala, Bengaluru', severity: 'High', issues: 'Pothole (99%)', time: '25m ago' },
+    { id: 'd3', lat: 13.0354, lng: 77.5988, location: 'Hebbal Flyover, Bengaluru', severity: 'Medium', issues: 'Alligator Cracks (88%)', time: '40m ago' },
+    { id: 'd4', lat: 12.9307, lng: 77.5838, location: 'Jayanagar, Bengaluru', severity: 'Low', issues: 'Transverse Cracks (75%)', time: '1h ago' },
 ];
 
-const HeatmapView = ({ height = '280px', hideHeader = false }) => {
+const HeatmapView = ({ 
+    height = '280px', 
+    hideHeader = false, 
+    center = [12.9716, 77.5946], 
+    zoom = 11, 
+    selectedZoneId = null 
+}) => {
     const [hotZones, setHotZones] = useState(DEFAULT_ZONES);
     const [mapError, setMapError] = useState(false);
 
@@ -50,12 +66,13 @@ const HeatmapView = ({ height = '280px', hideHeader = false }) => {
                 </div>
             )}
             <MapContainer
-                center={[40.7128, -74.006]}
-                zoom={11}
+                center={center}
+                zoom={zoom}
                 style={{ height, width: '100%', flex: 1 }}
-                scrollWheelZoom={false}
-                zoomControl={false}
+                scrollWheelZoom={true}
+                zoomControl={true}
             >
+                <ChangeMapView center={center} zoom={zoom} />
                 <TileLayer
                     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OSM</a>'
@@ -66,12 +83,12 @@ const HeatmapView = ({ height = '280px', hideHeader = false }) => {
                         <CircleMarker
                             key={zone.id}
                             center={[zone.lat, zone.lng]}
-                            radius={SEVERITY_RADIUS[zone.severity] || 8}
+                            radius={zone.id === selectedZoneId ? (SEVERITY_RADIUS[zone.severity] * 1.5) : (SEVERITY_RADIUS[zone.severity] || 8)}
                             pathOptions={{
-                                color: SEVERITY_COLORS[zone.severity] || '#3b82f6',
+                                color: zone.id === selectedZoneId ? '#38bdf8' : (SEVERITY_COLORS[zone.severity] || '#3b82f6'),
                                 fillColor: SEVERITY_COLORS[zone.severity] || '#3b82f6',
-                                fillOpacity: 0.4,
-                                weight: 2,
+                                fillOpacity: zone.id === selectedZoneId ? 0.75 : 0.4,
+                                weight: zone.id === selectedZoneId ? 4 : 2,
                             }}
                         >
                             <Popup>

@@ -51,7 +51,7 @@ const DamageRadarChart = ({ stats }) => {
             
             {totalIssues === 0 ? (
                 <div className="flex flex-col items-center justify-center h-[220px] text-center border border-dashed border-slate-200 dark:border-slate-800 rounded-xl bg-slate-50/50 dark:bg-slate-900/30 p-4">
-                    <div className="w-12 h-12 rounded-full bg-slate-100/80 dark:bg-slate-850 flex items-center justify-center mb-3">
+                    <div className="w-12 h-12 rounded-full bg-slate-100/80 dark:bg-slate-800 flex items-center justify-center mb-3">
                         <BarChart3 className="text-slate-400 dark:text-slate-500 w-6 h-6" />
                     </div>
                     <p className="text-slate-700 dark:text-slate-200 text-xs font-semibold">Awaiting Damage Data</p>

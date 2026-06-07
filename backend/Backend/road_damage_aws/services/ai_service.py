@@ -43,11 +43,11 @@ async def analyze_image_with_ai(file: UploadFile):
         return default_result
 
     try:
-        # Load image via PIL
-        img = Image.open(io.BytesIO(file_content))
+        # Load image via PIL and convert to RGB
+        img = Image.open(io.BytesIO(file_content)).convert("RGB")
         img_width, img_height = img.size
         
-        results = model(img, conf=0.15, imgsz=416)
+        results = model(img, conf=0.15, imgsz=640)
         
         detected_issues = []
         highest_conf = 0.0
@@ -142,7 +142,7 @@ def analyze_frame_with_ai(img) -> dict:
         return default_result
 
     try:
-        results = model(img, conf=0.15, imgsz=416)
+        results = model(img, conf=0.15, imgsz=640)
         detected_issues = []
         highest_conf = 0.0
         primary_damage = "None"

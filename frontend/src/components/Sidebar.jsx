@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { Shield, LayoutDashboard, BarChart3, Database, Sun, Moon } from 'lucide-react';
+import { Shield, LayoutDashboard, BarChart3, Database, Sun, Moon, Map } from 'lucide-react';
 
 const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
     const location = useLocation();
@@ -15,6 +15,7 @@ const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
     const navItems = [
         { path: '/', label: 'Dashboard', icon: LayoutDashboard },
         { path: '/analytics', label: 'Analytics', icon: BarChart3 },
+        { path: '/map', label: 'Live Map', icon: Map },
         { path: '/reports', label: 'Reports', icon: Database },
     ];
 
