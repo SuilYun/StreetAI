@@ -95,18 +95,23 @@ function App() {
             totalConfidence += issue.confidence * 100;
         });
 
-        const avgConfidence = issues.length > 0 ? parseFloat((totalConfidence / issues.length).toFixed(1)) : 0;
+        setStats(prev => {
+            const nextDetections = prev.totalDetections + issues.length;
+            const prevConfidenceSum = prev.totalDetections * prev.avgConfidence;
+            const newConfidenceSum = prevConfidenceSum + totalConfidence;
+            const newAvgConfidence = nextDetections > 0 ? parseFloat((newConfidenceSum / nextDetections).toFixed(1)) : 0;
 
-        setStats(prev => ({
-            totalDetections: prev.totalDetections + issues.length,
-            potholes: prev.potholes + potholes,
-            cracks: prev.cracks + cracks,
-            erosion: prev.erosion + erosion,
-            longCracks: prev.longCracks + longCracks,
-            transCracks: prev.transCracks + transCracks,
-            alligatorCracks: prev.alligatorCracks + alligatorCracks,
-            avgConfidence: avgConfidence > 0 ? avgConfidence : prev.avgConfidence,
-        }));
+            return {
+                totalDetections: nextDetections,
+                potholes: prev.potholes + potholes,
+                cracks: prev.cracks + cracks,
+                erosion: prev.erosion + erosion,
+                longCracks: prev.longCracks + longCracks,
+                transCracks: prev.transCracks + transCracks,
+                alligatorCracks: prev.alligatorCracks + alligatorCracks,
+                avgConfidence: newAvgConfidence,
+            };
+        });
     }, []);
 
     const handleResetStats = useCallback(() => {
