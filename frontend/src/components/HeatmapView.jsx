@@ -117,4 +117,4 @@ const HeatmapView = ({
     );
 };
 
-export default HeatmapView;
+export default React.memo(HeatmapView);

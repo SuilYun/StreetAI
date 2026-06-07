@@ -254,4 +254,4 @@ const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
     );
 };
 
-export default Sidebar;
+export default React.memo(Sidebar);

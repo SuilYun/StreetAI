@@ -1,11 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { checkServerStatus } from './services/api';
 import Sidebar from './components/Sidebar';
-import Dashboard from './pages/Dashboard';
-import Analytics from './pages/Analytics';
-import Reports from './pages/Reports';
-import LiveMap from './pages/LiveMap';
+
+const Dashboard = lazy(() => import('./pages/Dashboard'));
+const Analytics = lazy(() => import('./pages/Analytics'));
+const Reports = lazy(() => import('./pages/Reports'));
+const LiveMap = lazy(() => import('./pages/LiveMap'));
 
 function App() {
     const [darkMode, setDarkMode] = useState(() => {
@@ -135,51 +136,58 @@ function App() {
 
                 {/* Main Content Pane */}
                 <main className="flex-1 min-h-0 p-4 lg:p-6 flex flex-col overflow-hidden">
-                    <Routes>
-                        <Route
-                            path="/"
-                            element={
-                                <Dashboard
-                                    stats={stats}
-                                    isConnected={isConnected}
-                                    latestEvent={latestEvent}
-                                    handleMediaStateChange={handleMediaStateChange}
-                                    handleAnalysisComplete={handleAnalysisComplete}
-                                    handleResetStats={handleResetStats}
-                                    activeMode={activeMode}
-                                    setActiveMode={setActiveMode}
-                                    uploadedSrc={uploadedSrc}
-                                    setUploadedSrc={setUploadedSrc}
-                                    uploadedFile={uploadedFile}
-                                    setUploadedFile={setUploadedFile}
-                                    fileName={fileName}
-                                    setFileName={setFileName}
-                                    analysisState={analysisState}
-                                    setAnalysisState={setAnalysisState}
-                                    analysisResults={analysisResults}
-                                    setAnalysisResults={setAnalysisResults}
-                                    analysisProgress={analysisProgress}
-                                    setAnalysisProgress={setAnalysisProgress}
-                                    analysisTime={analysisTime}
-                                    setAnalysisTime={setAnalysisTime}
-                                    imageLoaded={imageLoaded}
-                                    setImageLoaded={setImageLoaded}
-                                />
-                            }
-                        />
-                        <Route
-                            path="/analytics"
-                            element={<Analytics stats={stats} />}
-                        />
-                        <Route
-                            path="/reports"
-                            element={<Reports />}
-                        />
-                        <Route
-                            path="/map"
-                            element={<LiveMap />}
-                        />
-                    </Routes>
+                    <Suspense fallback={
+                        <div className="flex-1 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 font-semibold text-xs gap-3">
+                            <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
+                            <span>Initializing StreetScan AI...</span>
+                        </div>
+                    }>
+                        <Routes>
+                            <Route
+                                path="/"
+                                element={
+                                    <Dashboard
+                                        stats={stats}
+                                        isConnected={isConnected}
+                                        latestEvent={latestEvent}
+                                        handleMediaStateChange={handleMediaStateChange}
+                                        handleAnalysisComplete={handleAnalysisComplete}
+                                        handleResetStats={handleResetStats}
+                                        activeMode={activeMode}
+                                        setActiveMode={setActiveMode}
+                                        uploadedSrc={uploadedSrc}
+                                        setUploadedSrc={setUploadedSrc}
+                                        uploadedFile={uploadedFile}
+                                        setUploadedFile={setUploadedFile}
+                                        fileName={fileName}
+                                        setFileName={setFileName}
+                                        analysisState={analysisState}
+                                        setAnalysisState={setAnalysisState}
+                                        analysisResults={analysisResults}
+                                        setAnalysisResults={setAnalysisResults}
+                                        analysisProgress={analysisProgress}
+                                        setAnalysisProgress={setAnalysisProgress}
+                                        analysisTime={analysisTime}
+                                        setAnalysisTime={setAnalysisTime}
+                                        imageLoaded={imageLoaded}
+                                        setImageLoaded={setImageLoaded}
+                                    />
+                                }
+                            />
+                            <Route
+                                path="/analytics"
+                                element={<Analytics stats={stats} />}
+                            />
+                            <Route
+                                path="/reports"
+                                element={<Reports />}
+                            />
+                            <Route
+                                path="/map"
+                                element={<LiveMap />}
+                            />
+                        </Routes>
+                    </Suspense>
                 </main>
             </div>
         </Router>

@@ -1,39 +1,6 @@
-import React, { useRef, useEffect } from 'react';
-import anime from 'animejs';
+import React from 'react';
 
 const EarthGlobe = ({ isConnected }) => {
-    const globeRef = useRef(null);
-    const rotationRef = useRef(null);
-
-    useEffect(() => {
-        if (!globeRef.current) return;
-
-        // Continuous rotation animation
-        rotationRef.current = anime({
-            targets: globeRef.current.querySelector('.earth-inner'),
-            rotate: '1turn',
-            loop: true,
-            easing: 'linear',
-            duration: 8000,
-        });
-
-        return () => {
-            if (rotationRef.current) rotationRef.current.pause();
-        };
-    }, []);
-
-    // Pause/resume spin based on connection
-    useEffect(() => {
-        if (rotationRef.current) {
-            if (isConnected) {
-                rotationRef.current.play();
-            } else {
-                rotationRef.current.pause();
-            }
-        }
-    }, [isConnected]);
-
-    const color = isConnected ? '#10b981' : '#ef4444';
     const bgGradient = isConnected
         ? 'linear-gradient(135deg, #10b981 0%, #059669 40%, #047857 100%)'
         : 'linear-gradient(135deg, #ef4444 0%, #dc2626 40%, #b91c1c 100%)';
@@ -42,16 +9,19 @@ const EarthGlobe = ({ isConnected }) => {
         <div className="flex flex-col items-center gap-2">
             <div className="earth-globe-container">
                 <div
-                    ref={globeRef}
                     className={`earth-globe ${isConnected ? 'connected' : 'disconnected'}`}
                     style={{ background: bgGradient }}
                 >
                     {/* Continent-like shapes via CSS */}
-                    <div className="earth-inner" style={{
-                        position: 'absolute',
-                        inset: 0,
-                        borderRadius: '50%',
-                    }}>
+                    <div 
+                        className="earth-inner animate-earth-spin" 
+                        style={{
+                            position: 'absolute',
+                            inset: 0,
+                            borderRadius: '50%',
+                            animationPlayState: isConnected ? 'running' : 'paused'
+                        }}
+                    >
                         {/* Grid lines */}
                         <div style={{
                             position: 'absolute', inset: 0, borderRadius: '50%',
@@ -110,4 +80,4 @@ const EarthGlobe = ({ isConnected }) => {
     );
 };
 
-export default EarthGlobe;
+export default React.memo(EarthGlobe);
