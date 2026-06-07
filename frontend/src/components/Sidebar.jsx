@@ -32,7 +32,7 @@ const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
                 </div>
                 <div>
                     <h1 className="text-lg font-bold text-slate-800 dark:text-white tracking-tight group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200">RoadAI</h1>
-                    <span className="text-[10px] text-slate-400 font-mono">v11.0.0</span>
+                    <span className="text-[10px] text-slate-400 font-mono">v11.0.1</span>
                 </div>
             </Link>
 
