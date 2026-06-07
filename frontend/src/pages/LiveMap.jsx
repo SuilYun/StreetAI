@@ -144,21 +144,21 @@ const LiveMap = () => {
                     </div>
 
                     {/* Operations Terminal */}
-                    <div className="glass-panel h-48 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-950 dark:bg-slate-950 overflow-hidden flex flex-col font-mono text-[10px] text-cyan-400 flex-shrink-0">
-                        <div className="px-3 py-2 border-b border-slate-850 flex items-center justify-between bg-slate-900 text-slate-400">
-                            <span className="font-bold flex items-center gap-1.5 uppercase tracking-wider text-[9px] text-cyan-400">
-                                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
+                    <div className="glass-panel h-48 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-950 overflow-hidden flex flex-col font-mono text-[10px] flex-shrink-0 shadow-sm">
+                        <div className="px-3 py-2 border-b border-slate-200 dark:border-slate-800/80 flex items-center justify-between bg-slate-100/80 dark:bg-slate-900 text-slate-500 dark:text-slate-400">
+                            <span className="font-bold flex items-center gap-1.5 uppercase tracking-wider text-[9px] text-cyan-600 dark:text-cyan-400">
+                                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 animate-pulse"></span>
                                 Live Scan Telemetry
                             </span>
-                            <span className="text-[8px] font-mono bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
+                            <span className="text-[8px] font-mono bg-slate-200 dark:bg-slate-800 text-slate-600 dark:text-slate-400 px-1.5 py-0.5 rounded">
                                 ACTIVE
                             </span>
                         </div>
                         <div className="flex-1 overflow-y-auto p-3 flex flex-col-reverse gap-1.5 select-text">
                             {logs.map((log, idx) => (
                                 <div key={idx} className="flex gap-2">
-                                    <span className="text-blue-500 font-semibold flex-shrink-0 select-none">[{log.time}]</span>
-                                    <span className="text-cyan-300 leading-normal">{log.msg}</span>
+                                    <span className="text-blue-600 dark:text-blue-500 font-semibold flex-shrink-0 select-none">[{log.time}]</span>
+                                    <span className="text-slate-700 dark:text-cyan-300 leading-normal font-medium dark:font-normal">{log.msg}</span>
                                 </div>
                             ))}
                         </div>
