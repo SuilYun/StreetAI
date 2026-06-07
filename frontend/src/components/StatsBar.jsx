@@ -9,17 +9,17 @@ const AnimatedValue = ({ value }) => {
 
     useEffect(() => {
         const stringVal = String(value);
-        const targetNum = parseInt(stringVal.replace(/[^0-9]/g, ''), 10) || 0;
+        const hasDecimal = stringVal.includes('.');
+        const targetNum = parseFloat(stringVal) || 0;
 
         const tempObj = { val: prevValue.current };
         anime({
             targets: tempObj,
             val: targetNum,
-            round: 1,
             duration: 1500,
             easing: 'easeOutExpo',
             update: () => {
-                setDisplayVal(tempObj.val);
+                setDisplayVal(hasDecimal ? tempObj.val.toFixed(1) : Math.round(tempObj.val));
             },
             complete: () => {
                 prevValue.current = targetNum;
