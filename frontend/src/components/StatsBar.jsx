@@ -12,6 +12,7 @@ const StatsBar = ({ stats, isConnected }) => {
             color: 'text-blue-500 dark:text-blue-400',
             bgColor: 'bg-blue-500/5',
             iconBg: 'bg-blue-500/10',
+            glowClass: 'glow-blue',
         },
         {
             label: 'Avg Confidence',
@@ -20,6 +21,7 @@ const StatsBar = ({ stats, isConnected }) => {
             color: 'text-emerald-500 dark:text-emerald-400',
             bgColor: 'bg-emerald-500/5',
             iconBg: 'bg-emerald-500/10',
+            glowClass: 'glow-green',
         },
         {
             label: 'Critical Alerts',
@@ -28,6 +30,7 @@ const StatsBar = ({ stats, isConnected }) => {
             color: 'text-red-500 dark:text-red-400',
             bgColor: 'bg-red-500/5',
             iconBg: 'bg-red-500/10',
+            glowClass: 'glow-red',
         },
     ];
 
@@ -51,7 +54,7 @@ const StatsBar = ({ stats, isConnected }) => {
     return (
         <div ref={containerRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
             {cards.map((card) => (
-                <div key={card.label} className="stat-card relative overflow-hidden">
+                <div key={card.label} className={`stat-card relative overflow-hidden ${card.glowClass}`}>
                     <div className="flex items-center justify-between z-10 relative">
                         <span className="text-xs text-mission-400 uppercase tracking-wider font-medium">{card.label}</span>
                         <div className={`${card.iconBg} ${card.color} p-2 rounded-lg`}>
@@ -66,7 +69,7 @@ const StatsBar = ({ stats, isConnected }) => {
             ))}
 
             {/* Earth Globe Connectivity Card */}
-            <div className="stat-card flex flex-col items-center justify-center gap-1 relative overflow-hidden">
+            <div className={`stat-card flex flex-col items-center justify-center gap-1 relative overflow-hidden ${isConnected ? 'glow-green' : 'glow-red'}`}>
                 <span className="text-xs text-mission-400 uppercase tracking-wider font-medium mb-1">Server Status</span>
                 <EarthGlobe isConnected={isConnected} />
             </div>

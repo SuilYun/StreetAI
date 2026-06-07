@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import HeatmapView, { DEFAULT_ZONES } from '../components/HeatmapView';
 import { AlertTriangle, MapPin, Activity, RotateCcw } from 'lucide-react';
 
@@ -6,6 +6,33 @@ const LiveMap = () => {
     const [mapCenter, setMapCenter] = useState([12.9716, 77.5946]);
     const [mapZoom, setMapZoom] = useState(11);
     const [selectedZoneId, setSelectedZoneId] = useState(null);
+    const [logs, setLogs] = useState([
+        { time: '22:45:01', msg: 'System initialized on Bengaluru grid.' },
+        { time: '22:45:03', msg: 'Connecting to AWS IoT stream... Connected.' },
+        { time: '22:45:08', msg: 'Mapping server listening on port 8000.' },
+    ]);
+
+    useEffect(() => {
+        const simulatedMsgs = [
+            'Scanned region Hebbal Flyover: Alligator Cracks detected.',
+            'Syncing coordinates [12.9716, 77.5946] with remote database.',
+            'Telemetry upload received from patrol vehicle ID #KA-03-M-1024.',
+            'Coordinate anomaly resolved. Mapping set to Bengaluru.',
+            'AWS S3 image upload completed for sector Whitefield-B.',
+            'Processing video stream feed from drone Drone-02 over MG Road.',
+            'Pothole severity registered as HIGH at Koramangala 80 Feet Rd.',
+            'Noise levels at Jayanagar filtered out successfully (Threshold: 20%).',
+            'Recalculating routing optimization path for emergency vehicle transit.',
+            'Pothole registered on Hebbal Flyover, severity: MEDIUM.',
+            'Active scan zone shifted to Electronic City Phase I.',
+        ];
+        const interval = setInterval(() => {
+            const time = new Date().toLocaleTimeString('en-US', { hour12: false });
+            const randomMsg = simulatedMsgs[Math.floor(Math.random() * simulatedMsgs.length)];
+            setLogs((prev) => [{ time, msg: randomMsg }, ...prev.slice(0, 15)]);
+        }, 5000);
+        return () => clearInterval(interval);
+    }, []);
 
     const handleZoneClick = (zone) => {
         setMapCenter([zone.lat, zone.lng]);
@@ -39,15 +66,13 @@ const LiveMap = () => {
                     </h2>
                     <p className="text-xs text-slate-400 mt-1">GPS locations and distribution density of detected road defects</p>
                 </div>
-                {selectedZoneId && (
-                    <button 
-                        onClick={handleReset}
-                        className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-350 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 transition-all cursor-pointer"
-                    >
-                        <RotateCcw size={12} />
-                        Reset View
-                    </button>
-                )}
+                <button 
+                    onClick={handleReset}
+                    className="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-200 rounded-lg text-xs font-semibold border border-slate-200 dark:border-slate-700 transition-all cursor-pointer shadow-sm"
+                >
+                    <RotateCcw size={12} />
+                    Reset View
+                </button>
             </div>
 
             {/* Layout container */}
@@ -115,6 +140,27 @@ const LiveMap = () => {
                                     </button>
                                 );
                             })}
+                        </div>
+                    </div>
+
+                    {/* Operations Terminal */}
+                    <div className="glass-panel h-48 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-950 dark:bg-slate-950 overflow-hidden flex flex-col font-mono text-[10px] text-cyan-400 flex-shrink-0">
+                        <div className="px-3 py-2 border-b border-slate-850 flex items-center justify-between bg-slate-900 text-slate-400">
+                            <span className="font-bold flex items-center gap-1.5 uppercase tracking-wider text-[9px] text-cyan-400">
+                                <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 animate-pulse"></span>
+                                Live Scan Telemetry
+                            </span>
+                            <span className="text-[8px] font-mono bg-slate-800 text-slate-400 px-1.5 py-0.5 rounded">
+                                ACTIVE
+                            </span>
+                        </div>
+                        <div className="flex-1 overflow-y-auto p-3 flex flex-col-reverse gap-1.5 select-text">
+                            {logs.map((log, idx) => (
+                                <div key={idx} className="flex gap-2">
+                                    <span className="text-blue-500 font-semibold flex-shrink-0 select-none">[{log.time}]</span>
+                                    <span className="text-cyan-300 leading-normal">{log.msg}</span>
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>

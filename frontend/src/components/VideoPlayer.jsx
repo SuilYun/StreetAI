@@ -52,6 +52,29 @@ const VideoPlayer = ({
     const mode = activeMode || localMode;
     const setMode = onModeChange || setLocalMode;
 
+    const [sliderPos, setSliderPos] = useState(50);
+    const sliderRef = useRef(null);
+
+    const handleSliderMove = useCallback((clientX) => {
+        if (!sliderRef.current) return;
+        const rect = sliderRef.current.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const pct = Math.max(0, Math.min(100, (x / rect.width) * 100));
+        setSliderPos(pct);
+    }, []);
+
+    const handleMouseMove = (e) => {
+        if (e.buttons === 1) {
+            handleSliderMove(e.clientX);
+        }
+    };
+
+    const handleTouchMove = (e) => {
+        if (e.touches && e.touches[0]) {
+            handleSliderMove(e.touches[0].clientX);
+        }
+    };
+
     // ── Notify parent when media is active ──
     useEffect(() => {
         const isActive = mode !== 'image' && uploadedSrc !== null;
@@ -477,19 +500,56 @@ const VideoPlayer = ({
                 );
             }
 
+            const showSlider = analysisState === 'done' && analysisResults;
+
             return (
                 <div className="flex flex-col h-full">
                     {/* Image + Canvas overlay */}
-                    <div className="relative flex-1 min-h-0">
-                        <img src={uploadedSrc} alt="Upload" className="w-full h-full object-contain"
-                            onLoad={() => setImageLoaded(true)} />
-                        <canvas ref={imageContainerRef}
-                            className="absolute top-0 left-0 w-full h-full pointer-events-none z-10" />
+                    <div 
+                        ref={sliderRef}
+                        className="relative flex-1 min-h-0 select-none overflow-hidden bg-slate-950/20"
+                        onMouseMove={handleMouseMove}
+                        onTouchMove={handleTouchMove}
+                        onClick={(e) => handleSliderMove(e.clientX)}
+                    >
+                        {/* Underneath (Plain Raw Image) */}
+                        <img src={uploadedSrc} alt="Upload Raw" className="w-full h-full object-contain pointer-events-none" />
+                        
+                        {/* On Top (Clipped Annotated Image + Canvas) */}
+                        <div 
+                            className="absolute inset-0 pointer-events-none overflow-hidden"
+                            style={{ clipPath: showSlider ? `polygon(0 0, ${sliderPos}% 0, ${sliderPos}% 100%, 0 100%)` : 'none' }}
+                        >
+                            <img src={uploadedSrc} alt="Upload Annotated" className="w-full h-full object-contain pointer-events-none"
+                                 onLoad={() => setImageLoaded(true)} />
+                            <canvas ref={imageContainerRef}
+                                className="absolute top-0 left-0 w-full h-full pointer-events-none z-10" />
+                        </div>
+
+                        {/* Slider bar & handle */}
+                        {showSlider && (
+                            <>
+                                <div 
+                                    className="absolute top-0 bottom-0 w-[2px] bg-white z-20 shadow-[0_0_10px_rgba(255,255,255,0.8)] pointer-events-none"
+                                    style={{ left: `${sliderPos}%` }}
+                                >
+                                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-9 h-9 rounded-full bg-blue-500 hover:bg-blue-600 border border-white text-white flex items-center justify-center shadow-lg font-bold font-mono text-xs select-none cursor-ew-resize">
+                                        ↔
+                                    </div>
+                                </div>
+                                <div className="absolute bottom-3 left-3 bg-slate-900/80 text-white text-[10px] font-bold px-2 py-1 rounded border border-white/10 select-none pointer-events-none z-20">
+                                    AI DETECTIONS
+                                </div>
+                                <div className="absolute bottom-3 right-3 bg-slate-900/80 text-white text-[10px] font-bold px-2 py-1 rounded border border-white/10 select-none pointer-events-none z-20">
+                                    RAW SURFACE
+                                </div>
+                            </>
+                        )}
 
                         {/* Close button */}
                         {analysisState !== 'analyzing' && (
                             <button onClick={handleNewUpload}
-                                className="absolute top-3 right-3 z-20 w-8 h-8 rounded-full bg-mission-900/70 hover:bg-mission-900 flex items-center justify-center transition-all border border-white/10">
+                                className="absolute top-3 right-3 z-30 w-8 h-8 rounded-full bg-slate-900/80 hover:bg-slate-900 flex items-center justify-center transition-all border border-white/10">
                                 <X size={16} />
                             </button>
                         )}
@@ -498,17 +558,17 @@ const VideoPlayer = ({
                         {analysisState === 'analyzing' && (
                             <>
                                 <div ref={laserRef} className="absolute left-0 top-0 w-full h-[3px] bg-accent-cyan shadow-[0_0_15px_rgba(6,182,212,1)] z-30" />
-                                <div className="absolute bottom-0 left-0 right-0 z-20 p-4 bg-gradient-to-t from-white/95 dark:from-slate-950/95 to-transparent">
-                                <div className="flex items-center gap-2 mb-2">
-                                    <Loader2 size={16} className="animate-spin text-accent-cyan" />
-                                    <span className="text-sm font-mono text-accent-cyan">AI model analyzing...</span>
-                                    <span className="ml-auto text-sm font-mono text-mission-300 dark:text-slate-400">{Math.min(Math.round(analysisProgress), 100)}%</span>
+                                <div className="absolute bottom-0 left-0 right-0 z-25 p-4 bg-gradient-to-t from-white/95 dark:from-slate-950/95 to-transparent">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <Loader2 size={16} className="animate-spin text-accent-cyan" />
+                                        <span className="text-sm font-mono text-accent-cyan">AI model analyzing...</span>
+                                        <span className="ml-auto text-sm font-mono text-mission-300 dark:text-slate-400">{Math.min(Math.round(analysisProgress), 100)}%</span>
+                                    </div>
+                                    <div className="w-full h-1.5 bg-mission-700 rounded-full overflow-hidden">
+                                        <div className="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full transition-all duration-300"
+                                            style={{ width: `${Math.min(analysisProgress, 100)}%` }} />
+                                    </div>
                                 </div>
-                                <div className="w-full h-1.5 bg-mission-700 rounded-full overflow-hidden">
-                                    <div className="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full transition-all duration-300"
-                                        style={{ width: `${Math.min(analysisProgress, 100)}%` }} />
-                                </div>
-                            </div>
                             </>
                         )}
                     </div>
