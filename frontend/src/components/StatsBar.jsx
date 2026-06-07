@@ -1,7 +1,35 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Activity, Target, AlertTriangle } from 'lucide-react';
 import anime from 'animejs';
 import EarthGlobe from './EarthGlobe';
+
+const AnimatedValue = ({ value }) => {
+    const [displayVal, setDisplayVal] = useState(0);
+    const prevValue = useRef(0);
+
+    useEffect(() => {
+        const stringVal = String(value);
+        const targetNum = parseInt(stringVal.replace(/[^0-9]/g, ''), 10) || 0;
+
+        const tempObj = { val: prevValue.current };
+        anime({
+            targets: tempObj,
+            val: targetNum,
+            round: 1,
+            duration: 1500,
+            easing: 'easeOutExpo',
+            update: () => {
+                setDisplayVal(tempObj.val);
+            },
+            complete: () => {
+                prevValue.current = targetNum;
+            }
+        });
+    }, [value]);
+
+    const suffix = String(value).includes('%') ? '%' : '';
+    return <span>{displayVal}{suffix}</span>;
+};
 
 const StatsBar = ({ stats, isConnected }) => {
     const cards = [
@@ -61,7 +89,9 @@ const StatsBar = ({ stats, isConnected }) => {
                             {card.icon}
                         </div>
                     </div>
-                    <span className={`text-4xl font-extrabold tracking-tight mt-1 z-10 relative ${card.color}`}>{card.value}</span>
+                    <span className={`text-4xl font-extrabold tracking-tight mt-1 z-10 relative ${card.color}`}>
+                        <AnimatedValue value={card.value} />
+                    </span>
                     <div className="absolute right-[-16px] bottom-[-16px] opacity-[0.04] text-slate-900 dark:text-white pointer-events-none">
                         {React.cloneElement(card.icon, { size: 100 })}
                     </div>

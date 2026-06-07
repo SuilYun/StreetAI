@@ -18,7 +18,10 @@ const ChangeMapView = ({ center, zoom }) => {
     const map = useMap();
     useEffect(() => {
         if (center) {
-            map.setView(center, zoom);
+            map.flyTo(center, zoom, {
+                animate: true,
+                duration: 1.5,
+            });
         }
     }, [center, zoom, map]);
     return null;
@@ -101,8 +104,8 @@ const HeatmapView = ({
                             }}
                         >
                             <Popup>
-                                <div style={{ color: '#0f172a', fontSize: '12px', fontWeight: 500, lineHeight: 1.5 }}>
-                                    <strong>{zone.location}</strong><br />
+                                <div className="text-slate-800 dark:text-slate-100 text-xs font-semibold leading-normal font-sans p-0.5">
+                                    <strong className="text-slate-950 dark:text-white font-bold">{zone.location}</strong><br />
                                     {zone.issues}<br />
                                     Severity: {zone.severity}
                                 </div>
