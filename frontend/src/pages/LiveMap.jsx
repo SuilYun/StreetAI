@@ -14,17 +14,17 @@ const LiveMap = () => {
 
     useEffect(() => {
         const simulatedMsgs = [
-            'Scanned region Hebbal Flyover: Alligator Cracks detected.',
-            'Syncing coordinates [12.9716, 77.5946] with remote database.',
-            'Telemetry upload received from patrol vehicle ID #KA-03-M-1024.',
-            'Coordinate anomaly resolved. Mapping set to Bengaluru.',
-            'AWS S3 image upload completed for sector Whitefield-B.',
-            'Processing video stream feed from drone Drone-02 over MG Road.',
-            'Pothole severity registered as HIGH at Koramangala 80 Feet Rd.',
-            'Noise levels at Jayanagar filtered out successfully (Threshold: 20%).',
-            'Recalculating routing optimization path for emergency vehicle transit.',
-            'Pothole registered on Hebbal Flyover, severity: MEDIUM.',
-            'Active scan zone shifted to Electronic City Phase I.',
+            'Pothole detected at MG Road. Severity: HIGH.',
+            'Alligator Crack detected at Koramangala. Severity: HIGH.',
+            'Transverse Crack detected at Hebbal Flyover. Severity: MEDIUM.',
+            'Longitudinal Crack detected at Jayanagar. Severity: LOW.',
+            'Pothole detected at Outer Ring Road. Severity: HIGH.',
+            'Longitudinal Crack detected at Indiranagar. Severity: MEDIUM.',
+            'Pothole detected at Whitefield Main Road. Severity: HIGH.',
+            'Alligator Crack detected at Malleshwaram. Severity: MEDIUM.',
+            'Transverse Crack detected at Bannerghatta Road. Severity: LOW.',
+            'Pothole detected at Richmond Road. Severity: HIGH.',
+            'Pothole detected at HSR Layout. Severity: MEDIUM.',
         ];
         const interval = setInterval(() => {
             const time = new Date().toLocaleTimeString('en-US', { hour12: false });
