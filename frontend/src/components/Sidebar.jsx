@@ -109,7 +109,7 @@ const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
                     </svg>
                 </div>
                 <div>
-                    <h1 className="text-[15px] font-extrabold text-slate-800 dark:text-white tracking-tight group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200 uppercase">StreetScan <span className="text-cyan-500">AI</span></h1>
+                    <h1 className="text-[15px] font-extrabold text-slate-800 dark:text-white tracking-tight group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200">StreetScan <span className="text-cyan-500">AI</span></h1>
                     <span className="text-[9px] text-slate-400 font-mono tracking-wider">v11.0.1</span>
                 </div>
             </Link>
@@ -201,7 +201,7 @@ const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
                         <path d="M 90 78 V 90 H 78" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
                     </svg>
                 </div>
-                <span className="text-xs font-black text-slate-800 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200 uppercase">StreetScan <span className="text-cyan-500">AI</span></span>
+                <span className="text-xs font-black text-slate-800 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200">StreetScan <span className="text-cyan-500">AI</span></span>
             </Link>
 
             {/* Navigation Links */}
