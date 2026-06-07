@@ -1,9 +1,9 @@
-# 🛣️ RoadAI Mission Control
+# 🛣️ StreetScan AI Mission Control
 **Advanced Road Damage Detection & Analytics Dashboard**
 
-RoadAI is a cutting-edge hybrid computer vision and AI system designed to automatically analyze road media (images and videos) and detect structural defects such as alligator cracks, transverse cracks, and potholes in real-time. 
+StreetScan AI is a cutting-edge hybrid computer vision and AI system designed to automatically analyze road media (images and videos) and detect structural defects such as alligator cracks, transverse cracks, and potholes in real-time. 
 
-![RoadAI Preview](https://img.shields.io/badge/Project_Status-Active_Development-brightgreen?style=for-the-badge) ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi) ![YOLO](https://img.shields.io/badge/YOLO-black?style=for-the-badge&logo=yolo)
+![StreetScan AI Preview](https://img.shields.io/badge/Project_Status-Active_Development-brightgreen?style=for-the-badge) ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) ![FastAPI](https://img.shields.io/badge/FastAPI-005571?style=for-the-badge&logo=fastapi) ![YOLO](https://img.shields.io/badge/YOLO-black?style=for-the-badge&logo=yolo)
 
 ---
 
@@ -27,7 +27,7 @@ This repository is uniquely structured to allow seamless collaboration across ou
 
 ## 🚀 Getting Started
 
-Follow these steps to run the RoadAI system locally:
+Follow these steps to run the StreetScan AI system locally:
 
 ### 1. Start the Backend API
 The backend requires Python 3.8+.

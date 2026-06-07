@@ -162,3 +162,18 @@
   background-color: #1e293b !important;
   border: 1px solid rgba(255, 255, 255, 0.1) !important;
 }
+
+/* Custom modern logo scanning animations */
+@keyframes logo-scan {
+  0%, 100% {
+    transform: translateY(-5px);
+  }
+  50% {
+    transform: translateY(7px);
+  }
+}
+
+.animate-logo-scan {
+  animation: logo-scan 2s ease-in-out infinite;
+}
+

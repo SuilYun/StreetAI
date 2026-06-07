@@ -1,7 +1,7 @@
 # 4. SYSTEM DESIGN
 
 ## 4.1 HIGH LEVEL DESIGN (ARCHITECTURAL)
-The **RoadAI Mission Control** system follows a classic **Client-Server Architecture** decoupled into a React frontend client and a FastAPI backend server. For maximum deployment flexibility, the design supports both local developer workstations and fully integrated AWS Cloud production environments.
+The **StreetScan AI Mission Control** system follows a classic **Client-Server Architecture** decoupled into a React frontend client and a FastAPI backend server. For maximum deployment flexibility, the design supports both local developer workstations and fully integrated AWS Cloud production environments.
 
 ### Architectural Workflow
 1. **Presentation Layer:** The Vite + React web interface handles UI layout, interactive dashboards, dynamic charting, and local media selection.
@@ -84,7 +84,7 @@ The data flow diagrams describe how raw upload binaries are progressively transf
 ### Level 0 DFD (Context Diagram)
 ```mermaid
 graph LR
-    User([Road Inspector / User]) -->|Uploads Image/Video| RoadAI[RoadAI Mission Control System]
+    User([Road Inspector / User]) -->|Uploads Image/Video| RoadAI[StreetScan AI Mission Control System]
     RoadAI -->|Returns Damage Detections & Coordinates| User
 ```
 
@@ -114,7 +114,7 @@ graph TD
     User --> UC3((View Active Radar Stats))
     User --> UC4((Browse Historic Reports))
     
-    subgraph RoadAI System Boundary
+    subgraph StreetScan AI System Boundary
         UC1
         UC2
         UC3
