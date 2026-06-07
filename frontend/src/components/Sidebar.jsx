@@ -27,18 +27,86 @@ const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
                 onClick={handleLogoClick}
                 className="hidden lg:flex items-center gap-3 mb-8 px-2 hover:opacity-90 transition-all duration-200 group"
             >
-                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 via-cyan-500 to-sky-400 flex items-center justify-center shadow-lg shadow-blue-500/25 group-hover:scale-105 group-hover:shadow-cyan-500/35 transition-all duration-300 relative overflow-hidden flex-shrink-0">
-                    <div className="absolute inset-[1.5px] bg-slate-950 dark:bg-slate-900 rounded-[10px] flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" className="w-5 h-5 text-cyan-400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 20 L9 4 H15 L20 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.3" />
-                            <path d="M12 4 V20" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 3" strokeLinecap="round" opacity="0.6" />
-                            <line x1="2" y1="12" x2="22" y2="12" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" className="animate-logo-scan" />
-                            <path d="M 3 7 V 3 H 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                            <path d="M 21 7 V 3 H 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                            <path d="M 3 17 V 21 H 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                            <path d="M 21 17 V 21 H 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
-                    </div>
+                <div className="w-10 h-10 flex-shrink-0 group-hover:scale-105 transition-all duration-300 relative shadow-lg shadow-cyan-500/20 rounded-xl overflow-hidden">
+                    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoBgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#1e293b" />
+                                <stop offset="100%" stopColor="#0f172a" />
+                            </linearGradient>
+                            <linearGradient id="logoRoadGrad" x1="0%" y1="100%" x2="0%" y2="0%">
+                                <stop offset="0%" stopColor="#020617" />
+                                <stop offset="100%" stopColor="#1e293b" />
+                            </linearGradient>
+                            <linearGradient id="logoSweepGrad" x1="50" y1="-5" x2="85" y2="15" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stopColor="#22d3ee" stopOpacity="0" />
+                                <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.6" />
+                            </linearGradient>
+                            <filter id="logoGlow" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="1.5" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+
+                        {/* Outer metallic panel */}
+                        <rect x="1.5" y="1.5" width="97" height="97" rx="14" fill="url(#logoBgGrad)" stroke="#334155" strokeWidth="2" />
+                        
+                        {/* Cyan outer border glow */}
+                        <rect x="1.5" y="1.5" width="97" height="97" rx="14" stroke="#22d3ee" strokeWidth="1" opacity="0.3" />
+
+                        {/* 5x5 Coordinate Grid */}
+                        <g opacity="0.25">
+                            {/* Vertical lines */}
+                            <line x1="10" y1="10" x2="10" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="26" y1="10" x2="26" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="42" y1="10" x2="42" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="58" y1="10" x2="58" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="74" y1="10" x2="74" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="90" y1="10" x2="90" y2="90" stroke="#64748b" strokeWidth="0.75" />
+
+                            {/* Horizontal lines */}
+                            <line x1="10" y1="10" x2="90" y2="10" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="26" x2="90" y2="26" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="42" x2="90" y2="42" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="58" x2="90" y2="58" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="74" x2="90" y2="74" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="90" x2="90" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                        </g>
+
+                        {/* Concentric Radar Rings */}
+                        <g opacity="0.6">
+                            <circle cx="50" cy="35" r="14" stroke="#22d3ee" strokeWidth="1.2" strokeDasharray="1 2" />
+                            <circle cx="50" cy="35" r="24" stroke="#22d3ee" strokeWidth="1.2" />
+                            <circle cx="50" cy="35" r="34" stroke="#22d3ee" strokeWidth="1.2" />
+                            <circle cx="50" cy="35" r="44" stroke="#22d3ee" strokeWidth="1.2" strokeDasharray="3 3" />
+                        </g>
+
+                        {/* Radar Sweep Wedge */}
+                        <g className="animate-radar-sweep">
+                            <path d="M 50 35 L 50 -5 A 40 40 0 0 1 85 15 Z" fill="url(#logoSweepGrad)" />
+                            <line x1="50" y1="35" x2="85" y2="15" stroke="#22d3ee" strokeWidth="1.5" filter="url(#logoGlow)" />
+                        </g>
+
+                        {/* Road Polygon */}
+                        <path d="M 22 90 L 45 35 H 55 L 78 90 Z" fill="url(#logoRoadGrad)" stroke="#475569" strokeWidth="1" />
+                        
+                        {/* Road White Border lines */}
+                        <line x1="22" y1="90" x2="45" y2="35" stroke="#f8fafc" strokeWidth="1.5" opacity="0.9" />
+                        <line x1="78" y1="90" x2="55" y2="35" stroke="#f8fafc" strokeWidth="1.5" opacity="0.9" />
+                        
+                        {/* Dashed Center lane */}
+                        <line x1="50" y1="90" x2="50" y2="35" stroke="#ffffff" strokeWidth="1.5" strokeDasharray="4 5" />
+
+                        {/* Corner Brackets */}
+                        {/* Top Left (Cyan) */}
+                        <path d="M 10 22 V 10 H 22" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" filter="url(#logoGlow)" />
+                        {/* Top Right (Cyan) */}
+                        <path d="M 90 22 V 10 H 78" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" filter="url(#logoGlow)" />
+                        {/* Bottom Left (White) */}
+                        <path d="M 10 78 V 90 H 22" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                        {/* Bottom Right (White) */}
+                        <path d="M 90 78 V 90 H 78" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                    </svg>
                 </div>
                 <div>
                     <h1 className="text-[15px] font-extrabold text-slate-800 dark:text-white tracking-tight group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200 uppercase">StreetScan <span className="text-cyan-500">AI</span></h1>
@@ -52,18 +120,86 @@ const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
                 onClick={handleLogoClick}
                 className="flex lg:hidden items-center gap-2 group hover:opacity-90 transition-all duration-200"
             >
-                <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-blue-600 via-cyan-500 to-sky-400 flex items-center justify-center shadow-md shadow-blue-500/20 group-hover:scale-105 transition-all duration-300 relative overflow-hidden flex-shrink-0">
-                    <div className="absolute inset-[1px] bg-slate-950 dark:bg-slate-900 rounded-[7px] flex items-center justify-center">
-                        <svg viewBox="0 0 24 24" className="w-4 h-4 text-cyan-400" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M4 20 L9 4 H15 L20 20" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" opacity="0.3" />
-                            <path d="M12 4 V20" stroke="currentColor" strokeWidth="1.5" strokeDasharray="2 3" strokeLinecap="round" opacity="0.6" />
-                            <line x1="2" y1="12" x2="22" y2="12" stroke="#22d3ee" strokeWidth="2" strokeLinecap="round" className="animate-logo-scan" />
-                            <path d="M 3 7 V 3 H 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                            <path d="M 21 7 V 3 H 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                            <path d="M 3 17 V 21 H 7" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                            <path d="M 21 17 V 21 H 17" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                        </svg>
-                    </div>
+                <div className="w-8 h-8 flex-shrink-0 group-hover:scale-105 transition-all duration-300 relative shadow-md shadow-cyan-500/20 rounded-lg overflow-hidden">
+                    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <linearGradient id="logoBgGradMobile" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stopColor="#1e293b" />
+                                <stop offset="100%" stopColor="#0f172a" />
+                            </linearGradient>
+                            <linearGradient id="logoRoadGradMobile" x1="0%" y1="100%" x2="0%" y2="0%">
+                                <stop offset="0%" stopColor="#020617" />
+                                <stop offset="100%" stopColor="#1e293b" />
+                            </linearGradient>
+                            <linearGradient id="logoSweepGradMobile" x1="50" y1="-5" x2="85" y2="15" gradientUnits="userSpaceOnUse">
+                                <stop offset="0%" stopColor="#22d3ee" stopOpacity="0" />
+                                <stop offset="100%" stopColor="#22d3ee" stopOpacity="0.6" />
+                            </linearGradient>
+                            <filter id="logoGlowMobile" x="-20%" y="-20%" width="140%" height="140%">
+                                <feGaussianBlur stdDeviation="1.5" result="blur" />
+                                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                            </filter>
+                        </defs>
+
+                        {/* Outer metallic panel */}
+                        <rect x="1.5" y="1.5" width="97" height="97" rx="14" fill="url(#logoBgGradMobile)" stroke="#334155" strokeWidth="2" />
+                        
+                        {/* Cyan outer border glow */}
+                        <rect x="1.5" y="1.5" width="97" height="97" rx="14" stroke="#22d3ee" strokeWidth="1" opacity="0.3" />
+
+                        {/* 5x5 Coordinate Grid */}
+                        <g opacity="0.25">
+                            {/* Vertical lines */}
+                            <line x1="10" y1="10" x2="10" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="26" y1="10" x2="26" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="42" y1="10" x2="42" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="58" y1="10" x2="58" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="74" y1="10" x2="74" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="90" y1="10" x2="90" y2="90" stroke="#64748b" strokeWidth="0.75" />
+
+                            {/* Horizontal lines */}
+                            <line x1="10" y1="10" x2="90" y2="10" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="26" x2="90" y2="26" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="42" x2="90" y2="42" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="58" x2="90" y2="58" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="74" x2="90" y2="74" stroke="#64748b" strokeWidth="0.75" />
+                            <line x1="10" y1="90" x2="90" y2="90" stroke="#64748b" strokeWidth="0.75" />
+                        </g>
+
+                        {/* Concentric Radar Rings */}
+                        <g opacity="0.6">
+                            <circle cx="50" cy="35" r="14" stroke="#22d3ee" strokeWidth="1.2" strokeDasharray="1 2" />
+                            <circle cx="50" cy="35" r="24" stroke="#22d3ee" strokeWidth="1.2" />
+                            <circle cx="50" cy="35" r="34" stroke="#22d3ee" strokeWidth="1.2" />
+                            <circle cx="50" cy="35" r="44" stroke="#22d3ee" strokeWidth="1.2" strokeDasharray="3 3" />
+                        </g>
+
+                        {/* Radar Sweep Wedge */}
+                        <g className="animate-radar-sweep">
+                            <path d="M 50 35 L 50 -5 A 40 40 0 0 1 85 15 Z" fill="url(#logoSweepGradMobile)" />
+                            <line x1="50" y1="35" x2="85" y2="15" stroke="#22d3ee" strokeWidth="1.5" filter="url(#logoGlowMobile)" />
+                        </g>
+
+                        {/* Road Polygon */}
+                        <path d="M 22 90 L 45 35 H 55 L 78 90 Z" fill="url(#logoRoadGradMobile)" stroke="#475569" strokeWidth="1" />
+                        
+                        {/* Road White Border lines */}
+                        <line x1="22" y1="90" x2="45" y2="35" stroke="#f8fafc" strokeWidth="1.5" opacity="0.9" />
+                        <line x1="78" y1="90" x2="55" y2="35" stroke="#f8fafc" strokeWidth="1.5" opacity="0.9" />
+                        
+                        {/* Dashed Center lane */}
+                        <line x1="50" y1="90" x2="50" y2="35" stroke="#ffffff" strokeWidth="1.5" strokeDasharray="4 5" />
+
+                        {/* Corner Brackets */}
+                        {/* Top Left (Cyan) */}
+                        <path d="M 10 22 V 10 H 22" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" filter="url(#logoGlowMobile)" />
+                        {/* Top Right (Cyan) */}
+                        <path d="M 90 22 V 10 H 78" stroke="#22d3ee" strokeWidth="2.5" strokeLinecap="round" filter="url(#logoGlowMobile)" />
+                        {/* Bottom Left (White) */}
+                        <path d="M 10 78 V 90 H 22" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                        {/* Bottom Right (White) */}
+                        <path d="M 90 78 V 90 H 78" stroke="#ffffff" strokeWidth="2.5" strokeLinecap="round" />
+                    </svg>
                 </div>
                 <span className="text-xs font-black text-slate-800 dark:text-white group-hover:text-blue-500 dark:group-hover:text-blue-400 transition-colors duration-200 uppercase">StreetScan <span className="text-cyan-500">AI</span></span>
             </Link>
