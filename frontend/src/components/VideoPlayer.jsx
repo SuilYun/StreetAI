@@ -16,6 +16,150 @@ const MODES = [
     { id: 'video', label: 'Video', icon: Video },
 ];
 
+const AnalysisOverlay = ({ progress, mode }) => {
+    const [statusText, setStatusText] = useState('Initializing scan...');
+    const [subText, setSubText] = useState('Establishing neural link');
+    const canvasRef = useRef(null);
+
+    useEffect(() => {
+        if (progress < 20) {
+            setStatusText('Initializing YOLO11 Engine...');
+            setSubText('Loading convolutional weights & tensor configs');
+        } else if (progress < 45) {
+            setStatusText('Analyzing surface textures...');
+            setSubText('Extracting high-frequency spatial gradients');
+        } else if (progress < 70) {
+            setStatusText('Detecting structural anomalies...');
+            setSubText('Locking onto cracks, potholes, and deformation zones');
+        } else if (progress < 90) {
+            setStatusText('Executing severity classifier...');
+            setSubText('Calculating defect depth & confidence values');
+        } else {
+            setStatusText('Finalizing report registry...');
+            setSubText('Saving inspection metadata & syncing cloud assets');
+        }
+    }, [progress]);
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let animationId;
+
+        const resize = () => {
+            canvas.width = canvas.parentElement.offsetWidth || 500;
+            canvas.height = canvas.parentElement.offsetHeight || 400;
+        };
+        resize();
+        window.addEventListener('resize', resize);
+
+        // Gibberish characters, alphabets & symbols
+        const chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz!@#$%^&*()_+-=[]{}|;:,./<>?~¥$&+*§#@';
+        
+        // Font size and columns configuration
+        const fontSize = 12;
+        const columns = Math.floor(canvas.width / 15) + 1;
+        
+        // Active falling streams
+        const streams = Array(columns).fill(0).map(() => ({
+            x: Math.random() * canvas.width,
+            y: Math.random() * -canvas.height,
+            speed: 1.0 + Math.random() * 2.0,
+            char: chars[Math.floor(Math.random() * chars.length)],
+            opacity: 0.08 + Math.random() * 0.25
+        }));
+
+        const draw = () => {
+            // Dark transparent background trailing
+            ctx.fillStyle = 'rgba(15, 23, 42, 0.08)'; 
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            streams.forEach((stream) => {
+                ctx.font = `500 ${fontSize}px monospace`;
+                ctx.fillStyle = `rgba(6, 182, 212, ${stream.opacity})`; // Neon Cyan
+                
+                // Draw current character
+                ctx.fillText(stream.char, stream.x, stream.y);
+                
+                // Move down
+                stream.y += stream.speed;
+
+                // Mutate character slightly as it falls
+                if (Math.random() > 0.95) {
+                    stream.char = chars[Math.floor(Math.random() * chars.length)];
+                }
+
+                // Reset stream to top with new position when it goes off screen
+                if (stream.y > canvas.height) {
+                    stream.y = Math.random() * -50 - 20;
+                    stream.x = Math.random() * canvas.width;
+                    stream.char = chars[Math.floor(Math.random() * chars.length)];
+                    stream.speed = 1.0 + Math.random() * 2.0;
+                    stream.opacity = 0.08 + Math.random() * 0.25;
+                }
+            });
+
+            animationId = requestAnimationFrame(draw);
+        };
+
+        draw();
+
+        return () => {
+            cancelAnimationFrame(animationId);
+            window.removeEventListener('resize', resize);
+        };
+    }, []);
+
+    return (
+        <div className="absolute inset-0 bg-slate-950/80 backdrop-blur-[2px] z-20 flex flex-col items-center justify-center p-6 select-none overflow-hidden">
+            {/* Falling Gibberish Canvas */}
+            <canvas ref={canvasRef} className="absolute inset-0 w-full h-full pointer-events-none z-0" />
+
+            {/* Corner brackets */}
+            <div className="absolute top-8 left-8 w-8 h-8 border-t-2 border-l-2 border-accent-cyan/60 rounded-tl-lg animate-pulse z-10" />
+            <div className="absolute top-8 right-8 w-8 h-8 border-t-2 border-r-2 border-accent-cyan/60 rounded-tr-lg animate-pulse z-10" />
+            <div className="absolute bottom-8 left-8 w-8 h-8 border-b-2 border-l-2 border-accent-cyan/60 rounded-bl-lg animate-pulse z-10" />
+            <div className="absolute bottom-8 right-8 w-8 h-8 border-b-2 border-r-2 border-accent-cyan/60 rounded-br-lg animate-pulse z-10" />
+
+            {/* Rotating futuristic HUD circles */}
+            <div className="relative w-28 h-28 flex items-center justify-center mb-6 z-10">
+                <div className="absolute inset-0 border border-dashed border-accent-blue/30 rounded-full animate-spin" style={{ animationDuration: '12s' }} />
+                <div className="absolute inset-2 border border-dotted border-accent-cyan/40 rounded-full animate-spin" style={{ animationDuration: '8s', animationDirection: 'reverse' }} />
+                <div className="absolute inset-6 border border-accent-blue/20 rounded-full flex items-center justify-center">
+                    <Loader2 size={28} className="animate-spin text-accent-cyan" />
+                </div>
+            </div>
+
+            {/* AI HUD text fields */}
+            <div className="text-center max-w-sm z-10">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-accent-cyan/10 border border-accent-cyan/30 mb-3 text-[10px] font-bold text-accent-cyan tracking-wider uppercase animate-pulse">
+                    AI Scan Active
+                </div>
+                <h4 className="text-white font-semibold text-sm mb-1 tracking-tight font-sans">
+                    {statusText}
+                </h4>
+                <p className="text-slate-400 text-[11px] font-mono mb-6 leading-relaxed min-h-[32px] px-4">
+                    {subText}
+                </p>
+            </div>
+
+            {/* Custom progress loading bar */}
+            <div className="w-64 z-10">
+                <div className="flex items-center justify-between mb-1.5 px-1">
+                    <span className="text-[10px] font-mono text-accent-cyan uppercase tracking-widest font-semibold">Progress</span>
+                    <span className="text-xs font-mono text-white font-bold">{Math.round(progress)}%</span>
+                </div>
+                <div className="h-2 bg-slate-800/80 rounded-full p-0.5 border border-slate-700/50 overflow-hidden shadow-inner">
+                    <div 
+                        className="h-full bg-gradient-to-r from-accent-blue via-accent-cyan to-blue-400 rounded-full transition-all duration-300 shadow-[0_0_8px_rgba(6,182,212,0.5)]"
+                        style={{ width: `${Math.min(progress, 100)}%` }} 
+                    />
+                </div>
+            </div>
+        </div>
+    );
+};
+
 const VideoPlayer = ({
     latestEvent,
     onMediaStateChange,
@@ -81,20 +225,7 @@ const VideoPlayer = ({
         onMediaStateChange?.(isActive);
     }, [mode, uploadedSrc, onMediaStateChange]);
 
-    // ── Laser Scanning Animation ──
-    useEffect(() => {
-        if (analysisState === 'analyzing' && laserRef.current) {
-            const containerHeight = laserRef.current.parentElement.offsetHeight || 300;
-            anime({
-                targets: laserRef.current,
-                translateY: [0, containerHeight - 5],
-                direction: 'alternate',
-                loop: true,
-                easing: 'easeInOutSine',
-                duration: 1200
-            });
-        }
-    }, [analysisState]);
+
 
     // ── Draw bounding boxes for live detection (camera/video mode) ──
     useEffect(() => {
@@ -445,19 +576,9 @@ const VideoPlayer = ({
                             </button>
                         )}
 
-                        {/* Loading overlay & Laser */}
+                        {/* Loading overlay */}
                         {analysisState === 'analyzing' && (
-                            <>
-                                <div ref={laserRef} className="absolute left-0 top-0 w-full h-[3px] bg-accent-cyan shadow-[0_0_15px_rgba(6,182,212,1)] z-30" />
-                                <div className="absolute inset-0 z-20 flex flex-col items-center justify-center bg-white/80 backdrop-blur-sm">
-                                <Loader2 size={32} className="animate-spin text-accent-cyan mb-4" />
-                                <span className="text-sm font-mono text-accent-cyan mb-2">Extracting and analyzing frames...</span>
-                                <div className="w-64 h-1.5 bg-mission-700 rounded-full overflow-hidden">
-                                    <div className="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full transition-all duration-300"
-                                        style={{ width: `${Math.min(analysisProgress, 100)}%` }} />
-                                </div>
-                            </div>
-                            </>
+                            <AnalysisOverlay progress={analysisProgress} mode="video" />
                         )}
                     </div>
 
@@ -554,22 +675,9 @@ const VideoPlayer = ({
                             </button>
                         )}
 
-                        {/* Loading overlay & Laser */}
+                        {/* Loading overlay */}
                         {analysisState === 'analyzing' && (
-                            <>
-                                <div ref={laserRef} className="absolute left-0 top-0 w-full h-[3px] bg-accent-cyan shadow-[0_0_15px_rgba(6,182,212,1)] z-30" />
-                                <div className="absolute bottom-0 left-0 right-0 z-25 p-4 bg-gradient-to-t from-white/95 dark:from-slate-950/95 to-transparent">
-                                    <div className="flex items-center gap-2 mb-2">
-                                        <Loader2 size={16} className="animate-spin text-accent-cyan" />
-                                        <span className="text-sm font-mono text-accent-cyan">AI model analyzing...</span>
-                                        <span className="ml-auto text-sm font-mono text-mission-300 dark:text-slate-400">{Math.min(Math.round(analysisProgress), 100)}%</span>
-                                    </div>
-                                    <div className="w-full h-1.5 bg-mission-700 rounded-full overflow-hidden">
-                                        <div className="h-full bg-gradient-to-r from-accent-blue to-accent-cyan rounded-full transition-all duration-300"
-                                            style={{ width: `${Math.min(analysisProgress, 100)}%` }} />
-                                    </div>
-                                </div>
-                            </>
+                            <AnalysisOverlay progress={analysisProgress} mode="image" />
                         )}
                     </div>
 

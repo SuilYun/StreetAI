@@ -96,7 +96,7 @@ const VideoTimeline = ({ results, onReset }) => {
                         {activeFrame.detected_issues.map((issue, idx) => (
                             <div key={idx} className="glass-panel p-5 border border-slate-200 dark:border-slate-800 flex flex-col justify-between">
                                 <div className="flex justify-between items-start mb-6">
-                                    <h4 className="text-slate-800 dark:text-slate-250 font-bold">{issue.type}</h4>
+                                    <h4 className="text-slate-800 dark:text-slate-100 font-bold">{issue.type}</h4>
                                     <span className={`px-2 py-0.5 rounded-full text-[10px] uppercase font-bold border ${getSeverityColor(issue.severity)}`}>
                                         {issue.severity}
                                     </span>
@@ -122,21 +122,6 @@ const VideoTimeline = ({ results, onReset }) => {
                         ))}
                     </div>
                 )}
-            </div>
-
-            {/* Action Buttons */}
-            <div className="flex flex-wrap gap-4 mt-8">
-                <button className="flex items-center gap-2 px-6 py-3 bg-accent-blue hover:bg-blue-600 text-white font-bold rounded-full transition-colors shadow-md shadow-blue-500/20">
-                    <Download className="w-4 h-4" />
-                    Save Report
-                </button>
-                <button 
-                    onClick={onReset}
-                    className="flex items-center gap-2 px-6 py-3 bg-white hover:bg-slate-50 text-slate-700 font-bold rounded-full transition-colors border border-slate-200 shadow-sm"
-                >
-                    <Upload className="w-4 h-4" />
-                    New Upload
-                </button>
             </div>
         </div>
     );

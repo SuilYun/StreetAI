@@ -468,3 +468,166 @@ def generate_report_pdf(report) -> io.BytesIO:
     doc.build(elements, onFirstPage=_page_footer, onLaterPages=_page_footer)
     buffer.seek(0)
     return buffer
+
+
+# ═══════════════════════════════════════════════
+# Video Report PDF Generation
+# ═══════════════════════════════════════════════
+def generate_video_report_pdf(report) -> io.BytesIO:
+    """Generate a professional PDF for a video analysis report."""
+    timeline = []
+    if report.timeline_data:
+        try:
+            timeline = json.loads(report.timeline_data)
+        except Exception:
+            pass
+
+    st = _get_styles()
+    buffer = io.BytesIO()
+    doc = SimpleDocTemplate(
+        buffer, pagesize=A4,
+        topMargin=15 * mm, bottomMargin=18 * mm,
+        leftMargin=20 * mm, rightMargin=20 * mm
+    )
+
+    sev = report.worst_severity or "None"
+    sev_color = SEVERITY_COLORS.get(sev, SEV_NONE)
+    priority_map = {'High': 'URGENT', 'Medium': 'MODERATE', 'Low': 'ROUTINE', 'None': 'CLEAR'}
+
+    elements = []
+
+    # 1. Branded Header
+    header_data = [[
+        Paragraph("STREETSCAN AI", ParagraphStyle('VBrand', parent=st['title'], fontSize=20, textColor=colors.white)),
+        Paragraph(f"VIDEO REPORT #{report.id}", ParagraphStyle('VBrandId', parent=st['title'], fontSize=14, textColor=BRAND_CYAN, alignment=TA_RIGHT))
+    ], [
+        Paragraph("Video Analysis Report", ParagraphStyle('VTag', parent=st['subtitle'], textColor=colors.HexColor('#cbd5e1'))),
+        Paragraph(report.created_at.strftime('%B %d, %Y &mdash; %I:%M %p'), ParagraphStyle('VDate', parent=st['subtitle'], textColor=colors.HexColor('#94a3b8'), alignment=TA_RIGHT))
+    ]]
+    header = Table(header_data, colWidths=[320, 150])
+    header.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), BRAND_DARK),
+        ('LEFTPADDING', (0, 0), (-1, -1), 20), ('RIGHTPADDING', (0, 0), (-1, -1), 20),
+        ('TOPPADDING', (0, 0), (-1, 0), 18), ('BOTTOMPADDING', (0, -1), (-1, -1), 14),
+        ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+    ]))
+    elements.append(header)
+
+    # Classification stamp
+    stamp_data = [[
+        Paragraph(f"SEVERITY: <b>{sev.upper()}</b>", ParagraphStyle('VStampL', fontSize=9, textColor=colors.white)),
+        Paragraph(f"PRIORITY: <b>{priority_map.get(sev, 'UNKNOWN')}</b>", ParagraphStyle('VStampR', fontSize=9, textColor=colors.white, alignment=TA_RIGHT)),
+    ]]
+    stamp = Table(stamp_data, colWidths=[235, 235])
+    stamp.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), sev_color),
+        ('LEFTPADDING', (0, 0), (-1, -1), 20), ('RIGHTPADDING', (0, 0), (-1, -1), 20),
+        ('TOPPADDING', (0, 0), (-1, -1), 6), ('BOTTOMPADDING', (0, 0), (-1, -1), 6),
+    ]))
+    elements.append(stamp)
+    elements.append(Spacer(1, 14))
+
+    # 2. Executive Summary
+    damage_pct = round((report.damage_frames / max(report.frames_scanned, 1)) * 100, 1)
+    if report.damage_frames > 0:
+        summary = (
+            f"StreetScan AI analyzed <b>{report.frames_scanned} frames</b> from video "
+            f"<b>{report.filename}</b>. Damage was detected in <b>{report.damage_frames} frames</b> "
+            f"(<b>{damage_pct}%</b> of total). The worst severity observed was "
+            f"<b><font color='{sev_color.hexval()}'>{sev}</font></b> "
+            f"with a peak detection confidence of <b>{report.peak_confidence}%</b>."
+        )
+    else:
+        summary = (
+            f"StreetScan AI analyzed <b>{report.frames_scanned} frames</b> from video "
+            f"<b>{report.filename}</b>. <b>No road damage was detected.</b> The road surface "
+            f"appears to be in acceptable condition throughout the video."
+        )
+    elements.append(Paragraph("Executive Summary", st['h1']))
+    elements.append(Paragraph(summary, st['body']))
+    elements.append(Spacer(1, 10))
+
+    # 3. Metrics
+    def _card(label, value, accent=TEXT_PRIMARY):
+        return [
+            Paragraph(f"<font size='7' color='{TEXT_SECONDARY.hexval()}'>{label}</font>", ParagraphStyle('VCL', fontSize=7, textColor=TEXT_SECONDARY)),
+            Paragraph(f"<font size='16'><b>{value}</b></font>", ParagraphStyle('VCV', fontSize=16, textColor=accent, fontName='Helvetica-Bold')),
+        ]
+    metrics = Table([[
+        _card("FRAMES", str(report.frames_scanned), BRAND_BLUE),
+        _card("DAMAGE FRAMES", str(report.damage_frames), sev_color),
+        _card("DAMAGE %", f"{damage_pct}%", sev_color),
+        _card("PEAK CONF.", f"{report.peak_confidence}%", BRAND_CYAN),
+    ]], colWidths=[117, 117, 118, 118])
+    metrics.setStyle(TableStyle([
+        ('BACKGROUND', (0, 0), (-1, -1), BG_LIGHT),
+        ('BOX', (0, 0), (-1, -1), 0.5, BORDER_LIGHT),
+        ('INNERGRID', (0, 0), (-1, -1), 0.5, BORDER_LIGHT),
+        ('LEFTPADDING', (0, 0), (-1, -1), 12), ('RIGHTPADDING', (0, 0), (-1, -1), 12),
+        ('TOPPADDING', (0, 0), (-1, -1), 10), ('BOTTOMPADDING', (0, 0), (-1, -1), 10),
+        ('VALIGN', (0, 0), (-1, -1), 'TOP'),
+    ]))
+    elements.append(metrics)
+    elements.append(Spacer(1, 10))
+
+    # 5. Detection Timeline Table
+    if timeline:
+        elements.append(Paragraph("Detection Timeline", st['h1']))
+        tl_data = [["Time (s)", "Type", "Severity", "Confidence"]]
+        for entry in timeline[:30]:
+            for issue in entry.get("detected_issues", []):
+                tl_data.append([
+                    f"{entry['timestamp']}s",
+                    issue.get("type", "—"),
+                    issue.get("severity", "—"),
+                    f"{round(issue.get('confidence', 0) * 100, 1)}%"
+                ])
+        tl_tbl = Table(tl_data, colWidths=[70, 190, 90, 90])
+        tl_tbl.setStyle(TableStyle([
+            ('BACKGROUND', (0, 0), (-1, 0), colors.HexColor('#1e293b')),
+            ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+            ('FONTSIZE', (0, 0), (-1, -1), 9),
+            ('GRID', (0, 0), (-1, -1), 0.5, BORDER_LIGHT),
+            ('ROWBACKGROUNDS', (0, 1), (-1, -1), [colors.white, BG_LIGHT]),
+            ('LEFTPADDING', (0, 0), (-1, -1), 8), ('RIGHTPADDING', (0, 0), (-1, -1), 8),
+            ('TOPPADDING', (0, 0), (-1, -1), 5), ('BOTTOMPADDING', (0, 0), (-1, -1), 5),
+        ]))
+        elements.append(tl_tbl)
+        if len(timeline) > 30:
+            elements.append(Paragraph(f"<i>Showing first 30 of {len(timeline)} detection events.</i>", st['body_sm']))
+    elements.append(Spacer(1, 10))
+
+    # 6. Recommendations (reuse logic)
+    recs_map = {
+        'High': ["<b>Immediate attention required.</b> Multiple high-severity detections across video frames.",
+                  "Schedule emergency road inspection within <b>48 hours</b>.",
+                  "Deploy temporary safety measures at the affected stretch."],
+        'Medium': ["<b>Scheduled maintenance recommended.</b> Moderate damage observed in video.",
+                    "Include in the next planned maintenance cycle.",
+                    "Monitor deterioration with follow-up scans."],
+        'Low': ["<b>Monitor and track.</b> Minor damage observed.",
+                "Re-scan in <b>30 days</b> to track progression."],
+        'None': ["<b>No action required.</b> Road appears in good condition.",
+                 "Continue routine scanning schedule."],
+    }
+    elements.append(Paragraph("Recommended Actions", st['h1']))
+    for i, item in enumerate(recs_map.get(sev, recs_map['None']), 1):
+        elements.append(Paragraph(
+            f"<font color='{sev_color.hexval()}'><b>{i}.</b></font> {item}",
+            ParagraphStyle(f'VRec{i}', parent=st['body'], spaceBefore=3, spaceAfter=3, leftIndent=12)
+        ))
+
+    # 7. Closing
+    elements.append(Spacer(1, 16))
+    elements.append(HRFlowable(width="100%", thickness=0.5, color=BORDER_LIGHT, spaceAfter=8))
+    elements.append(Paragraph(
+        "This report was auto-generated by <b>StreetScan AI</b> — Video Analysis Module. "
+        "All detections are produced by YOLOv8 and should be verified by a qualified inspector.",
+        st['footer']
+    ))
+
+    doc.build(elements, onFirstPage=_page_footer, onLaterPages=_page_footer)
+    buffer.seek(0)
+    return buffer
+

@@ -22,3 +22,21 @@ class RoadDamageOut(RoadDamageBase):
 
     class Config:
         from_attributes = True
+
+
+class VideoReportOut(BaseModel):
+    id: int
+    video_url: str
+    filename: str
+    duration_seconds: Optional[float] = None
+    frames_scanned: int
+    damage_frames: int
+    worst_severity: str
+    peak_confidence: float
+    timeline_data: Optional[str] = None
+    best_frame_url: Optional[str] = None
+    best_frame_annotated_url: Optional[str] = None
+    created_at: datetime
+
+    class Config:
+        from_attributes = True

@@ -156,3 +156,45 @@ export const downloadReportPdf = async (reportId) => {
     a.remove();
 };
 
+// ──────────────────────────────────────────────
+// Video Reports
+// ──────────────────────────────────────────────
+export const fetchVideoReports = async () => {
+    try {
+        const response = await fetch(`${BASE_URL}/api/reports/videos/list`);
+        if (!response.ok) throw new Error('Failed to fetch video reports');
+        return response.json();
+    } catch (error) {
+        console.warn('Backend not available for video reports:', error.message);
+        return [];
+    }
+};
+
+export const downloadVideo = async (videoId, filename) => {
+    const response = await fetch(`${BASE_URL}/api/reports/videos/${videoId}/download`);
+    if (!response.ok) throw new Error('Failed to download video');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = filename || `video_${videoId}.mp4`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+};
+
+export const downloadVideoPdf = async (videoId) => {
+    const response = await fetch(`${BASE_URL}/api/reports/videos/${videoId}/download-pdf`);
+    if (!response.ok) throw new Error('Failed to generate video PDF');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `StreetScan_Video_Report_${videoId}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+};
+
