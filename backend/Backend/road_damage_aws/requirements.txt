@@ -11,3 +11,4 @@ boto3>=1.34.0
 ultralytics>=8.0.0
 imageio>=2.31.0
 imageio-ffmpeg>=0.4.9
+reportlab>=4.0.0

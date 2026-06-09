@@ -121,3 +121,38 @@ export const getImageUrl = (relativePath) => {
     if (relativePath.startsWith('http') || relativePath.startsWith('blob:')) return relativePath;
     return `${BASE_URL}${relativePath}`;
 };
+
+// ──────────────────────────────────────────────
+// Download Report Image from S3
+// ──────────────────────────────────────────────
+export const downloadReportImage = async (reportId) => {
+    const response = await fetch(`${BASE_URL}/api/reports/${reportId}/download-image`);
+    if (!response.ok) throw new Error('Failed to download image');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `road_damage_report_${reportId}.jpg`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+};
+
+// ──────────────────────────────────────────────
+// Download PDF Report
+// ──────────────────────────────────────────────
+export const downloadReportPdf = async (reportId) => {
+    const response = await fetch(`${BASE_URL}/api/reports/${reportId}/download-pdf`);
+    if (!response.ok) throw new Error('Failed to generate PDF');
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `StreetScan_Report_${reportId}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    window.URL.revokeObjectURL(url);
+    a.remove();
+};
+

@@ -47,7 +47,7 @@ async def analyze_image_with_ai(file: UploadFile):
         img = Image.open(io.BytesIO(file_content)).convert("RGB")
         img_width, img_height = img.size
         
-        results = model(img, conf=0.15, imgsz=640)
+        results = model(img, conf=0.15, imgsz=1280)
         
         detected_issues = []
         highest_conf = 0.0
@@ -90,12 +90,24 @@ async def analyze_image_with_ai(file: UploadFile):
                     highest_conf = conf
                     primary_damage = issue_type
                     primary_severity = severity
+
+        # Generate YOLO-annotated image with native bounding boxes
+        annotated_image_bytes = None
+        try:
+            annotated_np = results[0].plot()  # numpy array (BGR) with boxes drawn by YOLO
+            annotated_pil = Image.fromarray(annotated_np[..., ::-1])  # BGR to RGB
+            img_buf = io.BytesIO()
+            annotated_pil.save(img_buf, format="JPEG", quality=90)
+            annotated_image_bytes = img_buf.getvalue()
+        except Exception as plot_err:
+            print(f"YOLO plot error: {plot_err}")
                     
         if not detected_issues:
             return {
                 "damage_type": "None",
                 "confidence": 1.0,
                 "severity": "None",
+                "annotated_image": None,
                 "analysis": {
                     "image_width": img_width,
                     "image_height": img_height,
@@ -107,6 +119,7 @@ async def analyze_image_with_ai(file: UploadFile):
             "damage_type": primary_damage,
             "confidence": highest_conf,
             "severity": primary_severity,
+            "annotated_image": annotated_image_bytes,
             "analysis": {
                 "image_width": img_width,
                 "image_height": img_height,

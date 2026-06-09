@@ -71,3 +71,34 @@ async def upload_image_to_s3(file: UploadFile) -> str:
         raise Exception(f"Failed to upload to S3: {str(e)}")
     except Exception as e:
         raise Exception(f"An error occurred uploading to AWS S3: {str(e)}")
+
+
+async def upload_bytes_to_s3(file_bytes: bytes, extension: str = "jpg", content_type: str = "image/jpeg") -> str:
+    """Uploads raw image bytes to AWS S3 and returns the public URL. Falls back to local storage."""
+    unique_filename = f"annotated_{uuid.uuid4()}.{extension}"
+
+    if not s3_client:
+        uploads_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "uploads")
+        os.makedirs(uploads_dir, exist_ok=True)
+        file_path = os.path.join(uploads_dir, unique_filename)
+        with open(file_path, "wb") as f:
+            f.write(file_bytes)
+        return f"/uploads/{unique_filename}"
+
+    try:
+        s3_client.put_object(
+            Bucket=AWS_S3_BUCKET_NAME,
+            Key=unique_filename,
+            Body=file_bytes,
+            ContentType=content_type
+        )
+        return f"https://{AWS_S3_BUCKET_NAME}.s3.{AWS_REGION}.amazonaws.com/{unique_filename}"
+    except Exception as e:
+        # Fallback to local
+        uploads_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "uploads")
+        os.makedirs(uploads_dir, exist_ok=True)
+        file_path = os.path.join(uploads_dir, unique_filename)
+        with open(file_path, "wb") as f:
+            f.write(file_bytes)
+        return f"/uploads/{unique_filename}"
+

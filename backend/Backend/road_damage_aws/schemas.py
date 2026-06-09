@@ -17,6 +17,8 @@ class RoadDamageOut(RoadDamageBase):
     image_url: str
     created_at: datetime
     analysis: Optional[dict] = None
+    detection_data: Optional[str] = None
+    annotated_image_url: Optional[str] = None
 
     class Config:
         from_attributes = True

@@ -6,10 +6,11 @@ from sqlalchemy.orm import Session
 from database import get_db
 import models
 import schemas
-from services.s3_service import upload_image_to_s3
+from services.s3_service import upload_image_to_s3, upload_bytes_to_s3
 from services.ai_service import analyze_image_with_ai, analyze_frame_with_ai
 import uuid
 import os
+import json
 import imageio
 from starlette.concurrency import run_in_threadpool
 
@@ -50,18 +51,30 @@ async def create_damage_report(
         # 3. Upload original image to AWS S3 Storage
         s3_url = await upload_image_to_s3(file)
         
-        # 4. Store metadata in database
+        # 4. Upload YOLO-annotated image (with detection boxes) to S3
+        annotated_url = None
+        annotated_bytes = ai_result.get("annotated_image")
+        if annotated_bytes:
+            try:
+                annotated_url = await upload_bytes_to_s3(annotated_bytes, extension="jpg")
+            except Exception as ann_err:
+                print(f"Failed to upload annotated image: {ann_err}")
+        
+        # 5. Store metadata in database (including detection bboxes)
+        detection_issues = ai_result.get("analysis", {}).get("detected_issues", [])
         db_report = models.RoadDamage(
             image_url=s3_url,
             damage_type=ai_result["damage_type"],
             severity=ai_result["severity"],
             latitude=latitude,
             longitude=longitude,
-            confidence=ai_result["confidence"]
+            confidence=ai_result["confidence"],
+            detection_data=json.dumps(detection_issues) if detection_issues else None,
+            annotated_image_url=annotated_url
         )
         
         db.add(db_report)
-        db.commit() # Ensure transactional consistency
+        db.commit()
         db.refresh(db_report)
         
         report_dict = {
@@ -115,6 +128,69 @@ def get_report_by_id(report_id: int, db: Session = Depends(get_db)):
         raise HTTPException(status_code=404, detail="Report not found")
         
     return report
+
+@router.get("/{report_id}/download-image")
+def download_report_image(report_id: int, db: Session = Depends(get_db)):
+    """Download the original image from S3 or local storage."""
+    import requests as http_requests
+    from fastapi.responses import StreamingResponse
+    import io
+
+    report = db.query(models.RoadDamage).filter(models.RoadDamage.id == report_id).first()
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+
+    image_url = report.image_url
+
+    # If it's an S3 URL, fetch from S3
+    if image_url.startswith("http"):
+        try:
+            resp = http_requests.get(image_url, timeout=15)
+            resp.raise_for_status()
+            content_type = resp.headers.get("Content-Type", "image/jpeg")
+            ext = "jpg" if "jpeg" in content_type or "jpg" in content_type else "png"
+            filename = f"road_damage_report_{report_id}.{ext}"
+            return StreamingResponse(
+                io.BytesIO(resp.content),
+                media_type=content_type,
+                headers={"Content-Disposition": f'attachment; filename="{filename}"'}
+            )
+        except Exception as e:
+            raise HTTPException(status_code=500, detail=f"Failed to fetch image from S3: {str(e)}")
+    else:
+        # Local file
+        local_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", image_url.lstrip("/"))
+        local_path = os.path.normpath(local_path)
+        if not os.path.exists(local_path):
+            raise HTTPException(status_code=404, detail="Image file not found on server")
+        ext = local_path.rsplit(".", 1)[-1] if "." in local_path else "jpg"
+        from fastapi.responses import FileResponse
+        return FileResponse(
+            local_path,
+            media_type=f"image/{ext}",
+            filename=f"road_damage_report_{report_id}.{ext}",
+            headers={"Content-Disposition": f'attachment; filename="road_damage_report_{report_id}.{ext}"'}
+        )
+
+
+@router.get("/{report_id}/download-pdf")
+def download_report_pdf(report_id: int, db: Session = Depends(get_db)):
+    """Generate and download a professional PDF report with YOLO detection bounding boxes."""
+    from fastapi.responses import StreamingResponse
+    from services.pdf_service import generate_report_pdf
+
+    report = db.query(models.RoadDamage).filter(models.RoadDamage.id == report_id).first()
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+
+    buffer = generate_report_pdf(report)
+
+    return StreamingResponse(
+        buffer,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'attachment; filename="StreetScan_Report_{report_id}.pdf"'}
+    )
+
 
 def _process_video_sync(temp_file_path: str) -> dict:
     """CPU-bound helper to extract and analyze video frames synchronously in a background thread."""
