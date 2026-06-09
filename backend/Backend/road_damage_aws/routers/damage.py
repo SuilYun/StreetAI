@@ -158,8 +158,9 @@ def download_report_image(report_id: int, db: Session = Depends(get_db)):
         except Exception as e:
             raise HTTPException(status_code=500, detail=f"Failed to fetch image from S3: {str(e)}")
     else:
-        # Local file
-        local_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", image_url.lstrip("/"))
+        # Local file — strip leading slashes for cross-platform compatibility
+        cleaned = image_url.lstrip("/").lstrip("\\")
+        local_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", cleaned)
         local_path = os.path.normpath(local_path)
         if not os.path.exists(local_path):
             raise HTTPException(status_code=404, detail="Image file not found on server")

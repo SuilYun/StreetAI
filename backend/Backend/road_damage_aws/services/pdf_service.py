@@ -70,7 +70,9 @@ def _fetch_image_data(url):
             return None
     else:
         base = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-        local_path = os.path.normpath(os.path.join(base, url.lstrip("/")))
+        # Strip leading slash for cross-platform compatibility
+        cleaned = url.lstrip("/").lstrip("\\")
+        local_path = os.path.normpath(os.path.join(base, cleaned))
         return local_path if os.path.exists(local_path) else None
 
 
