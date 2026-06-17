@@ -80,7 +80,7 @@ const StatsBar = ({ stats, isConnected }) => {
     }, []);
 
     return (
-        <div ref={containerRef} className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
             {cards.map((card) => (
                 <div key={card.label} className={`stat-card relative overflow-hidden ${card.glowClass}`}>
                     <div className="flex items-center justify-between z-10 relative">

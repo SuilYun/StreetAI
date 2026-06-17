@@ -1319,3 +1319,40 @@ p {
   pointer-events: none;
   background: var(--bg);
 }
+
+/* Mobile Specific CTA Item styling */
+.mobile-cta-item {
+  display: none;
+  width: 100%;
+}
+
+@media (max-width: 768px) {
+  .mobile-cta-item {
+    display: block;
+    margin-top: var(--space-sm);
+  }
+  
+  .mobile-cta-link {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    padding: 12px !important;
+    background: var(--blue) !important;
+    color: white !important;
+    border-radius: var(--radius-sm);
+    font-weight: 600;
+    font-size: 0.85rem !important;
+    text-align: center;
+    box-shadow: 0 4px 15px var(--blue-glow);
+    transition: all var(--dur-base) var(--ease);
+  }
+  
+  .mobile-cta-link:hover {
+    background: var(--blue-light) !important;
+    box-shadow: 0 4px 20px var(--blue-glow);
+  }
+  
+  .mobile-cta-link::after {
+    display: none !important; /* hide custom border underline effect on hover */
+  }
+}

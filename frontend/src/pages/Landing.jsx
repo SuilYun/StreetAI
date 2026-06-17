@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Layers, Upload, Monitor, PieChart, FileText, Video,
@@ -219,6 +219,7 @@ function WobblyGrid() {
 //  MAIN LANDING COMPONENT
 // ══════════════════════════════════════════════════════════════════
 export default function Landing() {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   // Force dark body for the landing page
   useEffect(() => {
@@ -255,7 +256,47 @@ export default function Landing() {
           <ArrowRight size={16} />
           Open Dashboard
         </Link>
+
+        {/* Mobile Hamburger menu button */}
+        <button
+          onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+          className="flex md:hidden flex-col gap-1.5 p-2 bg-transparent border-0 cursor-pointer focus:outline-none"
+          aria-label="Toggle Menu"
+          aria-expanded={mobileMenuOpen}
+        >
+          <span className={`w-6 h-0.5 bg-slate-300 transition-all duration-300 ${mobileMenuOpen ? 'rotate-45 translate-y-2' : ''}`} />
+          <span className={`w-6 h-0.5 bg-slate-300 transition-all duration-300 ${mobileMenuOpen ? 'opacity-0' : ''}`} />
+          <span className={`w-6 h-0.5 bg-slate-300 transition-all duration-300 ${mobileMenuOpen ? '-rotate-45 -translate-y-2' : ''}`} />
+        </button>
       </nav>
+
+      {/* Mobile Drawer Dropdown Menu */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed top-[84px] left-4 right-4 bg-[#06080D]/95 backdrop-blur-2xl border border-white/[0.08] rounded-2xl p-5 z-50 flex flex-col gap-4 shadow-2xl animate-in fade-in slide-in-from-top-4 duration-200">
+          {['How It Works', 'Features', 'Detection', 'Dashboard', 'Tech', 'API'].map((label, i) => {
+            const ids = ['how-it-works', 'features', 'damage-types', 'dashboard-preview', 'tech-stack', 'api-endpoints'];
+            return (
+              <a
+                key={i}
+                href={`#${ids[i]}`}
+                onClick={() => setMobileMenuOpen(false)}
+                className="text-base text-slate-400 hover:text-white transition-colors duration-250 py-1 font-medium"
+              >
+                {label}
+              </a>
+            );
+          })}
+          <div className="h-[1px] bg-white/[0.06] my-1" />
+          <Link
+            to="/dashboard"
+            onClick={() => setMobileMenuOpen(false)}
+            className="flex items-center justify-center gap-2 w-full py-3 text-sm font-semibold text-white bg-blue-500 rounded-xl shadow-lg shadow-blue-500/20 hover:bg-blue-400 transition-all duration-200 cursor-pointer"
+          >
+            <ArrowRight size={16} />
+            Open Dashboard
+          </Link>
+        </div>
+      )}
 
       {/* ──── HERO ────────────────────────────────────────────── */}
       <section id="hero" className="relative min-h-screen flex items-center pt-28 pb-16 overflow-hidden">
