@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, BarChart3, Database, Sun, Moon, Map, Home } from 'lucide-react';
+import { LayoutDashboard, BarChart3, Database, Sun, Moon, Map, Home, Activity } from 'lucide-react';
 
 // Reusable, highly interactive and professional animated Brand Logo SVG
 const LogoIcon = () => (
@@ -121,6 +121,7 @@ const Sidebar = ({ isConnected, darkMode, toggleDarkMode }) => {
     const navItems = [
         { path: '/', label: 'Home', icon: Home },
         { path: '/dashboard', label: 'Dashboard', icon: LayoutDashboard },
+        { path: '/monitor', label: 'Live Monitor', icon: Activity },
         { path: '/analytics', label: 'Analytics', icon: BarChart3 },
         { path: '/map', label: 'Live Map', icon: Map },
         { path: '/reports', label: 'Reports', icon: Database },

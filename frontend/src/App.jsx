@@ -8,6 +8,7 @@ const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Analytics = lazy(() => import('./pages/Analytics'));
 const Reports = lazy(() => import('./pages/Reports'));
 const LiveMap = lazy(() => import('./pages/LiveMap'));
+const LiveMonitor = lazy(() => import('./pages/LiveMonitor'));
 
 function App() {
     const [darkMode, setDarkMode] = useState(() => {
@@ -38,6 +39,7 @@ function App() {
 
     const [isConnected, setIsConnected] = useState(false);
     const [latestEvent, setLatestEvent] = useState(null);
+    const [events, setEvents] = useState([]);
 
     // Lifted analysis state from VideoPlayer to persist across view transitions
     const [activeMode, setActiveMode] = useState('image');
@@ -60,6 +62,36 @@ function App() {
         const interval = setInterval(checkStatus, 3000);
         return () => clearInterval(interval);
     }, []);
+
+    // Pipe latestEvent into global events list
+    useEffect(() => {
+        if (latestEvent) {
+            setEvents((prev) => {
+                if (prev.some((e) => e.id === latestEvent.id)) return prev;
+
+                const formatType = (type) => {
+                    if (type.includes('Pothole') || type.includes('D40')) return 'Pothole';
+                    if (type.includes('Erosion') || type.includes('Surface') || type.includes('Healthy') || type.includes('Safe')) return 'Surface Erosion';
+                    return 'Crack';
+                };
+
+                const newEvent = {
+                    id: latestEvent.id || Math.random().toString(),
+                    type: formatType(latestEvent.type),
+                    confidence: latestEvent.confidence,
+                    timestamp: latestEvent.timestamp || new Date().toISOString(),
+                };
+                return [newEvent, ...prev].slice(0, 100);
+            });
+        }
+    }, [latestEvent]);
+
+    // Reset local events when global stats are reset
+    useEffect(() => {
+        if (stats.totalDetections === 0) {
+            setEvents([]);
+        }
+    }, [stats.totalDetections]);
 
     const handleMediaStateChange = useCallback((isActive) => {
         setMediaActive(isActive);
@@ -165,6 +197,8 @@ function App() {
                                                 stats={stats}
                                                 isConnected={isConnected}
                                                 latestEvent={latestEvent}
+                                                events={events}
+                                                setEvents={setEvents}
                                                 handleMediaStateChange={handleMediaStateChange}
                                                 handleAnalysisComplete={handleAnalysisComplete}
                                                 handleResetStats={handleResetStats}
@@ -192,6 +226,18 @@ function App() {
                                     <Route path="/analytics" element={<Analytics stats={stats} />} />
                                     <Route path="/reports" element={<Reports />} />
                                     <Route path="/map" element={<LiveMap />} />
+                                    <Route
+                                        path="/monitor"
+                                        element={
+                                            <LiveMonitor
+                                                events={events}
+                                                stats={stats}
+                                                handleResetStats={handleResetStats}
+                                                setEvents={setEvents}
+                                                isConnected={isConnected}
+                                            />
+                                        }
+                                    />
                                 </Routes>
                             </main>
                         </div>
