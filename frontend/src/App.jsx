@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useCallback, lazy, Suspense } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import { checkServerStatus } from './services/api';
 import Sidebar from './components/Sidebar';
 
+const Landing = lazy(() => import('./pages/Landing'));
 const Dashboard = lazy(() => import('./pages/Dashboard'));
 const Analytics = lazy(() => import('./pages/Analytics'));
 const Reports = lazy(() => import('./pages/Reports'));
@@ -36,7 +37,7 @@ function App() {
     });
 
     const [isConnected, setIsConnected] = useState(false);
-    const latestEvent = null;
+    const [latestEvent, setLatestEvent] = useState(null);
 
     // Lifted analysis state from VideoPlayer to persist across view transitions
     const [activeMode, setActiveMode] = useState('image');
@@ -73,6 +74,13 @@ function App() {
                 if (frame.detected_issues) {
                     issues = issues.concat(frame.detected_issues);
                 }
+            });
+        }
+
+        if (issues.length > 0) {
+            setLatestEvent({
+                ...issues[issues.length - 1],
+                timestamp: new Date().toISOString()
             });
         }
 
@@ -130,66 +138,66 @@ function App() {
 
     return (
         <Router>
-            <div className="h-screen overflow-hidden flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950">
-                {/* Persistent Responsive Sidebar */}
-                <Sidebar isConnected={isConnected} darkMode={darkMode} toggleDarkMode={() => setDarkMode(!darkMode)} />
+            <Suspense fallback={
+                <div className="h-screen flex flex-col items-center justify-center bg-slate-50 dark:bg-slate-950 text-slate-400 dark:text-slate-500 font-semibold text-xs gap-3">
+                    <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
+                    <span>Initializing StreetScan AI...</span>
+                </div>
+            }>
+                <Routes>
+                    {/* Landing page — full-screen, no sidebar */}
+                    <Route path="/" element={<Landing />} />
 
-                {/* Main Content Pane */}
-                <main className="flex-1 min-h-0 p-4 lg:p-6 flex flex-col overflow-hidden">
-                    <Suspense fallback={
-                        <div className="flex-1 flex flex-col items-center justify-center text-slate-400 dark:text-slate-500 font-semibold text-xs gap-3">
-                            <div className="w-8 h-8 rounded-full border-2 border-blue-500 border-t-transparent animate-spin"></div>
-                            <span>Initializing StreetScan AI...</span>
-                        </div>
-                    }>
-                        <Routes>
-                            <Route
-                                path="/"
-                                element={
-                                    <Dashboard
-                                        stats={stats}
-                                        isConnected={isConnected}
-                                        latestEvent={latestEvent}
-                                        handleMediaStateChange={handleMediaStateChange}
-                                        handleAnalysisComplete={handleAnalysisComplete}
-                                        handleResetStats={handleResetStats}
-                                        activeMode={activeMode}
-                                        setActiveMode={setActiveMode}
-                                        uploadedSrc={uploadedSrc}
-                                        setUploadedSrc={setUploadedSrc}
-                                        uploadedFile={uploadedFile}
-                                        setUploadedFile={setUploadedFile}
-                                        fileName={fileName}
-                                        setFileName={setFileName}
-                                        analysisState={analysisState}
-                                        setAnalysisState={setAnalysisState}
-                                        analysisResults={analysisResults}
-                                        setAnalysisResults={setAnalysisResults}
-                                        analysisProgress={analysisProgress}
-                                        setAnalysisProgress={setAnalysisProgress}
-                                        analysisTime={analysisTime}
-                                        setAnalysisTime={setAnalysisTime}
-                                        imageLoaded={imageLoaded}
-                                        setImageLoaded={setImageLoaded}
+                    {/* App routes — with sidebar */}
+                    <Route path="/*" element={
+                        <div className="h-screen overflow-hidden flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950 relative">
+                            {/* Decorative blur blobs for glassmorphism backdrop texture */}
+                            <div className="absolute top-[-10%] left-[-10%] w-[35%] h-[35%] rounded-full bg-blue-500/5 dark:bg-blue-500/10 blur-[130px] pointer-events-none z-0" />
+                            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-orange-500/5 dark:bg-orange-500/10 blur-[130px] pointer-events-none z-0" />
+                            
+                            <Sidebar isConnected={isConnected} darkMode={darkMode} toggleDarkMode={() => setDarkMode(!darkMode)} />
+                            <main className="flex-1 min-h-0 p-4 lg:p-6 flex flex-col overflow-hidden z-10">
+                                <Routes>
+                                    <Route
+                                        path="/dashboard"
+                                        element={
+                                            <Dashboard
+                                                stats={stats}
+                                                isConnected={isConnected}
+                                                latestEvent={latestEvent}
+                                                handleMediaStateChange={handleMediaStateChange}
+                                                handleAnalysisComplete={handleAnalysisComplete}
+                                                handleResetStats={handleResetStats}
+                                                activeMode={activeMode}
+                                                setActiveMode={setActiveMode}
+                                                uploadedSrc={uploadedSrc}
+                                                setUploadedSrc={setUploadedSrc}
+                                                uploadedFile={uploadedFile}
+                                                setUploadedFile={setUploadedFile}
+                                                fileName={fileName}
+                                                setFileName={setFileName}
+                                                analysisState={analysisState}
+                                                setAnalysisState={setAnalysisState}
+                                                analysisResults={analysisResults}
+                                                setAnalysisResults={setAnalysisResults}
+                                                analysisProgress={analysisProgress}
+                                                setAnalysisProgress={setAnalysisProgress}
+                                                analysisTime={analysisTime}
+                                                setAnalysisTime={setAnalysisTime}
+                                                imageLoaded={imageLoaded}
+                                                setImageLoaded={setImageLoaded}
+                                            />
+                                        }
                                     />
-                                }
-                            />
-                            <Route
-                                path="/analytics"
-                                element={<Analytics stats={stats} />}
-                            />
-                            <Route
-                                path="/reports"
-                                element={<Reports />}
-                            />
-                            <Route
-                                path="/map"
-                                element={<LiveMap />}
-                            />
-                        </Routes>
-                    </Suspense>
-                </main>
-            </div>
+                                    <Route path="/analytics" element={<Analytics stats={stats} />} />
+                                    <Route path="/reports" element={<Reports />} />
+                                    <Route path="/map" element={<LiveMap />} />
+                                </Routes>
+                            </main>
+                        </div>
+                    } />
+                </Routes>
+            </Suspense>
         </Router>
     );
 }

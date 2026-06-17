@@ -1,5 +1,5 @@
 import React, { useRef, useEffect, useState, useCallback } from 'react';
-import { Video, Image, Upload, Loader2, Search, X, Save, RotateCcw } from 'lucide-react';
+import { Video, Image, Upload, Loader2, Search, X, Save, RotateCcw, Radio } from 'lucide-react';
 import anime from 'animejs';
 import { uploadImage, uploadVideo, getImageUrl } from '../services/api';
 import VideoTimeline from './VideoTimeline';
@@ -14,6 +14,7 @@ const SEVERITY_COLORS = {
 const MODES = [
     { id: 'image', label: 'Image', icon: Image },
     { id: 'video', label: 'Video', icon: Video },
+    { id: 'cctv', label: 'CCTV Live Feed', icon: Radio },
 ];
 
 const AnalysisOverlay = ({ progress, mode }) => {
@@ -158,6 +159,260 @@ const AnalysisOverlay = ({ progress, mode }) => {
             </div>
         </div>
     );
+};
+
+const CctvFeed = ({ isScanning, onEvent }) => {
+    const canvasRef = useRef(null);
+    const requestRef = useRef(null);
+    const speedRef = useRef(45); // km/h
+
+    useEffect(() => {
+        const canvas = canvasRef.current;
+        if (!canvas) return;
+        const ctx = canvas.getContext('2d');
+        let frameCount = 0;
+        let targets = [];
+
+        const resize = () => {
+            canvas.width = canvas.parentElement?.offsetWidth || 640;
+            canvas.height = canvas.parentElement?.offsetHeight || 400;
+        };
+        resize();
+        window.addEventListener('resize', resize);
+
+        let laserY = 80;
+        let laserDir = 1;
+
+        const animate = () => {
+            frameCount++;
+            ctx.fillStyle = '#090d16'; // Deep OLED black-blue
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Draw grid perspective lines
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.05)';
+            ctx.lineWidth = 1;
+            const cols = 12;
+            for (let i = 0; i <= cols; i++) {
+                const x = (i / cols) * canvas.width;
+                ctx.beginPath();
+                ctx.moveTo(canvas.width / 2, 80); // perspective center
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            // Draw scrolling horizontal road lines (perspective)
+            ctx.strokeStyle = 'rgba(59, 130, 246, 0.08)';
+            const speed = isScanning ? 4.5 : 0.4;
+            const lineSpacing = 60;
+            const lineOffset = (frameCount * speed) % lineSpacing;
+
+            for (let y = 80 + lineOffset; y < canvas.height; y += lineSpacing) {
+                const relativeY = (y - 80) / (canvas.height - 80);
+                const screenY = 80 + Math.pow(relativeY, 1.8) * (canvas.height - 80);
+
+                ctx.lineWidth = relativeY * 2;
+                ctx.beginPath();
+                ctx.moveTo(0, screenY);
+                ctx.lineTo(canvas.width, screenY);
+                ctx.stroke();
+            }
+
+            // Draw highway lane markings (scrolling center line)
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.25)';
+            const dashSpacing = 50;
+            const dashOffset = (frameCount * speed * 2) % dashSpacing;
+            for (let y = 80 + dashOffset; y < canvas.height; y += dashSpacing) {
+                const relativeY = (y - 80) / (canvas.height - 80);
+                const screenY = 80 + Math.pow(relativeY, 1.8) * (canvas.height - 80);
+
+                ctx.lineWidth = relativeY * 4;
+                ctx.beginPath();
+                // Left lane border
+                ctx.moveTo(canvas.width * 0.3 - (relativeY * 120), screenY);
+                ctx.lineTo(canvas.width * 0.3 - (relativeY * 120) + relativeY * 10, screenY);
+                // Center dashed line
+                ctx.moveTo(canvas.width * 0.5, screenY);
+                ctx.lineTo(canvas.width * 0.5, screenY + relativeY * 14);
+                // Right lane border
+                ctx.moveTo(canvas.width * 0.7 + (relativeY * 120), screenY);
+                ctx.lineTo(canvas.width * 0.7 + (relativeY * 120) - relativeY * 10, screenY);
+                ctx.stroke();
+            }
+
+            // Generate simulated road defects
+            if (isScanning && Math.random() < 0.012 && targets.length < 3) {
+                const types = ['Pothole', 'Crack', 'Surface Erosion'];
+                const type = types[Math.floor(Math.random() * types.length)];
+                targets.push({
+                    id: Date.now() + Math.random(),
+                    type,
+                    relativeY: 0.05,
+                    xOffset: (Math.random() - 0.5) * 200, // deviation from center lane
+                    w: 40 + Math.random() * 25,
+                    h: 25 + Math.random() * 15,
+                    confidence: 0.68 + Math.random() * 0.3,
+                    reported: false
+                });
+            }
+
+            // Update and draw targets
+            targets.forEach((target, index) => {
+                if (isScanning) {
+                    target.relativeY += 0.009;
+                }
+
+                if (target.relativeY > 1) {
+                    targets.splice(index, 1);
+                    return;
+                }
+
+                const screenY = 80 + Math.pow(target.relativeY, 1.8) * (canvas.height - 80);
+                const scale = 0.2 + target.relativeY * 1.8;
+                const screenX = canvas.width / 2 + target.xOffset * scale;
+                const boxW = target.w * scale;
+                const boxH = target.h * scale;
+
+                const colors = {
+                    Pothole: '#ef4444',
+                    Crack: '#f59e0b',
+                    'Surface Erosion': '#8b5cf6'
+                };
+                const color = colors[target.type] || '#3b82f6';
+
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 1.5 + target.relativeY * 2;
+                ctx.strokeRect(screenX - boxW/2, screenY - boxH/2, boxW, boxH);
+                ctx.fillStyle = color + '12';
+                ctx.fillRect(screenX - boxW/2, screenY - boxH/2, boxW, boxH);
+
+                // Corner brackets
+                const cl = 8 * scale;
+                ctx.lineWidth = 2.5;
+                ctx.strokeStyle = color;
+                ctx.beginPath();
+                ctx.moveTo(screenX - boxW/2, screenY - boxH/2 + cl);
+                ctx.lineTo(screenX - boxW/2, screenY - boxH/2);
+                ctx.lineTo(screenX - boxW/2 + cl, screenY - boxH/2);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(screenX + boxW/2 - cl, screenY - boxH/2);
+                ctx.lineTo(screenX + boxW/2, screenY - boxH/2);
+                ctx.lineTo(screenX + boxW/2, screenY - boxH/2 + cl);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(screenX - boxW/2, screenY + boxH/2 - cl);
+                ctx.lineTo(screenX - boxW/2, screenY + boxH/2);
+                ctx.lineTo(screenX - boxW/2 + cl, screenY + boxH/2);
+                ctx.stroke();
+
+                ctx.beginPath();
+                ctx.moveTo(screenX + boxW/2 - cl, screenY + boxH/2);
+                ctx.lineTo(screenX + boxW/2, screenY + boxH/2);
+                ctx.lineTo(screenX + boxW/2, screenY + boxH/2 - cl);
+                ctx.stroke();
+
+                if (target.relativeY > 0.18) {
+                    const label = `${target.type} ${(target.confidence * 100).toFixed(0)}%`;
+                    ctx.font = `600 ${Math.max(9, Math.round(10 * scale))}px Inter, sans-serif`;
+                    const textWidth = ctx.measureText(label).width;
+                    ctx.fillStyle = color;
+                    ctx.beginPath();
+                    ctx.roundRect(screenX - boxW/2, screenY - boxH/2 - (16 * scale), textWidth + 8, 14 * scale, 3);
+                    ctx.fill();
+                    ctx.fillStyle = '#ffffff';
+                    ctx.fillText(label, screenX - boxW/2 + 4, screenY - boxH/2 - (4 * scale));
+
+                    if (!target.reported && target.relativeY > 0.45) {
+                        target.reported = true;
+                        onEvent?.({
+                            type: target.type,
+                            confidence: target.confidence,
+                            bbox: [
+                                Math.round(((screenX - boxW/2) / canvas.width) * 100),
+                                Math.round(((screenY - boxH/2) / canvas.height) * 100),
+                                Math.round((boxW / canvas.width) * 100),
+                                Math.round((boxH / canvas.height) * 100)
+                            ],
+                            severity: target.type === 'Pothole' ? 'High' : (target.type === 'Crack' ? 'Medium' : 'Low')
+                        });
+                    }
+                }
+            });
+
+            // Draw horizontal scanning laser
+            if (isScanning) {
+                laserY += laserDir * 2.2;
+                if (laserY > canvas.height) { laserY = canvas.height; laserDir = -1; }
+                if (laserY < 80) { laserY = 80; laserDir = 1; }
+
+                const grad = ctx.createLinearGradient(0, laserY - 20, 0, laserY + 20);
+                grad.addColorStop(0, 'rgba(6, 182, 212, 0)');
+                grad.addColorStop(0.5, 'rgba(6, 182, 212, 0.35)');
+                grad.addColorStop(1, 'rgba(6, 182, 212, 0)');
+                ctx.fillStyle = grad;
+                ctx.fillRect(0, laserY - 20, canvas.width, 40);
+
+                ctx.strokeStyle = '#06b6d4';
+                ctx.lineWidth = 1.5;
+                ctx.beginPath();
+                ctx.moveTo(0, laserY);
+                ctx.lineTo(canvas.width, laserY);
+                ctx.stroke();
+            }
+
+            // HUD Overlays
+            ctx.fillStyle = isScanning ? '#ef4444' : '#64748b';
+            ctx.beginPath();
+            ctx.arc(30, 30, 5, 0, 2 * Math.PI);
+            ctx.fill();
+
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 11px Inter, sans-serif';
+            ctx.fillText(isScanning ? 'CCTV LIVE SCANNING' : 'CCTV FEED PAUSED', 45, 34);
+
+            ctx.fillStyle = '#94a3b8';
+            ctx.font = '10px monospace';
+            ctx.fillText('CAM-08 WESTERN EXPWY // SECTION A-4', 30, 52);
+
+            ctx.fillStyle = 'rgba(255, 255, 255, 0.75)';
+            ctx.font = '10px monospace';
+
+            const lat = (19.0760 + Math.sin(frameCount / 800) * 0.003).toFixed(4);
+            const lng = (72.8777 + Math.cos(frameCount / 800) * 0.003).toFixed(4);
+
+            ctx.fillText(`LAT: ${lat}`, canvas.width - 160, 30);
+            ctx.fillText(`LNG: ${lng}`, canvas.width - 160, 44);
+
+            const currentSpeed = isScanning ? Math.round(speedRef.current + Math.sin(frameCount / 40) * 2) : 0;
+            ctx.fillText(`SPEED: ${currentSpeed} km/h`, canvas.width - 160, 58);
+            ctx.fillText(`FPS: ${isScanning ? '30.0' : '0.0'}`, canvas.width - 160, 72);
+
+            // Center targeting reticle
+            ctx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.arc(canvas.width / 2, canvas.height / 2 + 20, 25, 0, 2 * Math.PI);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(canvas.width / 2 - 40, canvas.height / 2 + 20);
+            ctx.lineTo(canvas.width / 2 + 40, canvas.height / 2 + 20);
+            ctx.moveTo(canvas.width / 2, canvas.height / 2 + 20 - 40);
+            ctx.lineTo(canvas.width / 2, canvas.height / 2 + 20 + 40);
+            ctx.stroke();
+
+            requestRef.current = requestAnimationFrame(animate);
+        };
+
+        requestRef.current = requestAnimationFrame(animate);
+        return () => {
+            cancelAnimationFrame(requestRef.current);
+            window.removeEventListener('resize', resize);
+        };
+    }, [isScanning, onEvent]);
+
+    return <canvas ref={canvasRef} className="w-full h-full block rounded-b-2xl bg-[#090d16]" />;
 };
 
 const VideoPlayer = ({
@@ -538,6 +793,58 @@ const VideoPlayer = ({
 
     // ── Render content ──
     const renderContent = () => {
+        // ── CCTV MODE ──
+        if (mode === 'cctv') {
+            return (
+                <div className="flex flex-col h-full w-full bg-[#090d16]">
+                    <div className="relative flex-1 min-h-[320px] bg-[#090d16] overflow-hidden">
+                        <CctvFeed
+                            isScanning={analysisState === 'analyzing'}
+                            onEvent={(event) => {
+                                onAnalysisComplete?.({
+                                    detected_issues: [{
+                                        ...event,
+                                        id: `cctv-det-${Date.now()}-${Math.floor(Math.random() * 1000)}`
+                                    }]
+                                });
+                            }}
+                        />
+                    </div>
+                    
+                    <div className="flex items-center justify-between px-4 py-3 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 z-10">
+                        <div className="flex items-center gap-2">
+                            {analysisState === 'analyzing' ? (
+                                <button
+                                    onClick={() => {
+                                        setAnalysisState('idle');
+                                        onMediaStateChange?.(false);
+                                    }}
+                                    className="flex items-center gap-2 px-5 py-2.5 bg-red-500 hover:bg-red-600 text-white rounded-lg text-sm font-semibold transition-all shadow-md shadow-red-500/10 cursor-pointer"
+                                >
+                                    <X size={15} />
+                                    Pause CCTV Scan
+                                </button>
+                            ) : (
+                                <button
+                                    onClick={() => {
+                                        setAnalysisState('analyzing');
+                                        onMediaStateChange?.(true);
+                                    }}
+                                    className="flex items-center gap-2 px-5 py-2.5 bg-emerald-500 hover:bg-emerald-600 text-white rounded-lg text-sm font-semibold transition-all shadow-md shadow-emerald-500/10 cursor-pointer animate-pulse-glow"
+                                >
+                                    <Radio size={15} className="animate-spin-slow" />
+                                    Start Live CCTV Scan
+                                </button>
+                            )}
+                        </div>
+                        <span className="text-[11px] font-mono text-slate-400 dark:text-slate-500">
+                            Status: {analysisState === 'analyzing' ? 'Live Telemetry Active' : 'Standby'}
+                        </span>
+                    </div>
+                </div>
+            );
+        }
+
         // ── VIDEO MODE ──
         if (mode === 'video') {
             if (!uploadedSrc) {
