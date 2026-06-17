@@ -1,0 +1,15 @@
+[package]
+name = "suilyun/streetai007"
+version = "0.1.0"
+description = "StreetScan AI - Intelligent Road Damage Detection & Analytics"
+
+[fs]
+"/app" = "website"
+
+[[command]]
+name = "serve"
+module = "wasmer/static-web-server:webserver"
+runner = "wasi"
+
+[command.annotations.wasi]
+main-args = ["--root", "/app"]
