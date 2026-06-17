@@ -5,9 +5,9 @@
  * Currently connected to the YOLO backend.
  * When your teammate's backend is ready, just change BASE_URL.
  */
-const BASE_URL = 'http://127.0.0.1:8000';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
 
-export const WS_URL = 'ws://localhost:8000/ws/detections';
+export const WS_URL = import.meta.env.VITE_WS_URL || 'ws://127.0.0.1:8000/ws/detections';
 
 // ──────────────────────────────────────────────
 // Health Check
