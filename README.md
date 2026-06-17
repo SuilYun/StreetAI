@@ -271,8 +271,8 @@ streetscan-ai/
 ### 1 — Clone the Repository
 
 ```bash
-git clone https://github.com/SuilYun/updatedProject.git
-cd updatedProject
+git clone https://github.com/SuilYun/StreetAI.git
+cd StreetAI
 ```
 
 <br />
