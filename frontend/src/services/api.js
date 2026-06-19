@@ -2,12 +2,52 @@
 
 /**
  * API service for the FastAPI backend.
- * Currently connected to the YOLO backend.
- * When your teammate's backend is ready, just change BASE_URL.
+ *
+ * DEPLOYMENT CONFIGURATION:
+ * ─────────────────────────
+ * Set the VITE_API_URL environment variable in your Render / hosting dashboard
+ * to point to your deployed backend URL.
+ *
+ * Example (Render environment variable):
+ *   VITE_API_URL=https://your-backend-name.onrender.com
+ *
+ * For local development, it defaults to http://127.0.0.1:8000
  */
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://127.0.0.1:8000';
+const getBaseUrl = () => {
+    // 1. Explicit env var always wins
+    if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
 
-export const WS_URL = import.meta.env.VITE_WS_URL || 'ws://127.0.0.1:8000/ws/detections';
+    // 2. Local development / LAN access
+    if (typeof window !== 'undefined') {
+        const hostname = window.location.hostname;
+        const isLocalOrLAN = 
+            hostname === 'localhost' || 
+            hostname === '127.0.0.1' || 
+            hostname.startsWith('192.168.') || 
+            hostname.startsWith('10.') || 
+            (hostname.startsWith('172.') && parseInt(hostname.split('.')[1]) >= 16 && parseInt(hostname.split('.')[1]) <= 31) ||
+            hostname.endsWith('.local');
+
+        if (isLocalOrLAN) {
+            // Assume backend is on the same host but port 8000
+            return `http://${hostname}:8000`;
+        }
+    }
+
+    // 3. Deployed — assume backend is at same origin (or set VITE_API_URL)
+    return window.location.origin;
+};
+
+const BASE_URL = getBaseUrl();
+
+const getWsUrl = () => {
+    if (import.meta.env.VITE_WS_URL) return import.meta.env.VITE_WS_URL;
+    const protocol = BASE_URL.startsWith('https') ? 'wss' : 'ws';
+    const host = BASE_URL.replace(/^https?:\/\//, '');
+    return `${protocol}://${host}/ws/detections`;
+};
+
+export const WS_URL = getWsUrl();
 
 // ──────────────────────────────────────────────
 // Health Check

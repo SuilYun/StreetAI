@@ -80,16 +80,16 @@ const StatsBar = ({ stats, isConnected }) => {
     }, []);
 
     return (
-        <div ref={containerRef} className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <div ref={containerRef} className="flex lg:grid lg:grid-cols-4 gap-3 sm:gap-4 overflow-x-auto lg:overflow-visible mobile-scroll-container snap-x snap-mandatory pb-1 lg:pb-0 -mx-1 px-1 lg:mx-0 lg:px-0">
             {cards.map((card) => (
-                <div key={card.label} className={`stat-card relative overflow-hidden ${card.glowClass}`}>
+                <div key={card.label} className={`stat-card relative overflow-hidden ${card.glowClass} min-w-[200px] sm:min-w-0 snap-start flex-shrink-0 lg:flex-shrink`}>
                     <div className="flex items-center justify-between z-10 relative">
-                        <span className="text-xs text-mission-400 uppercase tracking-wider font-medium">{card.label}</span>
-                        <div className={`${card.iconBg} ${card.color} p-2 rounded-lg`}>
+                        <span className="text-[10px] sm:text-xs text-mission-400 uppercase tracking-wider font-medium">{card.label}</span>
+                        <div className={`${card.iconBg} ${card.color} p-1.5 sm:p-2 rounded-lg`}>
                             {card.icon}
                         </div>
                     </div>
-                    <span className={`text-4xl font-extrabold tracking-tight mt-1 z-10 relative ${card.color}`}>
+                    <span className={`text-3xl sm:text-4xl font-extrabold tracking-tight mt-1 z-10 relative ${card.color}`}>
                         <AnimatedValue value={card.value} />
                     </span>
                     <div className="absolute right-[-16px] bottom-[-16px] opacity-[0.04] text-slate-900 dark:text-white pointer-events-none">
@@ -99,8 +99,8 @@ const StatsBar = ({ stats, isConnected }) => {
             ))}
 
             {/* Earth Globe Connectivity Card */}
-            <div className={`stat-card flex flex-col items-center justify-center gap-1 relative overflow-hidden ${isConnected ? 'glow-green' : 'glow-red'}`}>
-                <span className="text-xs text-mission-400 uppercase tracking-wider font-medium mb-1">Server Status</span>
+            <div className={`stat-card flex flex-col items-center justify-center gap-1 relative overflow-hidden ${isConnected ? 'glow-green' : 'glow-red'} min-w-[160px] sm:min-w-0 snap-start flex-shrink-0 lg:flex-shrink`}>
+                <span className="text-[10px] sm:text-xs text-mission-400 uppercase tracking-wider font-medium mb-1">Server Status</span>
                 <EarthGlobe isConnected={isConnected} />
             </div>
         </div>

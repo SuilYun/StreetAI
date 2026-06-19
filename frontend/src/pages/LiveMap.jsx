@@ -58,9 +58,9 @@ const LiveMap = () => {
     return (
         <div className="flex-1 min-h-0 flex flex-col gap-4">
             {/* Page Header */}
-            <div className="flex-shrink-0 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div className="flex-shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
                 <div>
-                    <h2 className="text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                    <h2 className="text-xl sm:text-2xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
                         <Activity size={24} className="text-blue-500" />
                         Geographical Heatmap
                     </h2>
@@ -78,7 +78,7 @@ const LiveMap = () => {
             {/* Layout container */}
             <div className="flex-1 min-h-0 flex flex-col lg:flex-row gap-4">
                 {/* Map Area */}
-                <div className="flex-grow min-h-[400px] lg:min-h-0 overflow-hidden relative rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+                <div className="flex-grow min-h-[280px] sm:min-h-[400px] lg:min-h-0 overflow-hidden relative rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
                     <HeatmapView 
                         height="100%" 
                         hideHeader={true} 
@@ -144,7 +144,7 @@ const LiveMap = () => {
                     </div>
 
                     {/* Operations Terminal */}
-                    <div className="glass-panel h-48 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-950 overflow-hidden flex flex-col font-mono text-[10px] flex-shrink-0 shadow-sm">
+                    <div className="glass-panel h-36 sm:h-48 rounded-xl border border-slate-200 dark:border-slate-800 bg-slate-50/90 dark:bg-slate-950 overflow-hidden flex flex-col font-mono text-[10px] flex-shrink-0 shadow-sm">
                         <div className="px-3 py-2 border-b border-slate-200 dark:border-slate-800/80 flex items-center justify-between bg-slate-100/80 dark:bg-slate-900 text-slate-500 dark:text-slate-400">
                             <span className="font-bold flex items-center gap-1.5 uppercase tracking-wider text-[9px] text-cyan-600 dark:text-cyan-400">
                                 <span className="w-1.5 h-1.5 rounded-full bg-cyan-500 dark:bg-cyan-400 animate-pulse"></span>

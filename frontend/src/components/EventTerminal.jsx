@@ -29,18 +29,18 @@ const EventTerminal = ({ events }) => {
 
     return (
         <div className="glass-panel flex flex-col h-full">
-            <div className="flex items-center gap-2 px-4 py-3 border-b border-white/[0.06]">
-                <Terminal size={16} className="text-detect-safe" />
-                <span className="text-sm font-semibold text-mission-100">Live Event Stream</span>
+            <div className="flex items-center gap-2 px-3 sm:px-4 py-2.5 sm:py-3 border-b border-white/[0.06]">
+                <Terminal size={14} className="text-detect-safe sm:w-4 sm:h-4" />
+                <span className="text-xs sm:text-sm font-semibold text-mission-100">Live Event Stream</span>
                 <div className="ml-auto flex items-center gap-1.5">
                     <div className="w-2 h-2 rounded-full bg-detect-safe animate-pulse"></div>
-                    <span className="text-xs text-mission-300 font-mono">{events.length} events</span>
+                    <span className="text-[10px] sm:text-xs text-mission-300 font-mono">{events.length} events</span>
                 </div>
             </div>
 
             <div
                 ref={scrollRef}
-                className="flex-1 overflow-y-auto px-2 py-2 space-y-1"
+                className="flex-1 overflow-y-auto px-1.5 sm:px-2 py-2 space-y-1"
                 style={{ maxHeight: '500px' }}
             >
                 {events.length === 0 ? (

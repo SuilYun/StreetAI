@@ -46,7 +46,7 @@ const DamageRadarChart = ({ stats }) => {
     const totalIssues = rawData.reduce((sum, d) => sum + d.count, 0);
 
     return (
-        <div ref={chartRef} className="glass-panel p-4 flex flex-col gap-4 h-full min-h-0 overflow-y-auto">
+        <div ref={chartRef} className="glass-panel p-3 sm:p-4 flex flex-col gap-3 sm:gap-4 h-full min-h-0 overflow-y-auto">
             <h3 className="text-sm font-semibold text-mission-100 dark:text-slate-100">Damage Profile</h3>
             
             {totalIssues === 0 ? (
@@ -60,7 +60,7 @@ const DamageRadarChart = ({ stats }) => {
                     </p>
                 </div>
             ) : (
-                <ResponsiveContainer width="100%" height={220}>
+                <ResponsiveContainer width="100%" height={180} className="sm:!h-[220px]">
                     <RadarChart cx="50%" cy="50%" outerRadius="70%" data={normalizedData}>
                         <defs>
                             <linearGradient id="radarGradient" x1="0" y1="0" x2="0" y2="1">
@@ -71,7 +71,7 @@ const DamageRadarChart = ({ stats }) => {
                         <PolarGrid stroke="rgba(100, 116, 139, 0.15)" />
                         <PolarAngleAxis
                             dataKey="category"
-                            tick={{ fill: '#64748b', fontSize: 11 }}
+                            tick={{ fill: '#64748b', fontSize: 10 }}
                         />
                         <PolarRadiusAxis
                             angle={90}

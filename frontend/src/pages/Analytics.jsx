@@ -14,12 +14,12 @@ const Analytics = ({ stats }) => {
     const health = getSystemHealth();
 
     return (
-        <div className="flex-1 min-h-0 flex flex-col gap-5 overflow-y-auto pr-1">
+        <div className="flex-1 min-h-0 flex flex-col gap-3 sm:gap-5 overflow-y-auto pr-1">
             {/* Page Header */}
-            <div className="flex-shrink-0 flex items-center justify-between border-b border-slate-200 dark:border-slate-800 pb-3">
+            <div className="flex-shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-3">
                 <div>
-                    <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100">Analytics Insights</h2>
-                    <p className="text-xs text-slate-400 dark:text-slate-500">Detailed damage profile & predictive maintenance metrics</p>
+                    <h2 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100">Analytics Insights</h2>
+                    <p className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500">Detailed damage profile & predictive maintenance metrics</p>
                 </div>
                 <div className={`px-4 py-2 rounded-xl border text-xs font-semibold ${health.color} flex items-center gap-2`}>
                     <ShieldAlert size={14} />
@@ -37,7 +37,7 @@ const Analytics = ({ stats }) => {
                 {/* Right side: Insights & Actions */}
                 <div className="lg:col-span-1 flex flex-col gap-4">
                     {/* Summary Card */}
-                    <div className="glass-panel p-4 flex flex-col justify-between border border-slate-200/60 dark:border-slate-700 bg-white dark:bg-slate-900">
+                    <div className="glass-panel p-3 sm:p-4 flex flex-col justify-between border border-slate-200/60 dark:border-slate-700 bg-white dark:bg-slate-900">
                         <h3 className="text-sm font-semibold text-slate-800 dark:text-slate-100 mb-3">Defect Severity Summary</h3>
                         <div className="space-y-3">
                             <div className="flex justify-between items-center text-xs">

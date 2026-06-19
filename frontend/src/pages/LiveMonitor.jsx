@@ -35,12 +35,12 @@ export default function LiveMonitor({ events, stats, handleResetStats, setEvents
             {/* Header section */}
             <div className="flex-shrink-0 flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-200 dark:border-slate-800 pb-4">
                 <div>
-                    <h2 className="text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
-                        <Activity className="text-cyan-500 animate-pulse" size={22} />
+                    <h2 className="text-lg sm:text-xl font-bold text-slate-800 dark:text-slate-100 flex items-center gap-2">
+                        <Activity className="text-cyan-500 animate-pulse" size={20} />
                         Live Telemetry Monitor
                     </h2>
-                    <p className="text-xs text-slate-400 dark:text-slate-500 mt-0.5">
-                        Real-time AI telemetry feed, structural damage profiles, and maintenance advisories
+                    <p className="text-[10px] sm:text-xs text-slate-400 dark:text-slate-500 mt-0.5">
+                        Real-time AI telemetry feed and maintenance advisories
                     </p>
                 </div>
 
@@ -76,17 +76,17 @@ export default function LiveMonitor({ events, stats, handleResetStats, setEvents
             {/* 3-Column Layout */}
             <div className="grid grid-cols-1 xl:grid-cols-3 gap-5 items-stretch min-h-0 flex-grow pb-4">
                 {/* Damage Profile */}
-                <div className="h-[480px] xl:h-auto min-h-[420px] flex flex-col">
+                <div className="h-[340px] sm:h-[480px] xl:h-auto min-h-[300px] sm:min-h-[420px] flex flex-col">
                     <DamageRadarChart stats={stats} />
                 </div>
 
                 {/* Event Terminal */}
-                <div className="h-[480px] xl:h-auto min-h-[420px] flex flex-col">
+                <div className="h-[340px] sm:h-[480px] xl:h-auto min-h-[300px] sm:min-h-[420px] flex flex-col">
                     <EventTerminal events={events} />
                 </div>
 
                 {/* AI Advisory Panel */}
-                <div className="h-[480px] xl:h-auto min-h-[420px] glass-panel p-5 flex flex-col bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800">
+                <div className="h-[340px] sm:h-[480px] xl:h-auto min-h-[300px] sm:min-h-[420px] glass-panel p-3 sm:p-5 flex flex-col bg-white dark:bg-slate-900 border border-slate-200/50 dark:border-slate-800">
                     <h3 className="text-sm font-bold text-slate-800 dark:text-slate-100 border-b border-slate-100 dark:border-slate-800 pb-3 mb-4">
                         AI Maintenance Advisory
                     </h3>

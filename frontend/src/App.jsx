@@ -182,13 +182,13 @@ function App() {
 
                     {/* App routes — with sidebar */}
                     <Route path="/*" element={
-                        <div className="h-screen overflow-hidden flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950 relative">
+                        <div className="h-dvh lg:h-screen overflow-hidden flex flex-col lg:flex-row bg-slate-50 dark:bg-slate-950 relative">
                             {/* Decorative blur blobs for glassmorphism backdrop texture */}
                             <div className="absolute top-[-10%] left-[-10%] w-[35%] h-[35%] rounded-full bg-blue-500/5 dark:bg-blue-500/10 blur-[130px] pointer-events-none z-0" />
                             <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-orange-500/5 dark:bg-orange-500/10 blur-[130px] pointer-events-none z-0" />
                             
                             <Sidebar isConnected={isConnected} darkMode={darkMode} toggleDarkMode={() => setDarkMode(!darkMode)} />
-                            <main className="flex-1 min-h-0 p-4 lg:p-6 flex flex-col overflow-hidden z-10">
+                            <main className="flex-1 min-h-0 p-3 sm:p-4 lg:p-6 flex flex-col overflow-hidden z-10 pb-20 lg:pb-6 mobile-main-content lg:!pb-6">
                                 <Routes>
                                     <Route
                                         path="/dashboard"

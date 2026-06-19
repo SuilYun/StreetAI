@@ -849,15 +849,15 @@ const VideoPlayer = ({
         if (mode === 'video') {
             if (!uploadedSrc) {
                 return (
-                    <label className="flex flex-col items-center justify-center h-full gap-5 cursor-pointer m-4 border-2 border-dashed border-slate-200 hover:border-blue-400/70 hover:bg-blue-50/20 rounded-2xl transition-all duration-300 p-8 group">
-                        <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center shadow-inner transition-transform group-hover:scale-105">
-                            <Upload size={32} className="text-accent-blue" />
+                    <label className="flex flex-col items-center justify-center h-full gap-3 sm:gap-5 cursor-pointer m-2 sm:m-4 border-2 border-dashed border-slate-200 hover:border-blue-400/70 hover:bg-blue-50/20 rounded-2xl transition-all duration-300 p-4 sm:p-8 group active:scale-[0.98]">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-blue-50 flex items-center justify-center shadow-inner transition-transform group-hover:scale-105">
+                            <Upload size={28} className="text-accent-blue sm:w-8 sm:h-8" />
                         </div>
                         <div className="text-center">
-                            <p className="text-slate-700 text-sm font-semibold">Upload Road Video</p>
-                            <p className="text-xs text-slate-400 mt-1">Drag and drop or click to select video</p>
+                            <p className="text-slate-700 dark:text-slate-200 text-sm font-semibold">Upload Road Video</p>
+                            <p className="text-xs text-slate-400 mt-1">Tap to select or drag and drop</p>
                         </div>
-                        <span className="text-[10px] font-mono bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200/50">
+                        <span className="text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-3 py-1 rounded-full border border-slate-200/50 dark:border-slate-700">
                             MP4, AVI, MOV supported
                         </span>
                         <input type="file" accept="video/*" className="hidden" onChange={handleFileUpload} />
@@ -912,15 +912,15 @@ const VideoPlayer = ({
             // Empty state — upload prompt
             if (!uploadedSrc) {
                 return (
-                    <label className="flex flex-col items-center justify-center h-full gap-5 cursor-pointer m-4 border-2 border-dashed border-slate-200 hover:border-blue-400/70 hover:bg-blue-50/20 rounded-2xl transition-all duration-300 p-8 group">
-                        <div className="w-20 h-20 rounded-full bg-blue-50 flex items-center justify-center shadow-inner transition-transform group-hover:scale-105">
-                            <Upload size={32} className="text-accent-blue" />
+                    <label className="flex flex-col items-center justify-center h-full gap-3 sm:gap-5 cursor-pointer m-2 sm:m-4 border-2 border-dashed border-slate-200 hover:border-blue-400/70 hover:bg-blue-50/20 rounded-2xl transition-all duration-300 p-4 sm:p-8 group active:scale-[0.98]">
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-blue-50 flex items-center justify-center shadow-inner transition-transform group-hover:scale-105">
+                            <Upload size={28} className="text-accent-blue sm:w-8 sm:h-8" />
                         </div>
                         <div className="text-center">
-                            <p className="text-slate-700 text-sm font-semibold">Upload Road Image</p>
-                            <p className="text-xs text-slate-400 mt-1">Drag and drop or click to select image</p>
+                            <p className="text-slate-700 dark:text-slate-200 text-sm font-semibold">Upload Road Image</p>
+                            <p className="text-xs text-slate-400 mt-1">Tap to select or drag and drop</p>
                         </div>
-                        <span className="text-[10px] font-mono bg-slate-100 text-slate-500 px-3 py-1 rounded-full border border-slate-200/50">
+                        <span className="text-[10px] font-mono bg-slate-100 dark:bg-slate-800 text-slate-500 dark:text-slate-400 px-3 py-1 rounded-full border border-slate-200/50 dark:border-slate-700">
                             JPG, PNG, WEBP supported
                         </span>
                         <input type="file" accept="image/*" className="hidden" onChange={handleFileUpload} />
@@ -1069,7 +1069,7 @@ const VideoPlayer = ({
 
     return (
         <>
-            <div className={`glass-panel overflow-hidden relative flex flex-col ${analysisState === 'done' ? 'min-h-[380px]' : 'lg:h-[calc(100vh-230px)] min-h-[380px]'}`} ref={containerRef}>
+            <div className={`glass-panel overflow-hidden relative flex flex-col ${analysisState === 'done' ? 'min-h-[300px] sm:min-h-[380px]' : 'lg:h-[calc(100vh-230px)] min-h-[280px] sm:min-h-[380px]'}`} ref={containerRef}>
                 {/* Header tabs */}
                 <div className="flex items-center justify-between px-4 py-2.5 border-b border-slate-200 dark:border-slate-800 z-20 bg-white/90 dark:bg-slate-900/90 backdrop-blur-sm">
                     <div className="flex gap-1">
@@ -1111,7 +1111,7 @@ const VideoPlayer = ({
                 </div>
 
                 {/* Media area */}
-                <div className={`relative flex flex-col ${analysisState === 'done' ? (mode === 'video' ? 'h-[400px] flex-shrink-0' : 'h-[640px] flex-shrink-0') : 'flex-grow flex-1 min-h-0'}`}>
+                <div className={`relative flex flex-col ${analysisState === 'done' ? (mode === 'video' ? 'h-[280px] sm:h-[400px] flex-shrink-0' : 'h-[350px] sm:h-[640px] flex-shrink-0') : 'flex-grow flex-1 min-h-0'}`}>
                     {renderContent()}
                 </div>
             </div>
