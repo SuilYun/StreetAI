@@ -34,8 +34,8 @@ const getBaseUrl = () => {
         }
     }
 
-    // 3. Deployed — assume backend is at same origin (or set VITE_API_URL)
-    return window.location.origin;
+    // 3. Deployed — fallback to your deployed Render backend
+    return 'https://street-scan-api.onrender.com';
 };
 
 const BASE_URL = getBaseUrl();
