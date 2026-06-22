@@ -9,6 +9,7 @@ const Analytics = lazy(() => import('./pages/Analytics'));
 const Reports = lazy(() => import('./pages/Reports'));
 const LiveMap = lazy(() => import('./pages/LiveMap'));
 const LiveMonitor = lazy(() => import('./pages/LiveMonitor'));
+const MishmiPage = lazy(() => import('./pages/Mishmi/MishmiPage'));
 
 function App() {
     const [darkMode, setDarkMode] = useState(() => {
@@ -120,6 +121,7 @@ function App() {
         let cracks = 0;
         let erosion = 0;
         let longCracks = 0;
+        let textCracks = 0;
         let transCracks = 0;
         let alligatorCracks = 0;
         let totalConfidence = 0;
@@ -179,6 +181,7 @@ function App() {
                 <Routes>
                     {/* Landing page — full-screen, no sidebar */}
                     <Route path="/" element={<Landing />} />
+                    <Route path="/mishmi" element={<MishmiPage />} />
 
                     {/* App routes — with sidebar */}
                     <Route path="/*" element={

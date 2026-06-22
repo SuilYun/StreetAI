@@ -1,0 +1,56 @@
+/* Dedicated Styles for Mishmi Tribe Cultural Portal */
+
+/* Custom Scrollbar */
+.mishmi-body-wrapper::-webkit-scrollbar {
+  width: 8px;
+}
+.mishmi-body-wrapper::-webkit-scrollbar-track {
+  background: #0a1f18; /* forest-950 dark */
+}
+.mishmi-body-wrapper::-webkit-scrollbar-thumb {
+  background: #1B4332; /* forest-800 */
+  border-radius: 4px;
+}
+.mishmi-body-wrapper::-webkit-scrollbar-thumb:hover {
+  background: #8D6E63; /* earth-500 */
+}
+
+/* Glassmorphism utility helpers */
+.glass-overlay {
+  backdrop-filter: blur(16px);
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dark .glass-overlay {
+  background: rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* Timeline center connector alignment */
+@media (min-width: 768px) {
+  .timeline-line-glow {
+    box-shadow: 0 0 15px rgba(245, 245, 220, 0.4);
+  }
+}
+
+/* Waveform pulse micro-animations */
+@keyframes voicePulse {
+  0%, 100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(1.4);
+  }
+}
+
+/* Typewriter animation utilities */
+.typewriter-cursor::after {
+  content: '|';
+  animation: blink 1s step-end infinite;
+}
+
+@keyframes blink {
+  from, to { color: transparent }
+  50% { color: #F5F5DC }
+}
