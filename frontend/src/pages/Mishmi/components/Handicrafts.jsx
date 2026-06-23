@@ -310,8 +310,12 @@ export default function Handicrafts({ amewa, crafts }) {
             {/* Service 1: Attire */}
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col justify-between hover:border-amber-500/30 transition-all duration-300 hover:-translate-y-1">
               <div>
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-5">
-                  <Icons.Shirt className="w-6 h-6" />
+                <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 border border-white/10 relative">
+                  <img 
+                    src="/mishmi/weaving.png" 
+                    alt="Bespoke Attire & Weaving" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <h4 className="text-lg font-bold text-white font-playfair mb-2">Bespoke Attire & Weaves</h4>
                 <p className="text-stone-300 text-xs font-light leading-relaxed">
@@ -346,8 +350,12 @@ export default function Handicrafts({ amewa, crafts }) {
             {/* Service 3: Catering */}
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col justify-between hover:border-amber-500/30 transition-all duration-300 hover:-translate-y-1">
               <div>
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-5">
-                  <Icons.FlameKindling className="w-6 h-6" />
+                <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 border border-white/10 relative">
+                  <img 
+                    src="/mishmi/bamboo_rice.jpeg" 
+                    alt="Indigenous Food Catering" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <h4 className="text-lg font-bold text-white font-playfair mb-2">Indigenous Food Catering</h4>
                 <p className="text-stone-300 text-xs font-light leading-relaxed">
@@ -362,8 +370,12 @@ export default function Handicrafts({ amewa, crafts }) {
             {/* Service 4: Grains */}
             <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col justify-between hover:border-amber-500/30 transition-all duration-300 hover:-translate-y-1">
               <div>
-                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-5">
-                  <Icons.Leaf className="w-6 h-6" />
+                <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 border border-white/10 relative">
+                  <img 
+                    src="/mishmi/mishmi_teeta.png" 
+                    alt="Millets & Herb Supplies" 
+                    className="w-full h-full object-cover"
+                  />
                 </div>
                 <h4 className="text-lg font-bold text-white font-playfair mb-2">Millets & Herb Supplies</h4>
                 <p className="text-stone-300 text-xs font-light leading-relaxed">
