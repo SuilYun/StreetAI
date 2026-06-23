@@ -249,18 +249,21 @@ export const mishmiData = {
     handlooms: [
       {
         name: "Thoba (Traditional Wrap-around)",
+        image: "/mishmi/craft_thoba.png",
         description: "A finely woven wrap-around skirt featuring intricate geometric patterns. Sourced from backstrap looms, representing centuries of female weaving heritage.",
         tag: "Women's Attire",
         highlights: "Organic dyes, geometric panels, extra warp technique"
       },
       {
         name: "Togo (Sleeveless Coat)",
+        image: "/mishmi/craft_togo.png",
         description: "Worn by Mishmi men, woven from natural nettle fiber and cotton. It features bold red, black, and white lines with stylized geometric border embroidery.",
         tag: "Men's Attire",
         highlights: "Nettle fiber base, durable texture, traditional motifs"
       },
       {
         name: "Woven Shoulder Bag (Pom-Pom Bag)",
+        image: "/mishmi/craft_bag.png",
         description: "Vibrant pink and red sling bags adorned with woolen pom-poms, widely carried as an iconic accessory across all Mishmi sub-tribes.",
         tag: "Accessory",
         highlights: "Detailed cross-stitching, robust strap, aesthetic tassels"
@@ -306,18 +309,21 @@ export const mishmiData = {
     milletsProduce: [
       {
         name: "Local Millets (Foxtail & Finger)",
+        image: "/mishmi/craft_millets.png",
         description: "Sustainably harvested from Jhum (shifting cultivation) slopes. Millets represent nutritional resilience and are crucial for festival food preparations.",
         tag: "Traditional Grain",
         highlights: "Organic farming, drought-resilient, source of iron and calcium"
       },
       {
         name: "Buckwheat (High-Altitude Harvest)",
+        image: "/mishmi/craft_buckwheat.png",
         description: "Grown in high-altitude valleys, actively promoted by AMEWA as an alternative cash crop to uplift the rural economy of Mishmi farmers.",
         tag: "Agricultural Crop",
         highlights: "Cold-tolerant, gluten-free, key economic booster"
       },
       {
         name: "Mishmi Yu (Fermented Brew)",
+        image: "/mishmi/craft_yu.png",
         description: "Traditional beverage brewed using local millet and rice starter cakes. Fermented in bamboo tubes and served during community gatherings.",
         tag: "Traditional Beverage",
         highlights: "Natural fermentation, organic ingredients, cultural toast"
