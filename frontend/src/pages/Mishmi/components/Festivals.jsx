@@ -21,6 +21,16 @@ export default function Festivals({ data }) {
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
         {data.map((festival, idx) => (
           <GlassCard key={idx} hoverEffect={true} className="border-forest-800/15 bg-white/40 dark:bg-stone-900/40 p-8 flex flex-col">
+            {festival.image && (
+              <div className="w-full aspect-video rounded-xl overflow-hidden mb-6 relative group border border-stone-200/50 dark:border-stone-800/50">
+                <img 
+                  src={festival.image} 
+                  alt={festival.name} 
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500 ease-out"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/10 to-transparent pointer-events-none" />
+              </div>
+            )}
             <div className="space-y-4 mb-6">
               {/* Meta indicators */}
               <div className="flex flex-wrap items-center gap-3">

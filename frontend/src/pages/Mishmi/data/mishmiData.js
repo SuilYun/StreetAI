@@ -79,6 +79,7 @@ export const mishmiData = {
       name: "Reh Festival",
       tribe: "Idu Mishmi",
       date: "February 1 - 3",
+      image: "/mishmi/reh_festival.jpg",
       description: "Reh is the most important festival of the Idu Mishmi, celebrated for peace, prosperity, and a bountiful harvest. It is a grand socio-religious event dedicated to the mother goddess 'Nanyi Inyitaya'.",
       rituals: [
         "Led by the Igu (shaman) who chants ancestral tales and performs mystical dances.",
@@ -91,6 +92,7 @@ export const mishmiData = {
       name: "Tamladu Festival",
       tribe: "Digaru & Miju Mishmi",
       date: "February 15",
+      image: "/mishmi/tamladu_festival.jpg",
       description: "Tamladu is celebrated by the Digaru (Taraon) and Miju (Kaman) tribes. It is a prayer offered to the Almighty 'Matai' and 'Jebmalu' (god of nature) for protection from natural calamities, diseases, and for agricultural success.",
       rituals: [
         "Erection of sacred altars made of bamboo and leaves in the center of the village.",
@@ -232,6 +234,95 @@ export const mishmiData = {
     "Mishmi women are considered among the finest weavers in the Eastern Himalayas, producing textiles that can last decades.",
     "The legendary medicinal plant 'Coptis Teeta' grows only in high-altitude shade in this specific mountain range."
   ],
+  amewa: {
+    title: "All Mishmi Economy Welfare Association (AMEWA)",
+    established: "26th October 1997",
+    registrationNo: "SR/ITA/718/00",
+    headOffice: "Tezu, Lohit District, Arunachal Pradesh, PIN: 792001",
+    storeMuseum: {
+      name: "Handloom, Handicrafts & Millets Store Cum Museum",
+      address: "Chaitom Complex Near APMC, Tezu / Opposite IGG College Tezu",
+      description: "A community-led center promoting local economy and conserving traditional Mishmi heritage. It showcases authentic handwoven textiles, organic millet grains, and masterfully crafted cane and bamboo objects directly sourced from native artisans."
+    }
+  },
+  craftsShowcase: {
+    handlooms: [
+      {
+        name: "Thoba (Traditional Wrap-around)",
+        description: "A finely woven wrap-around skirt featuring intricate geometric patterns. Sourced from backstrap looms, representing centuries of female weaving heritage.",
+        tag: "Women's Attire",
+        highlights: "Organic dyes, geometric panels, extra warp technique"
+      },
+      {
+        name: "Togo (Sleeveless Coat)",
+        description: "Worn by Mishmi men, woven from natural nettle fiber and cotton. It features bold red, black, and white lines with stylized geometric border embroidery.",
+        tag: "Men's Attire",
+        highlights: "Nettle fiber base, durable texture, traditional motifs"
+      },
+      {
+        name: "Woven Shoulder Bag (Pom-Pom Bag)",
+        description: "Vibrant pink and red sling bags adorned with woolen pom-poms, widely carried as an iconic accessory across all Mishmi sub-tribes.",
+        tag: "Accessory",
+        highlights: "Detailed cross-stitching, robust strap, aesthetic tassels"
+      }
+    ],
+    bambooCane: [
+      {
+        name: "Boolup (Cane Helmet)",
+        image: "/mishmi/craft_boolup.jpg",
+        description: "A dome-shaped, impact-resistant helmet woven from split cane. Historically used in warfare and ceremonies, representing master craftsmanship.",
+        tag: "Traditional Headgear",
+        highlights: "Closed weave, high structural strength, lightweight"
+      },
+      {
+        name: "Thee (Carrying Basket)",
+        image: "/mishmi/craft_basket.jpg",
+        description: "A tapering agricultural basket used for harvesting crops. It features a unique flat bamboo base stand secured by strong cane bindings.",
+        tag: "Harvest Utility",
+        highlights: "Twill weave pattern, reinforced frame, flat wooden stand"
+      },
+      {
+        name: "Epum (Storage & Utility Basket)",
+        description: "A heavy-duty carrying and storage basket with four bamboo stalks forming supporting legs at the base corners, designed for firewood and grain storage.",
+        tag: "Household Storage",
+        highlights: "Thick split bamboo stalks, open-work pattern, sturdy build"
+      },
+      {
+        name: "Dao Sheath (Knife Holder)",
+        image: "/mishmi/craft_dao_sheath.jpg",
+        description: "A half-open sheath for carrying the traditional Dao machete. Platted with fine split cane to provide durability and prevent injury.",
+        tag: "Personal Tool Holder",
+        highlights: "Plaited split cane, decorated back, waist-belt attachment"
+      },
+      {
+        name: "Dun (Cooking Tube)",
+        image: "/mishmi/craft_dun.jpg",
+        description: "Freshly cut hollow green bamboo tubes used for steaming rice and fish over open wood fires. Infuses the food with a delicate sweet bamboo aroma.",
+        tag: "Culinary Utensil",
+        highlights: "Natural single-use vessel, heat-resistant green bamboo"
+      }
+    ],
+    milletsProduce: [
+      {
+        name: "Local Millets (Foxtail & Finger)",
+        description: "Sustainably harvested from Jhum (shifting cultivation) slopes. Millets represent nutritional resilience and are crucial for festival food preparations.",
+        tag: "Traditional Grain",
+        highlights: "Organic farming, drought-resilient, source of iron and calcium"
+      },
+      {
+        name: "Buckwheat (High-Altitude Harvest)",
+        description: "Grown in high-altitude valleys, actively promoted by AMEWA as an alternative cash crop to uplift the rural economy of Mishmi farmers.",
+        tag: "Agricultural Crop",
+        highlights: "Cold-tolerant, gluten-free, key economic booster"
+      },
+      {
+        name: "Mishmi Yu (Fermented Brew)",
+        description: "Traditional beverage brewed using local millet and rice starter cakes. Fermented in bamboo tubes and served during community gatherings.",
+        tag: "Traditional Beverage",
+        highlights: "Natural fermentation, organic ingredients, cultural toast"
+      }
+    ]
+  },
   references: [
     "Verrier Elwin, 'Myths of the North-East Frontier of India', 1958.",
     "District Census Handbooks of Dibang Valley & Lohit, Government of India.",

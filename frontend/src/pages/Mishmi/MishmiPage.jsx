@@ -133,7 +133,7 @@ export default function MishmiPage() {
         <Cuisine data={mishmiData.cuisine} />
         <Religion data={mishmiData.religion} />
         <FloraFauna data={mishmiData.floraFauna} />
-        <Handicrafts />
+        <Handicrafts amewa={mishmiData.amewa} crafts={mishmiData.craftsShowcase} />
         <Gallery />
         <Timeline data={mishmiData.timeline} />
         <FunFacts data={mishmiData} />
