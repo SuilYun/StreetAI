@@ -292,8 +292,93 @@ export default function Handicrafts({ amewa, crafts }) {
           </div>
         </div>
 
+        {/* Services Provided by AMEWA */}
+        <div className="mt-24 space-y-12">
+          <div className="text-center max-w-2xl mx-auto space-y-3">
+            <span className="text-xs font-semibold uppercase tracking-widest text-amber-400 bg-amber-500/10 px-3 py-1 rounded-full border border-amber-500/20">
+              Commercial Catalogue
+            </span>
+            <h3 className="text-3xl font-playfair font-bold text-beige">
+              Services & Products by AMEWA
+            </h3>
+            <p className="text-stone-300 font-light text-sm">
+              We offer certified authentic services directly run by Mishmi artisans. All proceeds fund community welfare initiatives in Lohit and Anjaw.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
+            {/* Service 1: Attire */}
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col justify-between hover:border-amber-500/30 transition-all duration-300 hover:-translate-y-1">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-5">
+                  <Icons.Shirt className="w-6 h-6" />
+                </div>
+                <h4 className="text-lg font-bold text-white font-playfair mb-2">Bespoke Attire & Weaves</h4>
+                <p className="text-stone-300 text-xs font-light leading-relaxed">
+                  We supply custom-made traditional garments including wrap-around skirts (*Thoba*), sleeveless coats (*Togo*), and pom-pom sling bags handwoven on backstrap looms.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-white/5 text-[10px] font-mono text-amber-400/80 uppercase">
+                100% Native Handwoven
+              </div>
+            </div>
+
+            {/* Service 2: Bamboo Cups */}
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col justify-between hover:border-amber-500/30 transition-all duration-300 hover:-translate-y-1">
+              <div>
+                <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 border border-white/10 relative">
+                  <img 
+                    src="/mishmi/craft_cups.jpg" 
+                    alt="Handcrafted Bamboo Cups" 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h4 className="text-lg font-bold text-white font-playfair mb-2">Cane & Bamboo Utilities</h4>
+                <p className="text-stone-300 text-xs font-light leading-relaxed">
+                  Purchase handcrafted single-joint bamboo cups/mugs, tea strainers, tableware, and custom-woven storage baskets made from seasoned hill-bamboo.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-white/5 text-[10px] font-mono text-amber-400/80 uppercase">
+                Eco-Friendly Dining
+              </div>
+            </div>
+
+            {/* Service 3: Catering */}
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col justify-between hover:border-amber-500/30 transition-all duration-300 hover:-translate-y-1">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-5">
+                  <Icons.FlameKindling className="w-6 h-6" />
+                </div>
+                <h4 className="text-lg font-bold text-white font-playfair mb-2">Indigenous Food Catering</h4>
+                <p className="text-stone-300 text-xs font-light leading-relaxed">
+                  Book culinary catering for events featuring organic sticky rice cooked in green bamboo hollows (*Dun*), smoked meats, and native ginger-infused broths.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-white/5 text-[10px] font-mono text-amber-400/80 uppercase">
+                Traditional Kitchens
+              </div>
+            </div>
+
+            {/* Service 4: Grains */}
+            <div className="rounded-2xl border border-white/10 bg-white/5 p-6 flex flex-col justify-between hover:border-amber-500/30 transition-all duration-300 hover:-translate-y-1">
+              <div>
+                <div className="w-12 h-12 rounded-xl bg-amber-500/10 text-amber-400 flex items-center justify-center mb-5">
+                  <Icons.Leaf className="w-6 h-6" />
+                </div>
+                <h4 className="text-lg font-bold text-white font-playfair mb-2">Millets & Herb Supplies</h4>
+                <p className="text-stone-300 text-xs font-light leading-relaxed">
+                  Bulk seed supplies and retail marketing of organic foxtail millet, cold-tolerant buckwheat, and shade-grown medicinal herbs like Mishmi Teeta.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t border-white/5 text-[10px] font-mono text-amber-400/80 uppercase">
+                Artisanal Seed Bank
+              </div>
+            </div>
+          </div>
+        </div>
+
         {/* AMEWA Services Advertisement Section */}
-        <div className="mt-20 bg-gradient-to-r from-amber-500/10 via-forest-900/40 to-amber-500/10 border border-amber-500/20 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
+        <div className="mt-24 bg-gradient-to-r from-amber-500/10 via-forest-900/40 to-amber-500/10 border border-amber-500/20 rounded-3xl p-8 md:p-12 shadow-2xl relative overflow-hidden">
           {/* Decorative background vectors */}
           <div className="absolute -top-12 -left-12 w-48 h-48 bg-amber-500/10 rounded-full blur-3xl pointer-events-none" />
           <div className="absolute -bottom-12 -right-12 w-48 h-48 bg-forest-700/20 rounded-full blur-3xl pointer-events-none" />
