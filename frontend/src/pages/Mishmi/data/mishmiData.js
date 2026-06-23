@@ -195,22 +195,22 @@ export const mishmiData = {
     description: "Living in the Indo-Burma biodiversity hotspot, the Mishmi hills harbor thousands of rare, endemic species of orchids, medicinal herbs, and animals.",
     items: [
       {
-        name: "Mishmi Takin",
-        scientificName: "Budorcas taxicolor taxicolor",
-        description: "A rare, stocky mountain mammal adapted to rugged slopes. Protected as a sacred animal by the local tribes, who prevent its overhunting.",
-        image: "/mishmi/mishmi_mountains.jpg"
+        name: "Mithun",
+        scientificName: "Bos frontalis",
+        description: "The state animal of Arunachal Pradesh, holding immense cultural, social, and religious significance. Reared semi-wildly in the high forest canopies.",
+        image: "/mishmi/mithun.jpg"
       },
       {
         name: "Mishmi Teeta",
         scientificName: "Coptis teeta",
         description: "A highly prized medicinal herb endemic to the Mishmi hills. Used traditionally to cure fevers, dysentery, and inflammation, it is highly threatened.",
-        image: "/mishmi/mishmi_mountains.jpg"
+        image: "/mishmi/mishmi_teeta.png"
       },
       {
-        name: "Sclater's Monal",
-        scientificName: "Lophophorus sclateri",
-        description: "A brilliantly colored pheasant found in alpine meadows and rocky peaks of Anjaw and Dibang Valley. Known for its dazzling iridescent feathers.",
-        image: "/mishmi/mishmi_mountains.jpg"
+        name: "Great Hornbill",
+        scientificName: "Buceros bicornis",
+        description: "The state bird of Arunachal Pradesh, famous for its grand size, yellow-black casque, and deep cultural resonance in folk traditions.",
+        image: "/mishmi/great_hornbill.jpg"
       }
     ]
   },
