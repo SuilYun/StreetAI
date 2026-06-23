@@ -283,6 +283,7 @@ export const mishmiData = {
       },
       {
         name: "Epum (Storage & Utility Basket)",
+        image: "/mishmi/craft_epum.jpg",
         description: "A heavy-duty carrying and storage basket with four bamboo stalks forming supporting legs at the base corners, designed for firewood and grain storage.",
         tag: "Household Storage",
         highlights: "Thick split bamboo stalks, open-work pattern, sturdy build"
