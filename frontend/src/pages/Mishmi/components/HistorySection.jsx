@@ -53,7 +53,7 @@ export default function HistorySection({ data }) {
           >
             <div 
               className="absolute inset-0 bg-cover bg-center group-hover:scale-105 transition-transform duration-700 ease-out"
-              style={{ backgroundImage: "url('/mishmi/village.png')" }}
+              style={{ backgroundImage: "url('/mishmi/mishmi_longhouse_large.jpg')" }}
             />
             {/* Ambient Overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />

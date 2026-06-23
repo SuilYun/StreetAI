@@ -40,7 +40,7 @@ export default function HeroSection({ data }) {
         animate={{ scale: 1, opacity: 0.65 }}
         transition={{ duration: 2.2, ease: "easeOut" }}
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
-        style={{ backgroundImage: "url('/mishmi/hero.png')" }}
+        style={{ backgroundImage: "url('/mishmi/mishmi_mountains.jpg')" }}
       />
 
       {/* Atmospheric Gradient Overlays */}

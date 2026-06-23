@@ -312,7 +312,7 @@ export default function Handicrafts({ amewa, crafts }) {
               <div>
                 <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 border border-white/10 relative">
                   <img 
-                    src="/mishmi/weaving.png" 
+                    src="/mishmi/mishmi_weaving_loom.jpg" 
                     alt="Bespoke Attire & Weaving" 
                     className="w-full h-full object-cover"
                   />
@@ -332,7 +332,7 @@ export default function Handicrafts({ amewa, crafts }) {
               <div>
                 <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 border border-white/10 relative">
                   <img 
-                    src="/mishmi/craft_cups.jpg" 
+                    src="/mishmi/mishmi_bamboo_flute.jpg" 
                     alt="Handcrafted Bamboo Cups" 
                     className="w-full h-full object-cover"
                   />
@@ -352,7 +352,7 @@ export default function Handicrafts({ amewa, crafts }) {
               <div>
                 <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 border border-white/10 relative">
                   <img 
-                    src="/mishmi/bamboo_rice.jpeg" 
+                    src="/mishmi/mishmi_elder_drinking.jpg" 
                     alt="Indigenous Food Catering" 
                     className="w-full h-full object-cover"
                   />
@@ -372,7 +372,7 @@ export default function Handicrafts({ amewa, crafts }) {
               <div>
                 <div className="w-full aspect-[4/3] rounded-xl overflow-hidden mb-5 border border-white/10 relative">
                   <img 
-                    src="/mishmi/mishmi_teeta.png" 
+                    src="/mishmi/mishmi_mountains.jpg" 
                     alt="Millets & Herb Supplies" 
                     className="w-full h-full object-cover"
                   />

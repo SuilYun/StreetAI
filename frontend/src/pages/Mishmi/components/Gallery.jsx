@@ -4,13 +4,13 @@ import { X, ZoomIn, ChevronLeft, ChevronRight } from 'lucide-react';
 import SectionWrapper from './shared/SectionWrapper';
 
 const galleryImages = [
-  { id: 1, src: "/mishmi/hero.png", category: "landscapes", title: "Himalayan Ridges", desc: "Mist rolling over pine forests." },
-  { id: 2, src: "/mishmi/village.png", category: "culture", title: "Traditional Settlement", desc: "Classic stilted longhouses." },
-  { id: 3, src: "/mishmi/dress.png", category: "attire", title: "Mishmi Attire", desc: "Beaded necklaces and traditional gear." },
-  { id: 4, src: "/mishmi/festival.png", category: "culture", title: "Ritual Gathering", desc: "Reh festival community dancers." },
-  { id: 5, src: "/mishmi/cuisine.png", category: "culture", title: "Gastronomy Spreed", desc: "Traditional food served on banana leaves." },
-  { id: 6, src: "/mishmi/weaving.png", category: "attire", title: "Loom Geometrics", desc: "Red and black woven patterns." },
-  { id: 7, src: "/mishmi/takin.png", category: "landscapes", title: "Mishmi Takin", desc: "Rare stocky bovid native to Eastern Himalayas." }
+  { id: 1, src: "/mishmi/mishmi_mountains.jpg", category: "landscapes", title: "Himalayan Ridges", desc: "Mist rolling over alpine peaks." },
+  { id: 2, src: "/mishmi/mishmi_longhouse_large.jpg", category: "culture", title: "Traditional Settlement", desc: "Classic stilted longhouse structure." },
+  { id: 3, src: "/mishmi/mishmi_family.jpg", category: "attire", title: "Mishmi Family", desc: "Traditional woven garments and beaded necklaces." },
+  { id: 4, src: "/mishmi/mishmi_tangong_dance.jpg", category: "culture", title: "Tangong Dance Celebration", desc: "Dancers performing during community festivities." },
+  { id: 5, src: "/mishmi/mishmi_elder_drinking.jpg", category: "culture", title: "Drinking Yu", desc: "Traditional fermented beverage served in cups." },
+  { id: 6, src: "/mishmi/mishmi_weaving_loom.jpg", category: "attire", title: "Loom Geometrics", desc: "Mishmi weaver producing intricate patterns on a backstrap loom." },
+  { id: 7, src: "/mishmi/mishmi_women_mountains.jpg", category: "landscapes", title: "Highland Slopes", desc: "Women in traditional attire overlooking the valleys." }
 ];
 
 export default function Gallery() {

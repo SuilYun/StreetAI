@@ -25,7 +25,7 @@ export const mishmiData = {
       regions: "Dibang Valley & Lower Dibang Valley",
       description: "Known for their distinct crop haircut (historically referred to as 'Chulikata' by plains people), the Idu Mishmi are famous for their profound spiritual practices led by shamans (Igu), their master weaving skills, and their deep-rooted taboos that protect local wildlife like the Tiger.",
       features: ["Distinctive crop haircut style", "Shamanic rituals led by 'Igu'", "Strong taboos protecting tigers as brothers", "Imposing stone and wood architecture"],
-      image: "/mishmi/idu_tribe.png"
+      image: "/mishmi/mishmi_men_valley.jpg"
     },
     {
       id: "digaru",
@@ -35,7 +35,7 @@ export const mishmiData = {
       regions: "Lohit & Anjaw Districts",
       description: "Also called the Taraon, the Digaru Mishmi share close cultural ties with the Miju. They are exceptional traders and agriculturalists, known for their longhouses and high-quality weaving. Their women wear elaborate silver ornaments including large circular ear-plugs.",
       features: ["Traditional long silver pipe smoked by elders", "Circular silver ear ornaments ('Apre')", "Elaborate multi-family bamboo longhouses", "Pioneers of cardamom cultivation"],
-      image: "/mishmi/digaru_tribe.png"
+      image: "/mishmi/mishmi_elder_pipe.jpg"
     },
     {
       id: "miju",
@@ -45,7 +45,7 @@ export const mishmiData = {
       regions: "Anjaw & Lohit Districts",
       description: "The Miju, or Kaman Mishmi, reside further east along the Lohit river valley up to the border regions. Famous for their colorful textiles, intricate handlooms, and deep connection to nature. They are traditional animists worshipping supreme deities like 'Matai'.",
       features: ["Vibrant red and black geometric weaves", "Belief in 'Matai' as the creator deity", "Extensive usage of large silver hairpins", "Deep forest foraging traditions"],
-      image: "/mishmi/miju_tribe.png"
+      image: "/mishmi/mishmi_women_mountains.jpg"
     }
   ],
   geography: {
@@ -65,12 +65,12 @@ export const mishmiData = {
       {
         title: "Idu Mishmi Attire",
         description: "Men wear a sleeveless coat ('Togo') woven of nettle fiber and cotton, decorated with beautiful geometric designs, often paired with a woven cane helmet ('Apapa'). Women wear a wrap-around skirt ('Thoba') and a black jacket, complemented by silver headbands.",
-        image: "/mishmi/dress.png"
+        image: "/mishmi/mishmi_cane_helmet.jpg"
       },
       {
         title: "Ornaments and Accents",
         description: "Silver plays a huge role. Women wear a thin silver band ('Arua') on their foreheads, large silver ear plugs ('Apre'), and heavy necklaces of beads and silver coins. Men carry a beautifully crafted 'Dao' (machete) slung across their chest in a decorated wooden sheath.",
-        image: "/mishmi/weaving.png"
+        image: "/mishmi/mishmi_elder_ornaments.jpg"
       }
     ]
   },
@@ -79,7 +79,7 @@ export const mishmiData = {
       name: "Reh Festival",
       tribe: "Idu Mishmi",
       date: "February 1 - 3",
-      image: "/mishmi/reh_festival.jpg",
+      image: "/mishmi/mishmi_tangong_dance.jpg",
       description: "Reh is the most important festival of the Idu Mishmi, celebrated for peace, prosperity, and a bountiful harvest. It is a grand socio-religious event dedicated to the mother goddess 'Nanyi Inyitaya'.",
       rituals: [
         "Led by the Igu (shaman) who chants ancestral tales and performs mystical dances.",
@@ -92,7 +92,7 @@ export const mishmiData = {
       name: "Tamladu Festival",
       tribe: "Digaru & Miju Mishmi",
       date: "February 15",
-      image: "/mishmi/tamladu_festival.jpg",
+      image: "/mishmi/IMG-20260623-WA0003.jpg",
       description: "Tamladu is celebrated by the Digaru (Taraon) and Miju (Kaman) tribes. It is a prayer offered to the Almighty 'Matai' and 'Jebmalu' (god of nature) for protection from natural calamities, diseases, and for agricultural success.",
       rituals: [
         "Erection of sacred altars made of bamboo and leaves in the center of the village.",
@@ -147,17 +147,17 @@ export const mishmiData = {
       {
         title: "Shamanic Dance (Igu Dance)",
         description: "Performed by the Idu Mishmi shaman (Igu). Dressed in ceremonial robes with shells, brass bells, and a headpiece, the shaman beats a drum ('Tambre') and dances in a trance-like state to invoke guardian spirits and heal the sick.",
-        image: "/mishmi/igu_dance.png"
+        image: "/mishmi/IMG-20260623-WA0003.jpg"
       },
       {
         title: "Tangong Dance",
         description: "A joyous community dance performed by the Digaru and Miju youth during Tamladu. Dancers form circular chains, holding hands, moving gracefully to the beats of gongs, drums, and wind instruments.",
-        image: "/mishmi/tangong_dance.png"
+        image: "/mishmi/mishmi_tangong_dance.jpg"
       },
       {
         title: "Folk Instruments",
         description: "Mishmi instruments are organic. They include bamboo flutes, jew's harps ('Kungki'), bronze gongs ('Ahing'), and single-headed drums ('Tambre'). The metallic tone of gongs is highly valued.",
-        image: "/mishmi/weaving.png"
+        image: "/mishmi/mishmi_bamboo_flute.jpg"
       }
     ]
   },
@@ -165,19 +165,19 @@ export const mishmiData = {
     {
       name: "Smoked Mithun Meat",
       description: "Meat is preserved by smoking it over the central hearth of the longhouse, imparting a rich, woody flavor. It is cooked simply with wild ginger and chilies.",
-      image: "/mishmi/mithun_meat.jpg",
+      image: "/mishmi/mishmi_elder_drinking.jpg",
       tag: "Signature Dish"
     },
     {
       name: "Dun (Bamboo Rice)",
       description: "Sticky local rice cooked inside hollow bamboo tubes over hot ashes. The sticky texture absorbs the delicate lining of the bamboo, giving it a unique aroma.",
-      image: "/mishmi/bamboo_rice.jpeg",
+      image: "/mishmi/mishmi_longhouse_2.jpg",
       tag: "Staple"
     },
     {
       name: "Mishmi Yu (Rice Beer)",
       description: "A traditional fermented beverage made from millet or rice. Brewed in every home, it represents hospitality and is offered to guest and deities alike.",
-      image: "/mishmi/rice_beer_generated.png",
+      image: "/mishmi/mishmi_elder_drinking.jpg",
       tag: "Traditional Drink"
     }
   ],
@@ -198,19 +198,19 @@ export const mishmiData = {
         name: "Mishmi Takin",
         scientificName: "Budorcas taxicolor taxicolor",
         description: "A rare, stocky mountain mammal adapted to rugged slopes. Protected as a sacred animal by the local tribes, who prevent its overhunting.",
-        image: "/mishmi/takin.png"
+        image: "/mishmi/mishmi_mountains.jpg"
       },
       {
         name: "Mishmi Teeta",
         scientificName: "Coptis teeta",
         description: "A highly prized medicinal herb endemic to the Mishmi hills. Used traditionally to cure fevers, dysentery, and inflammation, it is highly threatened.",
-        image: "/mishmi/mishmi_teeta.png"
+        image: "/mishmi/mishmi_mountains.jpg"
       },
       {
         name: "Sclater's Monal",
         scientificName: "Lophophorus sclateri",
         description: "A brilliantly colored pheasant found in alpine meadows and rocky peaks of Anjaw and Dibang Valley. Known for its dazzling iridescent feathers.",
-        image: "/mishmi/hero.png"
+        image: "/mishmi/mishmi_mountains.jpg"
       }
     ]
   },
@@ -249,21 +249,21 @@ export const mishmiData = {
     handlooms: [
       {
         name: "Thoba (Traditional Wrap-around)",
-        image: "/mishmi/craft_thoba.png",
+        image: "/mishmi/mishmi_handwoven_fabric.jpg",
         description: "A finely woven wrap-around skirt featuring intricate geometric patterns. Sourced from backstrap looms, representing centuries of female weaving heritage.",
         tag: "Women's Attire",
         highlights: "Organic dyes, geometric panels, extra warp technique"
       },
       {
         name: "Togo (Sleeveless Coat)",
-        image: "/mishmi/craft_togo.png",
+        image: "/mishmi/mishmi_back_togo.jpg",
         description: "Worn by Mishmi men, woven from natural nettle fiber and cotton. It features bold red, black, and white lines with stylized geometric border embroidery.",
         tag: "Men's Attire",
         highlights: "Nettle fiber base, durable texture, traditional motifs"
       },
       {
         name: "Woven Shoulder Bag (Pom-Pom Bag)",
-        image: "/mishmi/craft_bag.png",
+        image: "/mishmi/mishmi_weaving_hands.jpg",
         description: "Vibrant pink and red sling bags adorned with woolen pom-poms, widely carried as an iconic accessory across all Mishmi sub-tribes.",
         tag: "Accessory",
         highlights: "Detailed cross-stitching, robust strap, aesthetic tassels"
@@ -272,35 +272,35 @@ export const mishmiData = {
     bambooCane: [
       {
         name: "Boolup (Cane Helmet)",
-        image: "/mishmi/craft_boolup.jpg",
+        image: "/mishmi/mishmi_cane_helmet.jpg",
         description: "A dome-shaped, impact-resistant helmet woven from split cane. Historically used in warfare and ceremonies, representing master craftsmanship.",
         tag: "Traditional Headgear",
         highlights: "Closed weave, high structural strength, lightweight"
       },
       {
         name: "Thee (Carrying Basket)",
-        image: "/mishmi/craft_basket.jpg",
+        image: "/mishmi/mishmi_family.jpg",
         description: "A tapering agricultural basket used for harvesting crops. It features a unique flat bamboo base stand secured by strong cane bindings.",
         tag: "Harvest Utility",
         highlights: "Twill weave pattern, reinforced frame, flat wooden stand"
       },
       {
         name: "Epum (Storage & Utility Basket)",
-        image: "/mishmi/craft_epum.jpg",
+        image: "/mishmi/mishmi_family.jpg",
         description: "A heavy-duty carrying and storage basket with four bamboo stalks forming supporting legs at the base corners, designed for firewood and grain storage.",
         tag: "Household Storage",
         highlights: "Thick split bamboo stalks, open-work pattern, sturdy build"
       },
       {
         name: "Dao Sheath (Knife Holder)",
-        image: "/mishmi/craft_dao_sheath.jpg",
+        image: "/mishmi/mishmi_man_dao.jpg",
         description: "A half-open sheath for carrying the traditional Dao machete. Platted with fine split cane to provide durability and prevent injury.",
         tag: "Personal Tool Holder",
         highlights: "Plaited split cane, decorated back, waist-belt attachment"
       },
       {
         name: "Dun (Cooking Tube)",
-        image: "/mishmi/craft_dun.jpg",
+        image: "/mishmi/mishmi_bamboo_flute.jpg",
         description: "Freshly cut hollow green bamboo tubes used for steaming rice and fish over open wood fires. Infuses the food with a delicate sweet bamboo aroma.",
         tag: "Culinary Utensil",
         highlights: "Natural single-use vessel, heat-resistant green bamboo"
@@ -309,21 +309,21 @@ export const mishmiData = {
     milletsProduce: [
       {
         name: "Local Millets (Foxtail & Finger)",
-        image: "/mishmi/craft_millets.png",
+        image: "/mishmi/mishmi_women_hill.jpg",
         description: "Sustainably harvested from Jhum (shifting cultivation) slopes. Millets represent nutritional resilience and are crucial for festival food preparations.",
         tag: "Traditional Grain",
         highlights: "Organic farming, drought-resilient, source of iron and calcium"
       },
       {
         name: "Buckwheat (High-Altitude Harvest)",
-        image: "/mishmi/craft_buckwheat.png",
+        image: "/mishmi/mishmi_women_hill.jpg",
         description: "Grown in high-altitude valleys, actively promoted by AMEWA as an alternative cash crop to uplift the rural economy of Mishmi farmers.",
         tag: "Agricultural Crop",
         highlights: "Cold-tolerant, gluten-free, key economic booster"
       },
       {
         name: "Mishmi Yu (Fermented Brew)",
-        image: "/mishmi/craft_yu.png",
+        image: "/mishmi/mishmi_elder_drinking.jpg",
         description: "Traditional beverage brewed using local millet and rice starter cakes. Fermented in bamboo tubes and served during community gatherings.",
         tag: "Traditional Beverage",
         highlights: "Natural fermentation, organic ingredients, cultural toast"
